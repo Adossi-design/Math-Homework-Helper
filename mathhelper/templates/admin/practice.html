@@ -1,0 +1,45 @@
+{% extends "admin/_base.html" %}
+{% block admin_title %}{{ _("Practice") }}{% endblock %}
+{% block admin_lead %}{{ _("Add, edit and delete the practice sets students play.") }}{% endblock %}
+{% block admin_action %}<a class="btn btn-primary" href="{{ url_for('admin.new_practice') }}">{{ icon("plus") }} {{ _("New practice set") }}</a>{% endblock %}
+
+{% block admin %}
+<div class="card">
+  {% for item in items %}
+  <div class="admin-row {{ 'is-muted' if item.state == 'deleted' }}">
+    <span class="thumb-icon">{{ icon("target") }}</span>
+    <div class="body">
+      <div class="title">
+        <span>{{ _(item.skill.title) }}</span>
+        {% if item.state == "deleted" %}<span class="tag warning">{{ _("Deleted") }}</span>
+        {% elif item.draft %}<span class="tag warning">{{ _("Draft") }}</span>
+        {% else %}<span class="tag success">{{ _("Published") }}</span>{% endif %}
+        {% if item.state == "edited" %}<span class="tag">{{ _("Edited") }}</span>{% elif item.state == "custom" %}<span class="tag">{{ _("Added by you") }}</span>{% endif %}
+      </div>
+      <div class="meta">{{ _(item.skill.topic) }}, {% if item.state == "custom" %}{{ ngettext("{n} question", "{n} questions", item.count) }}{% else %}{{ _("new questions every round") }}{% endif %}</div>
+    </div>
+    <div class="actions">
+      {% if item.state == "deleted" %}
+      <form method="post" action="{{ url_for('admin.restore_practice', skill_id=item.skill.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-soft btn-sm" type="submit">{{ icon("refresh", "sm") }} {{ _("Restore") }}</button>
+      </form>
+      {% else %}
+      <a class="btn btn-ghost btn-sm" href="{{ url_for('admin.preview_practice', skill_id=item.skill.id) }}">{{ icon("eye", "sm") }} {{ _("Preview") }}</a>
+      <a class="btn btn-outline btn-sm" href="{{ url_for('admin.edit_practice', skill_id=item.skill.id) }}">{{ icon("pencil", "sm") }} {{ _("Edit") }}</a>
+      {% if item.state == "edited" %}
+      <form method="post" action="{{ url_for('admin.restore_practice', skill_id=item.skill.id) }}" data-confirm="{{ _("Throw away your changes and bring back the original practice set?") }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-ghost btn-sm" type="submit">{{ icon("refresh", "sm") }} {{ _("Restore") }}</button>
+      </form>
+      {% endif %}
+      <form method="post" action="{{ url_for('admin.delete_practice', skill_id=item.skill.id) }}" data-confirm="{{ _("Delete the practice set {title}? Students will no longer see it.", title=_(item.skill.title)) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-danger btn-sm" type="submit">{{ icon("trash", "sm") }} {{ _("Delete") }}</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
