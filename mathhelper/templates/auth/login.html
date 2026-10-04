@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Log in") }} | {{ app_name }}{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+  {% include "auth/_side.html" %}
+  <main class="auth-main">
+    {% include "auth/_top.html" %}
+    <div class="auth-box">
+      <div class="auth-lang desk-only">{% include "partials/lang_switch.html" %}</div>
+      {% if returning %}
+      <h1>{{ _("Welcome back") }}</h1>
+      <p class="sub">{{ _("Log in to pick up where you left off.") }}</p>
+      {% else %}
+      <h1>{{ _("Welcome") }}</h1>
+      <p class="sub">{{ _("Log in to your account.") }}</p>
+      {% endif %}
+
+      {% include "auth/_google.html" %}
+
+      {% if error %}<div class="alert alert-error" role="alert" style="margin-bottom:16px">{{ icon("alert") }}<span>{{ error }}</span></div>{% endif %}
+
+      <form method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="timezone" data-timezone-field>
+        <div class="field">
+          <label class="label" for="email">{{ _("Email") }}</label>
+          <div class="input-wrap">{{ icon("mail") }}<input class="input" id="email" name="email" type="email" value="{{ email }}" autocomplete="email" required autofocus></div>
+        </div>
+        <div class="field">
+          <div class="row" style="justify-content:space-between">
+            <label class="label" for="password">{{ _("Password") }}</label>
+            <a class="small" href="{{ url_for('auth.forgot_password') }}">{{ _("Forgot password?") }}</a>
+          </div>
+          <div class="input-wrap">
+            {{ icon("lock") }}
+            <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+            <button class="btn btn-ghost btn-icon btn-sm reveal" type="button" data-reveal="password" aria-label="{{ _("Show password") }}">{{ icon("eye", "sm") }}</button>
+          </div>
+        </div>
+        <div class="field">
+          <label class="check"><input type="checkbox" name="remember" checked> {{ _("Keep me signed in") }}</label>
+        </div>
+        <div class="field"><button class="btn btn-primary btn-lg btn-block" type="submit">{{ _("Log in") }}</button></div>
+      </form>
+      <p class="auth-switch">{{ _("New here?") }} <a href="{{ url_for('auth.signup') }}">{{ _("Create an account") }}</a></p>
+    </div>
+  </main>
+</div>
+{% endblock %}
