@@ -1,0 +1,68 @@
+{% extends "admin/_base.html" %}
+{% block admin_back %}<a class="back-link" href="{{ url_for('admin.practice') }}">{{ icon("arrow-left", "sm") }} {{ _("All practice sets") }}</a>{% endblock %}
+{% block admin_title %}{{ _("Edit practice set") if editing else _("New practice set") }}{% endblock %}
+
+{% block admin %}
+{% if error %}<div class="alert alert-error" role="alert" style="margin-bottom:16px">{{ icon("alert") }}<span>{{ error }}</span></div>{% endif %}
+
+<form class="stack admin-form" method="post" novalidate data-question-editor>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <section class="card card-body">
+    <h3>{{ _("Details") }}</h3>
+    <div class="field">
+      <label class="label" for="title">{{ _("Title") }}</label>
+      <input class="input" id="title" name="title" value="{{ form.content.en.title }}" maxlength="80">
+    </div>
+    <div class="field">
+      <label class="label" for="blurb">{{ _("Description") }}</label>
+      <input class="input" id="blurb" name="blurb" value="{{ form.content.en.blurb }}" maxlength="200">
+    </div>
+    <div class="field">
+      <label class="label" for="topic">{{ _("Topic") }}</label>
+      <select class="select" id="topic" name="topic">
+        <option value="">{{ _("Choose a topic") }}</option>
+        {% for topic in topics %}<option value="{{ topic }}" {{ 'selected' if form.topic == topic }}>{{ _(topic) }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label class="check"><input type="checkbox" name="published" {{ 'checked' if form.published }}> {{ _("Published, so students can see it") }}</label>
+    </div>
+    <details style="margin-top:16px" {{ 'open' if form.content.fr.title }}>
+      <summary class="small" style="font-weight:600">{{ _("French version (optional)") }}</summary>
+      <p class="hint" style="margin:8px 0 4px">{{ _("Leave a field empty to show the English text to French readers.") }}</p>
+      <div class="field">
+        <label class="label" for="fr_title">{{ _("Title") }}</label>
+        <input class="input" id="fr_title" name="fr_title" value="{{ form.content.fr.title }}" maxlength="80">
+      </div>
+      <div class="field">
+        <label class="label" for="fr_blurb">{{ _("Description") }}</label>
+        <input class="input" id="fr_blurb" name="fr_blurb" value="{{ form.content.fr.blurb }}" maxlength="200">
+      </div>
+    </details>
+  </section>
+
+  {% if written %}
+  <div>
+    <div class="section-head" style="margin-bottom:8px"><h2>{{ _("Questions") }}</h2></div>
+    <p class="hint" style="margin-bottom:14px">{{ _("Each round shows up to 10 of these questions in a random order. Write math between dollar signs, for example $x^2 + 1$.") }}</p>
+    <div data-questions data-next-index="{{ blocks | length }}">
+      {% for block in blocks %}
+      {% with index = loop.index0, number = loop.index %}{% include "admin/_question.html" %}{% endwith %}
+      {% endfor %}
+    </div>
+    <button class="btn btn-soft" type="button" style="margin-top:16px" data-add-question>{{ icon("plus") }} {{ _("Add a question") }}</button>
+    <template data-question-template>
+      {% with index = "__index__", number = "", block = blank %}{% include "admin/_question.html" %}{% endwith %}
+    </template>
+  </div>
+  {% else %}
+  <div class="alert alert-info">{{ icon("info") }}<span>{{ _("This practice set makes new questions automatically every round, so only its details can be changed.") }}</span></div>
+  {% endif %}
+
+  <div class="row wrap">
+    <button class="btn btn-primary btn-lg" type="submit">{{ icon("check") }} {{ _("Save practice set") }}</button>
+    <a class="btn btn-ghost" href="{{ url_for('admin.practice') }}">{{ _("Cancel") }}</a>
+  </div>
+</form>
+{% endblock %}
