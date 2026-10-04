@@ -1,0 +1,10 @@
+<header class="auth-top">
+  <div class="row">
+    <a class="brand" href="{{ url_for('main.landing') }}">{% include "partials/logo.html" %}<span>{{ app_name }}</span></a>
+    {% if show_lang | default(true) %}{% with lang_class = "glass" %}{% include "partials/lang_switch.html" %}{% endwith %}{% endif %}
+  </div>
+  <div class="auth-hello">
+    <p>{{ _("Understand the steps, not just the answer.") }}</p>
+    <img src="{{ url_for('static', filename='mascot/mascot_' ~ (pose | default('welcome')) ~ '_large.webp') }}" alt="" loading="lazy">
+  </div>
+</header>
