@@ -1,0 +1,75 @@
+{% extends "admin/_base.html" %}
+{% block admin_title %}{{ _("Users") }}{% endblock %}
+{% block admin_lead %}{{ _("View, suspend, reactivate or delete student accounts.") }}{% endblock %}
+
+{% block admin %}
+<form class="searchbar" method="get" role="search">
+  {% if status != "all" %}<input type="hidden" name="status" value="{{ status }}">{% endif %}
+  <div class="input-wrap">{{ icon("search") }}<input class="input" type="search" name="q" value="{{ query }}" placeholder="{{ _("Search by name or email") }}" aria-label="{{ _("Search by name or email") }}"></div>
+  <div class="segmented">
+    <a class="{{ 'is-active' if status == 'all' }}" href="{{ url_for('admin.users', q=query or None) }}">{{ _("All") }}</a>
+    <a class="{{ 'is-active' if status == 'active' }}" href="{{ url_for('admin.users', status='active', q=query or None) }}">{{ _("Active") }}</a>
+    <a class="{{ 'is-active' if status == 'suspended' }}" href="{{ url_for('admin.users', status='suspended', q=query or None) }}">{{ _("Suspended") }}</a>
+  </div>
+</form>
+
+{% if page.items %}
+<p class="small muted" style="margin-bottom:12px">{{ ngettext("{n} account", "{n} accounts", page.total) }}</p>
+<div class="card">
+  {% for user in page.items %}
+  <div class="admin-row">
+    <span class="avatar">{{ user.initials }}</span>
+    <div class="body">
+      <div class="title">
+        <span>{{ user.name }}</span>
+        {% if user.is_admin %}<span class="tag">{{ _("Admin") }}</span>
+        {% elif user.suspended_at %}<span class="tag warning">{{ _("Suspended", "tag") }}</span>
+        {% else %}<span class="tag success">{{ _("Active", "tag") }}</span>{% endif %}
+      </div>
+      <div class="meta">{{ user.email }}</div>
+      <div class="meta">{{ _("Joined {date}", date=user.created_at | local) }}{% if user.suspended_at %}, {{ _("suspended {date}", date=user.suspended_at | local) }}{% endif %}</div>
+      <div class="meta">{{ ngettext("{n} solution", "{n} solutions", activity.solutions.get(user.id, 0)) }}, {{ ngettext("{n} practice round", "{n} practice rounds", activity.rounds.get(user.id, 0)) }}, {{ ngettext("{n} lesson done", "{n} lessons done", activity.lessons.get(user.id, 0)) }}</div>
+    </div>
+    {% if not user.is_admin %}
+    <div class="actions">
+      {% if user.suspended_at %}
+      <form method="post" action="{{ url_for('admin.reactivate', user_id=user.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="next" value="{{ request.full_path }}">
+        <button class="btn btn-soft btn-sm" type="submit">{{ icon("refresh", "sm") }} {{ _("Reactivate") }}</button>
+      </form>
+      {% else %}
+      <form method="post" action="{{ url_for('admin.suspend', user_id=user.id) }}" data-confirm="{{ _("Suspend {name}? They will be signed out and cannot log in until you reactivate them.", name=user.name) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="next" value="{{ request.full_path }}">
+        <button class="btn btn-outline btn-sm" type="submit">{{ icon("lock", "sm") }} {{ _("Suspend") }}</button>
+      </form>
+      {% endif %}
+      <form method="post" action="{{ url_for('admin.remove_user', user_id=user.id) }}" data-confirm="{{ _("Delete {name} and everything in the account? This cannot be undone.", name=user.name) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="next" value="{{ request.full_path }}">
+        <button class="btn btn-danger btn-sm" type="submit">{{ icon("trash", "sm") }} {{ _("Delete") }}</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% if page.pages > 1 %}
+<nav class="pager" aria-label="Pages">
+  {% if page.has_prev %}<a class="btn btn-outline btn-sm" href="{{ url_for('admin.users', q=query or None, status=status if status != 'all' else None, page=page.prev_num) }}">{{ icon("chevron-left", "sm") }} {{ _("Newer") }}</a>{% endif %}
+  <span>{{ _("Page {page} of {pages}", page=page.page, pages=page.pages) }}</span>
+  {% if page.has_next %}<a class="btn btn-outline btn-sm" href="{{ url_for('admin.users', q=query or None, status=status if status != 'all' else None, page=page.next_num) }}">{{ _("Older") }} {{ icon("chevron-right", "sm") }}</a>{% endif %}
+</nav>
+{% endif %}
+{% else %}
+<div class="card">
+  <div class="empty">
+    <div class="bubble">{{ icon("users", "lg") }}</div>
+    <h3>{{ _("No users match") }}</h3>
+    <p>{{ _("Try a different search or clear the filters.") }}</p>
+    <a class="btn btn-outline" href="{{ url_for('admin.users') }}">{{ _("Show everything") }}</a>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
