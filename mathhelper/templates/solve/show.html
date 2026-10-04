@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+{% set active_nav = "library" %}
+{% block title %}{{ solution.title | plain(60) }} | {{ app_name }}{% endblock %}
+{% block page_class %}narrow{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{{ url_for('library.index') }}">{{ icon("arrow-left", "sm") }} {{ _("Library") }}</a>
+<div class="page-head">
+  <div>
+    <h1>{{ _("Solution") }}</h1>
+    <p>{{ _("Solved {when}", when=solution.created_at | ago) }}</p>
+  </div>
+  <div class="row">
+    <form method="post" action="{{ url_for('solve.star', solution_id=solution.id) }}" data-star-form>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn btn-outline {{ 'is-starred' if solution.starred }}" type="submit">{{ icon("star") }}<span>{{ _("Saved") if solution.starred else _("Save") }}</span></button>
+    </form>
+    <a class="btn btn-primary" href="{{ url_for('solve.new') }}">{{ icon("plus") }} {{ _("New") }}</a>
+    <form method="post" action="{{ url_for('solve.delete', solution_id=solution.id) }}" data-confirm="{{ _("Delete this solution? This cannot be undone.") }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn btn-ghost btn-icon" type="submit" aria-label="{{ _("Delete solution") }}" title="{{ _("Delete") }}">{{ icon("trash") }}</button>
+    </form>
+  </div>
+</div>
+
+{% if solution.image_name %}
+<a class="card photo-strip" href="{{ url_for('main.upload', name=solution.image_name) }}" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">
+  <img src="{{ url_for('main.upload', name=solution.image_name) }}" alt="{{ _("Your photo") }}">
+  <div><strong>{{ _("Your photo") }}</strong><div class="small faint">{{ _("Open full size") }}</div></div>
+</a>
+{% elif solution.prompt %}
+<div class="card photo-strip">
+  <span class="thumb-icon">{{ icon("pencil") }}</span>
+  <div style="min-width:0"><strong>{{ _("You asked") }}</strong><div class="small muted" style="white-space:pre-wrap;overflow-wrap:anywhere">{{ solution.prompt }}</div></div>
+</div>
+{% endif %}
+
+{% if solution.note %}<div class="alert alert-info section">{{ icon("info") }}<span>{{ solution.note }}</span></div>{% endif %}
+
+<div class="section">
+  {% for problem in solution.problems %}
+  <article class="card card-body problem-card tex" data-problem>
+    <div class="problem-head">
+      {% if solution.problems | length > 1 %}<span class="tag neutral">{{ _("Problem {n} of {total}", n=loop.index, total=solution.problems | length) }}</span>{% endif %}
+      <span class="tag">{{ _(problem.topic) }}</span>
+    </div>
+    <div class="problem-text rich">{{ problem.problem | rich_inline }}</div>
+    <div class="answer">
+      <span class="check-bubble">{{ icon("check") }}</span>
+      <div style="min-width:0"><div class="label">{{ _("Answer") }}</div><div class="value">{{ problem.answer | tall | rich_inline }}</div></div>
+    </div>
+    {% set hide = not current_user.expand_steps %}
+    {% set working = [] %}
+    {% if problem.start %}{% set added = working.append((problem.start, -1)) %}{% endif %}
+    {% for step in problem.steps %}{% if step.result %}{% set added = working.append((step.result, loop.index0)) %}{% endif %}{% endfor %}
+    {% if working | length > 1 %}
+    <section class="working" aria-label="{{ _("Working") }}">
+      <div class="block-label">{{ _("Working") }}</div>
+      {% for line, step_index in working %}
+      <div class="working-line {{ 'is-last' if loop.last }} {{ 'is-hidden' if hide and step_index >= 0 }}" data-step-line="{{ step_index }}">{{ line | tall | rich_inline }}</div>
+      {% endfor %}
+    </section>
+    <div class="block-label steps-label">{{ _("Step by step") }}</div>
+    {% endif %}
+    <ol class="steps">
+      {% for step in problem.steps %}
+      <li class="step {{ 'is-hidden' if hide }}">
+        {% if step.result %}
+        <div class="step-result">{{ step.result | tall | rich_inline }}</div>
+        <div class="step-title">{{ step.title | rich_inline }}</div>
+        {% else %}
+        <h4>{{ step.title | rich_inline }}</h4>
+        {% endif %}
+        <div class="work rich">{{ step.work | rich }}</div>
+      </li>
+      {% endfor %}
+    </ol>
+    {% if not current_user.expand_steps and problem.steps %}
+    <div class="step-controls" data-step-controls>
+      <button class="btn btn-primary btn-sm" type="button" data-next-step>{{ icon("chevron-down", "sm") }}<span>{{ _("Show the first step") }}</span></button>
+      <button class="btn btn-ghost btn-sm" type="button" data-all-steps>{{ _("Show all {n} steps", n=problem.steps | length) }}</button>
+    </div>
+    {% endif %}
+    {% if problem.tip %}
+    <div class="tip">{{ icon("bulb") }}<div><strong>{{ _("Remember") }}</strong><span>{{ problem.tip | rich_inline }}</span></div></div>
+    {% endif %}
+  </article>
+  {% endfor %}
+</div>
+
+<section class="section card" id="tutor">
+  <div class="card-head">
+    <div class="row">
+      <span class="tutor-avatar">{{ icon("sparkles") }}</span>
+      <div><h2 style="font-size:17px">{{ _("Ask the tutor") }}</h2><p class="small muted desk-only">{{ _("Get a simpler explanation, check your own work or try a similar problem.") }}</p></div>
+    </div>
+  </div>
+  <div class="chat tex" data-chat style="margin-top:14px">
+    {% with messages = solution.messages %}{% include "solve/_messages.html" %}{% endwith %}
+  </div>
+  <div class="suggestions" data-suggestions {{ 'hidden' if solution.messages }}>
+    {% for prompt in prompts %}<button type="button" class="chip" data-prompt="{{ prompt }}">{{ prompt }}</button>{% endfor %}
+  </div>
+  <form class="composer" action="{{ url_for('solve.ask', solution_id=solution.id) }}" data-ask-form>
+    <textarea class="textarea" name="question" rows="1" maxlength="1000" placeholder="{{ _("Ask anything about this problem") }}" aria-label="{{ _("Your question") }}" data-question></textarea>
+    <button class="btn btn-primary" type="submit" aria-label="{{ _("Send question") }}">{{ icon("send") }}</button>
+  </form>
+</section>
+{% endblock %}
