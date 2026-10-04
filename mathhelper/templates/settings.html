@@ -1,0 +1,134 @@
+{% extends "layout.html" %}
+{% block title %}{{ _("Settings") }} | {{ app_name }}{% endblock %}
+{% block page_class %}narrow{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{{ _("Settings") }}</h1>
+    <p>{{ _("Manage your profile, preferences and account.") }}</p>
+  </div>
+</div>
+
+<div class="card card-body">
+  <section class="settings-section" id="profile">
+    <div><h2>{{ _("Profile") }}</h2><p>{{ _("Your name and email.") }}</p></div>
+    <form method="post" action="{{ url_for('settings.profile') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="row" style="margin-bottom:20px">
+        <span class="avatar lg">{{ current_user.initials }}</span>
+        <div><strong>{{ current_user.name }}</strong><div class="small faint">{{ _("Member since") }} {{ current_user.created_at | local("month") }}</div></div>
+      </div>
+      <div class="field">
+        <label class="label" for="name">{{ _("Name") }}</label>
+        <input class="input" id="name" name="name" value="{{ current_user.name }}" maxlength="80" required>
+      </div>
+      <div class="field">
+        <label class="label" for="email">{{ _("Email") }}</label>
+        <input class="input" id="email" name="email" type="email" value="{{ current_user.email }}" required {{ 'readonly' if current_user.is_admin }}>
+        {% if current_user.is_admin %}<span class="hint">{{ _("The admin email is set in the server settings.") }}</span>{% endif %}
+      </div>
+      <div class="field"><button class="btn btn-primary" type="submit">{{ _("Save profile") }}</button></div>
+    </form>
+  </section>
+
+  <section class="settings-section" id="preferences">
+    <div><h2>{{ _("Preferences") }}</h2><p>{{ _("How the app looks and behaves.") }}</p></div>
+    <form method="post" action="{{ url_for('settings.preferences') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="field" style="margin-bottom:20px">
+        <label class="label" for="language">{{ _("Language") }}</label>
+        <select class="select" id="language" name="language">
+          {% for code, label in languages.items() %}<option value="{{ code }}" {{ 'selected' if lang == code }}>{{ label }}</option>{% endfor %}
+        </select>
+      </div>
+      <p class="label" style="margin-bottom:10px">{{ _("Theme") }}</p>
+      <div class="theme-options">
+        {% for value, label, glyph in [("system", "System", "monitor"), ("light", "Light", "sun"), ("dark", "Dark", "moon")] %}
+        <div class="theme-option">
+          <input type="radio" id="theme-{{ value }}" name="theme" value="{{ value }}" {{ 'checked' if current_user.theme == value }}>
+          <label for="theme-{{ value }}">{{ icon(glyph) }}{{ _(label) }}</label>
+        </div>
+        {% endfor %}
+      </div>
+      {% if not current_user.is_admin %}
+      <div style="margin-top:22px">
+        <div class="switch-row">
+          <div><strong>{{ _("Show all steps at once") }}</strong><p class="small muted">{{ _("Turn this off to reveal solutions one step at a time.") }}</p></div>
+          <label class="switch"><input type="checkbox" name="expand_steps" aria-label="{{ _("Show all steps at once") }}" {{ 'checked' if current_user.expand_steps }}><span></span></label>
+        </div>
+        <div class="switch-row">
+          <div><strong>{{ _("Sound effects") }}</strong><p class="small muted">{{ _("A short sound for right and wrong answers in practice.") }}</p></div>
+          <label class="switch"><input type="checkbox" name="sounds" aria-label="{{ _("Sound effects") }}" {{ 'checked' if current_user.sounds }}><span></span></label>
+        </div>
+      </div>
+      {% endif %}
+      <div class="field"><button class="btn btn-primary" type="submit">{{ _("Save preferences") }}</button></div>
+    </form>
+  </section>
+
+  <section class="settings-section" id="security">
+    <div><h2>{{ _("Password") }}</h2><p>{% if current_user.password_hash %}{{ _("Change the password you use to log in.") }}{% else %}{{ _("You sign in with Google. Add a password to also log in with your email.") }}{% endif %}</p></div>
+    <form method="post" action="{{ url_for('settings.password') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      {% if current_user.password_hash %}
+      <div class="field">
+        <label class="label" for="current_password">{{ _("Current password") }}</label>
+        <input class="input" id="current_password" name="current_password" type="password" autocomplete="current-password" required>
+      </div>
+      {% endif %}
+      <div class="field">
+        <label class="label" for="new_password">{{ _("New password") }}</label>
+        <input class="input" id="new_password" name="new_password" type="password" autocomplete="new-password" minlength="8" required>
+        <span class="hint">{{ _("At least 8 characters.") }}</span>
+      </div>
+      <div class="field">
+        <label class="label" for="confirm_password">{{ _("Confirm new password") }}</label>
+        <input class="input" id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" minlength="8" required>
+      </div>
+      <div class="field"><button class="btn btn-primary" type="submit">{{ _("Update password") }}</button></div>
+    </form>
+  </section>
+
+  {% if not current_user.is_admin %}
+  <section class="settings-section" id="data">
+    <div><h2>{{ _("Your data") }}</h2><p>{{ _("Clear your history or remove your account for good.") }}</p></div>
+    <div class="stack">
+      <form method="post" action="{{ url_for('settings.clear_history') }}" data-confirm="{{ _("Delete every solved problem and chat? Lessons and practice scores stay.") }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="row wrap" style="justify-content:space-between">
+          <div><strong>{{ _("Clear solution history") }}</strong><p class="small muted">{{ _("Removes all solved problems, photos and tutor chats.") }}</p></div>
+          <button class="btn btn-outline" type="submit">{{ icon("trash", "sm") }} {{ _("Clear history") }}</button>
+        </div>
+      </form>
+      <form class="card card-body danger-zone" method="post" action="{{ url_for('settings.delete_account') }}" data-confirm="{{ _("Delete your account and everything in it? This cannot be undone.") }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <strong>{{ _("Delete account") }}</strong>
+        <p class="small muted" style="margin-top:2px">{{ _("This permanently removes your account, solutions, progress and scores.") }}</p>
+        <div class="field" style="margin-top:14px">
+          {% if current_user.password_hash %}
+          <label class="label" for="delete_password">{{ _("Type your password to confirm") }}</label>
+          <input class="input" id="delete_password" name="password" type="password" autocomplete="current-password" required>
+          {% else %}
+          <label class="label" for="delete_email">{{ _("Type your email to confirm") }}</label>
+          <input class="input" id="delete_email" name="email" type="email" required>
+          {% endif %}
+        </div>
+        <div class="field"><button class="btn btn-danger" type="submit">{{ icon("trash", "sm") }} {{ _("Delete my account") }}</button></div>
+      </form>
+    </div>
+  </section>
+  {% endif %}
+</div>
+
+<form class="settings-logout touch-only" method="post" action="{{ url_for('auth.logout') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <button class="btn btn-outline btn-lg btn-block" type="submit">{{ icon("logout") }} {{ _("Log out") }}</button>
+</form>
+
+<nav class="about-links" aria-label="{{ _("About") }}">
+  <a href="{{ url_for('main.about') }}">{{ icon("info", "sm") }} {{ _("About the app") }}</a>
+  <a href="{{ url_for('main.privacy') }}">{{ _("Privacy Policy") }}</a>
+  <a href="{{ url_for('main.terms') }}">{{ _("Terms of Service") }}</a>
+</nav>
+{% endblock %}
