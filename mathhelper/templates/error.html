@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} | {{ app_name }}{% endblock %}
+
+{% block body %}
+<div class="error-page">
+  <div>
+    <div class="code">{{ code }}</div>
+    <h1>{{ title }}</h1>
+    <p>{{ message }}</p>
+    <a class="btn btn-primary" href="{{ url_for('main.home') if current_user.is_authenticated else url_for('main.landing') }}">{{ icon("home") }} {{ _("Take me home") }}</a>
+  </div>
+</div>
+{% endblock %}
