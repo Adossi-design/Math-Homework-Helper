@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Create your account") }} | {{ app_name }}{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+  {% include "auth/_side.html" %}
+  <main class="auth-main">
+    {% include "auth/_top.html" %}
+    <div class="auth-box">
+      <div class="auth-lang desk-only">{% include "partials/lang_switch.html" %}</div>
+      <h1>{{ _("Create your account") }}</h1>
+      <p class="sub">{{ _("Free to use. Your work is saved as you go.") }}</p>
+
+      {% include "auth/_google.html" %}
+
+      <form method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="timezone" data-timezone-field>
+        <div class="field">
+          <label class="label" for="name">{{ _("Your name") }}</label>
+          <div class="input-wrap">{{ icon("user") }}<input class="input {{ 'is-invalid' if errors.name }}" id="name" name="name" value="{{ form.name }}" autocomplete="name" maxlength="80" required autofocus></div>
+          {% if errors.name %}<span class="error-text">{{ errors.name }}</span>{% endif %}
+        </div>
+        <div class="field">
+          <label class="label" for="email">{{ _("Email") }}</label>
+          <div class="input-wrap">{{ icon("mail") }}<input class="input {{ 'is-invalid' if errors.email }}" id="email" name="email" type="email" value="{{ form.email }}" autocomplete="email" required></div>
+          {% if errors.email %}<span class="error-text">{{ errors.email }}</span>{% endif %}
+        </div>
+        <div class="field">
+          <label class="label" for="password">{{ _("Password") }}</label>
+          <div class="input-wrap">
+            {{ icon("lock") }}
+            <input class="input {{ 'is-invalid' if errors.password }}" id="password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+            <button class="btn btn-ghost btn-icon btn-sm reveal" type="button" data-reveal="password" aria-label="{{ _("Show password") }}">{{ icon("eye", "sm") }}</button>
+          </div>
+          {% if errors.password %}<span class="error-text">{{ errors.password }}</span>{% else %}<span class="hint">{{ _("At least 8 characters.") }}</span>{% endif %}
+        </div>
+        <div class="field"><button class="btn btn-primary btn-lg btn-block" type="submit">{{ _("Create account") }}</button></div>
+      </form>
+      <p class="hint" style="text-align:center;margin-top:14px">{{ _("By creating an account you agree to the") }} <a href="{{ url_for('main.terms') }}">{{ _("Terms") }}</a> {{ _("and the") }} <a href="{{ url_for('main.privacy') }}">{{ _("Privacy Policy") }}</a>.</p>
+      <p class="auth-switch">{{ _("Already have an account?") }} <a href="{{ url_for('auth.login') }}">{{ _("Log in") }}</a></p>
+    </div>
+  </main>
+</div>
+{% endblock %}
