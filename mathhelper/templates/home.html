@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% block title %}{{ _("Home") }} | {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{{ greeting }}, {{ current_user.first_name }}</h1>
+    <p class="keep">{{ today }}</p>
+  </div>
+</div>
+
+<section class="hero">
+  <img class="hero-mascot desk-only" src="{{ url_for('static', filename='mascot/mascot_thinking_large.webp') }}" alt="" loading="lazy">
+  <h2>{{ _("Stuck on a problem?") }}</h2>
+  <p class="desk-only">{{ _("Snap a photo or type it in. You will get the answer and every line of working, explained.") }}</p>
+  <div class="row wrap">
+    <a class="btn btn-white btn-lg" href="{{ url_for('solve.new') }}">{{ icon("camera") }} <span class="desk-only">{{ _("Take a photo") }}</span><span class="touch-only">{{ _("Photo") }}</span></a>
+    <a class="btn btn-glass btn-lg" href="{{ url_for('solve.new', mode='type') }}">{{ icon("pencil") }} <span class="desk-only">{{ _("Type a problem") }}</span><span class="touch-only">{{ _("Type") }}</span></a>
+  </div>
+</section>
+
+<section class="section grid grid-4 stats">
+  <div class="card stat">
+    <div class="stat-top"><span class="stat-icon streak">{{ icon("flame", "sm") }}</span><span class="desk-only">{{ _("Day streak") }}</span><span class="touch-only">{{ _("Streak") }}</span></div>
+    <div class="value">{{ numbers.streak }}<small>{{ ngettext("day", "days", numbers.streak) }}</small></div>
+    <div class="week" aria-label="{{ _("Activity over the last seven days") }}">
+      {% for day in numbers.week %}<span class="{{ 'on' if day.active }} {{ 'today' if day.today }}"><i></i>{{ day.label }}</span>{% endfor %}
+    </div>
+  </div>
+  <div class="card stat">
+    <div class="stat-top"><span class="stat-icon">{{ icon("check-circle", "sm") }}</span><span class="desk-only">{{ _("Problems solved") }}</span><span class="touch-only">{{ _("Solved") }}</span></div>
+    <div class="value">{{ numbers.problems }}</div>
+    <p class="small faint" style="margin-top:12px">{{ _("Saved in your library") }}</p>
+  </div>
+  <div class="card stat">
+    <div class="stat-top"><span class="stat-icon green">{{ icon("chart", "sm") }}</span><span class="desk-only">{{ _("Practice accuracy") }}</span><span class="touch-only">{{ _("Accuracy") }}</span></div>
+    <div class="value">{% if numbers.accuracy is none %}<span class="faint desk-only">{{ _("None yet") }}</span><span class="faint touch-only">0</span>{% else %}{{ numbers.accuracy }}<small>%</small>{% endif %}</div>
+    <p class="small faint" style="margin-top:12px">{{ ngettext("{n} round played", "{n} rounds played", numbers.rounds) }}</p>
+  </div>
+  <div class="card stat">
+    <div class="stat-top"><span class="stat-icon amber">{{ icon("book", "sm") }}</span><span class="desk-only">{{ _("Lessons done") }}</span><span class="touch-only">{{ _("Lessons") }}</span></div>
+    <div class="value">{{ numbers.lessons }}</div>
+    <p class="small faint" style="margin-top:12px">{{ _("Across all courses") }}</p>
+  </div>
+</section>
+
+<div class="section split">
+  <section>
+    <div class="section-head"><h2>{{ _("Recent solutions") }}</h2>{% if recent %}<a href="{{ url_for('library.index') }}">{{ _("See all") }}</a>{% endif %}</div>
+    <div class="card">
+      {% if recent %}
+      <div class="list">
+        {% for solution in recent %}
+        <a class="list-item" href="{{ url_for('solve.show', solution_id=solution.id) }}">
+          {% if solution.image_name %}<img class="thumb" src="{{ url_for('main.upload', name=solution.image_name) }}" alt="" loading="lazy">
+          {% else %}<span class="thumb-icon">{{ icon("pencil") }}</span>{% endif %}
+          <div class="body">
+            <div class="title">{{ solution.title | plain(90) }}</div>
+            <div class="meta"><span class="tag">{{ _(solution.topic) }}</span><span>{{ solution.created_at | ago }}</span></div>
+          </div>
+          {{ icon("chevron-right") }}
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty">
+        <div class="bubble">{{ icon("camera", "lg") }}</div>
+        <h3>{{ _("No problems solved yet") }}</h3>
+        <p>{{ _("Your first solution will show up here. Try a photo of any worksheet.") }}</p>
+        <a class="btn btn-primary" href="{{ url_for('solve.new') }}">{{ _("Solve your first problem") }}</a>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <aside class="stack">
+    {% if next_lesson %}
+    <div>
+      <div class="section-head"><h2>{{ _("Continue learning") }}</h2></div>
+      <a class="card card-link card-body tone-{{ next_course.tone }}" href="{{ url_for('learn.lesson', course_id=next_course.id, lesson_id=next_lesson.id) }}">
+        <div class="row">
+          <span class="glyph">{{ next_course.glyph }}</span>
+          <div>
+            <div class="small faint">{{ next_course.title }}</div>
+            <h3>{{ next_lesson.title }}</h3>
+          </div>
+        </div>
+        <div class="row" style="margin-top:16px;justify-content:space-between">
+          <span class="small muted">{{ icon("clock", "sm") }} {{ _("{n} min read", n=next_lesson.minutes) }}</span>
+          <span class="btn btn-soft btn-sm">{{ _("Start") }} {{ icon("arrow-right", "sm") }}</span>
+        </div>
+      </a>
+    </div>
+    {% endif %}
+    {% if suggestion %}
+    <div>
+      <div class="section-head"><h2>{{ _("Practice pick") }}</h2></div>
+      <div class="card card-body">
+        <span class="tag neutral">{{ _(suggestion.topic) }}</span>
+        <h3 style="margin-top:10px">{{ _(suggestion.title) }}</h3>
+        <p class="small muted desk-only" style="margin-top:4px">{{ _(suggestion.blurb) }}</p>
+        {% set score = best.get(suggestion.id) %}
+        <div class="row" style="margin-top:16px;justify-content:space-between">
+          <span class="small faint">{% if score %}{{ _("Best {score}/{total}", score=score.best, total=score.total) }}{% else %}{{ _("Not tried yet") }}{% endif %}</span>
+          <a class="btn btn-primary btn-sm" href="{{ url_for('practice.play', skill_id=suggestion.id) }}">{{ icon("play", "sm") }} {{ _("Practice") }}</a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}
