@@ -1,0 +1,75 @@
+{% extends "admin/_base.html" %}
+{% block admin_title %}{{ _("Overview") }}{% endblock %}
+{% block admin_lead %}{{ _("Everything happening in the app, in one place.") }}{% endblock %}
+
+{% block admin %}
+<section class="grid grid-4 stats">
+  <a class="card card-link stat" href="{{ url_for('admin.users') }}">
+    <div class="stat-top"><span class="stat-icon">{{ icon("users", "sm") }}</span><span>{{ _("Users") }}</span></div>
+    <div class="value">{{ numbers.users }}</div>
+    <p class="small faint" style="margin-top:12px">{{ _("{n} new this week", n=numbers.new) }}</p>
+  </a>
+  <a class="card card-link stat" href="{{ url_for('admin.users', status='suspended') }}">
+    <div class="stat-top"><span class="stat-icon amber">{{ icon("lock", "sm") }}</span><span>{{ _("Suspended") }}</span></div>
+    <div class="value">{{ numbers.suspended }}</div>
+    <p class="small faint" style="margin-top:12px">{{ _("Cannot sign in") }}</p>
+  </a>
+  <a class="card card-link stat" href="{{ url_for('admin.lessons') }}">
+    <div class="stat-top"><span class="stat-icon green">{{ icon("book", "sm") }}</span><span>{{ _("Lessons") }}</span></div>
+    <div class="value">{{ numbers.lessons }}</div>
+    <p class="small faint" style="margin-top:12px">{{ _("Visible to students") }}</p>
+  </a>
+  <a class="card card-link stat" href="{{ url_for('admin.practice') }}">
+    <div class="stat-top"><span class="stat-icon streak">{{ icon("target", "sm") }}</span><span>{{ _("Practice") }}</span></div>
+    <div class="value">{{ numbers.practice }}</div>
+    <p class="small faint" style="margin-top:12px">{{ _("Visible to students") }}</p>
+  </a>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("This week") }}</h2></div>
+  <div class="card week-activity">
+    <div><span class="stat-icon">{{ icon("check-circle", "sm") }}</span><strong>{{ numbers.solved }}</strong><span>{{ _("Problems solved") }}</span></div>
+    <div><span class="stat-icon streak">{{ icon("target", "sm") }}</span><strong>{{ numbers.rounds }}</strong><span>{{ _("Practice rounds") }}</span></div>
+    <div><span class="stat-icon green">{{ icon("book", "sm") }}</span><strong>{{ numbers.finished }}</strong><span>{{ _("Lessons finished") }}</span></div>
+  </div>
+</section>
+
+<div class="section split">
+  <section>
+    <div class="section-head"><h2>{{ _("Newest users") }}</h2><a href="{{ url_for('admin.users') }}">{{ _("See all") }}</a></div>
+    <div class="card">
+      {% if newest %}
+      <div class="list">
+        {% for user in newest %}
+        <a class="list-item" href="{{ url_for('admin.users', q=user.email) }}">
+          <span class="avatar">{{ user.initials }}</span>
+          <div class="body">
+            <div class="title">{{ user.name }}</div>
+            <div class="meta"><span>{{ user.email }}</span></div>
+          </div>
+          <span class="small faint desk-only">{{ user.created_at | ago }}</span>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty">
+        <div class="bubble">{{ icon("users", "lg") }}</div>
+        <h3>{{ _("No users yet") }}</h3>
+        <p>{{ _("New accounts will show up here.") }}</p>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <aside>
+    <div class="section-head"><h2>{{ _("Quick actions") }}</h2></div>
+    <div class="card card-body stack">
+      <a class="btn btn-primary btn-block" href="{{ url_for('admin.new_lesson') }}">{{ icon("plus") }} {{ _("New lesson") }}</a>
+      <a class="btn btn-soft btn-block" href="{{ url_for('admin.new_practice') }}">{{ icon("plus") }} {{ _("New practice set") }}</a>
+      <a class="btn btn-outline btn-block" href="{{ url_for('admin.users') }}">{{ icon("users") }} {{ _("Manage users") }}</a>
+      <a class="btn btn-ghost btn-block" href="{{ url_for('admin.beral') }}">{{ icon("sparkles") }} {{ _("Beral 3D preview") }}</a>
+    </div>
+  </aside>
+</div>
+{% endblock %}
