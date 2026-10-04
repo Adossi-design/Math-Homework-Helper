@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Reset your password") }} | {{ app_name }}{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+  {% set pose = "thinking" %}
+  {% include "auth/_side.html" %}
+  <main class="auth-main">
+    {% include "auth/_top.html" %}
+    <div class="auth-box">
+      <div class="auth-lang desk-only">{% include "partials/lang_switch.html" %}</div>
+      {% if sent %}
+      <div class="empty" style="padding:0;text-align:left">
+        <div class="bubble" style="margin:0 0 18px">{{ icon("mail", "lg") }}</div>
+        <h1>{{ _("Check your email") }}</h1>
+        <p class="sub" style="max-width:none;margin:8px 0 16px">{{ _("We sent a reset link to") }} <strong>{{ email }}</strong>.</p>
+        <div class="alert alert-info" style="margin-bottom:22px">{{ icon("info") }}<span>{{ _("Can't find it? Check your Spam folder.") }}</span></div>
+        <a class="btn btn-primary btn-lg btn-block" href="{{ url_for('auth.login') }}">{{ _("Back to log in") }}</a>
+      </div>
+      {% else %}
+      <h1>{{ _("Forgot your password?") }}</h1>
+      <p class="sub">{{ _("Enter your email to get a reset link.") }}</p>
+
+      {% if error %}<div class="alert alert-error" role="alert" style="margin-bottom:16px">{{ icon("alert") }}<span>{{ error }}</span></div>{% endif %}
+
+      <form method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="field">
+          <label class="label" for="email">{{ _("Email") }}</label>
+          <div class="input-wrap">{{ icon("mail") }}<input class="input" id="email" name="email" type="email" value="{{ email }}" autocomplete="email" required autofocus></div>
+        </div>
+        <div class="field"><button class="btn btn-primary btn-lg btn-block" type="submit">{{ _("Send reset link") }}</button></div>
+      </form>
+      <p class="auth-switch">{{ _("Remembered it?") }} <a href="{{ url_for('auth.login') }}">{{ _("Back to log in") }}</a></p>
+      {% endif %}
+    </div>
+  </main>
+</div>
+{% endblock %}
