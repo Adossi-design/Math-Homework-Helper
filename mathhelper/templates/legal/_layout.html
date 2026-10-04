@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% include "partials/public_nav.html" %}
+<main class="legal">
+  {% block legal %}{% endblock %}
+</main>
+{% include "partials/footer.html" %}
+{% endblock %}
