@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}{{ course.title }} | {{ app_name }}{% endblock %}
+
+{% block content %}
+{% set total = course.lessons | length %}
+<a class="back-link" href="{{ url_for('learn.index') }}">{{ icon("arrow-left", "sm") }} {{ _("All courses") }}</a>
+
+<div class="card card-body course-hero tone-{{ course.tone }}">
+  <span class="glyph lg">{{ course.glyph }}</span>
+  <div class="grow">
+    <h1>{{ course.title }}</h1>
+    <p class="muted" style="margin-top:6px">{{ course.summary }}</p>
+    <div class="row" style="margin-top:14px">
+      <div class="progress {{ 'success' if finished == total }}" style="flex:1;max-width:280px"><span style="width:{{ (100 * finished / total) | round | int }}%"></span></div>
+      <span class="small muted">{{ _("{done} of {total} lessons done", done=finished, total=total) }}</span>
+    </div>
+  </div>
+  <a class="btn btn-primary btn-lg" href="{{ url_for('learn.lesson', course_id=course.id, lesson_id=(resume or course.lessons[0]).id) }}">
+    {% if finished == 0 %}{{ _("Start course") }}{% elif resume %}{{ _("Continue") }}{% else %}{{ _("Review course") }}{% endif %} {{ icon("arrow-right") }}
+  </a>
+</div>
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("Lessons") }}</h2></div>
+  <div class="card">
+    {% for lesson in course.lessons %}
+    {% set is_done = key(course, lesson) in done %}
+    <a class="lesson-row" href="{{ url_for('learn.lesson', course_id=course.id, lesson_id=lesson.id) }}">
+      <span class="lesson-num {{ 'done' if is_done }}">{% if is_done %}{{ icon("check", "sm") }}{% else %}{{ loop.index }}{% endif %}</span>
+      <div class="body"><strong>{{ lesson.title }}</strong><span>{{ _("{n} min read", n=lesson.minutes) }}{% if is_done %}, {{ _("completed") }}{% endif %}</span></div>
+      {{ icon("chevron-right") }}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("Practice these skills") }}</h2></div>
+  <div class="grid grid-2">
+    {% for skill in skills %}
+    <a class="card card-link card-body row" href="{{ url_for('practice.play', skill_id=skill.id) }}">
+      <span class="glyph sm">{{ icon("target") }}</span>
+      <div style="flex:1;min-width:0"><h3>{{ _(skill.title) }}</h3><p class="small muted desk-only">{{ _(skill.blurb) }}</p></div>
+      {{ icon("chevron-right") }}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
