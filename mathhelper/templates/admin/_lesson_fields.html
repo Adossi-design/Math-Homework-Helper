@@ -1,0 +1,30 @@
+<div class="field">
+  <label class="label" for="{{ prefix }}title">{{ _("Title") }}</label>
+  <input class="input" id="{{ prefix }}title" name="{{ prefix }}title" value="{{ text.title }}" maxlength="120">
+</div>
+<div class="field">
+  <label class="label" for="{{ prefix }}intro">{{ _("Introduction") }}</label>
+  <textarea class="textarea short" id="{{ prefix }}intro" name="{{ prefix }}intro">{{ text.intro }}</textarea>
+</div>
+<div class="field">
+  <label class="label" for="{{ prefix }}points">{{ _("Key ideas") }}</label>
+  <textarea class="textarea" id="{{ prefix }}points" name="{{ prefix }}points">{{ text.points | join("\n") }}</textarea>
+  <span class="hint">{{ _("One per line.") }}</span>
+</div>
+<div class="field">
+  <label class="label" for="{{ prefix }}problem">{{ _("Example problem") }}</label>
+  <input class="input" id="{{ prefix }}problem" name="{{ prefix }}problem" value="{{ text.problem }}">
+</div>
+<div class="field">
+  <label class="label" for="{{ prefix }}steps">{{ _("Example steps") }}</label>
+  <textarea class="textarea" id="{{ prefix }}steps" name="{{ prefix }}steps">{{ text.steps | join("\n") }}</textarea>
+  <span class="hint">{{ _("One per line.") }}</span>
+</div>
+<div class="field">
+  <label class="label" for="{{ prefix }}answer">{{ _("Example answer") }}</label>
+  <input class="input" id="{{ prefix }}answer" name="{{ prefix }}answer" value="{{ text.answer }}">
+</div>
+<div class="field">
+  <label class="label" for="{{ prefix }}mistake">{{ _("Common mistake") }}</label>
+  <textarea class="textarea short" id="{{ prefix }}mistake" name="{{ prefix }}mistake">{{ text.mistake }}</textarea>
+</div>
