@@ -1,0 +1,12 @@
+<header class="public-nav has-action">
+  <a class="brand" href="{{ url_for('main.landing') }}" aria-label="{{ app_name }}">{% include "partials/logo.html" %}<span>{{ app_name }}</span></a>
+  <div class="row">
+    {% include "partials/lang_switch.html" %}
+    {% if current_user.is_authenticated %}
+    <a class="btn btn-primary" href="{{ url_for('main.home') }}">{{ _("Back to the app") }}</a>
+    {% else %}
+    <a class="btn btn-ghost" href="{{ url_for('auth.login') }}">{{ _("Log in") }}</a>
+    <a class="btn btn-primary desk-only" href="{{ url_for('auth.signup') }}">{{ _("Get started") }}</a>
+    {% endif %}
+  </div>
+</header>
