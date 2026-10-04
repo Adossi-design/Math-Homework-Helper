@@ -1,0 +1,11 @@
+<aside class="mascot" data-mascot hidden>
+  <div class="mascot-bubble">
+    <strong class="mascot-name">{{ mascot_name }}</strong>
+    <p data-mascot-text></p>
+    <button class="mascot-close" type="button" data-mascot-close aria-label="{{ _("Dismiss") }}">{{ icon("x", "sm") }}</button>
+  </div>
+  <img class="mascot-img" data-mascot-img alt="" decoding="async">
+  <div class="mascot-stage" data-mascot-stage aria-hidden="true"></div>
+</aside>
+<p class="sr-only" role="status" aria-live="polite" data-mascot-live></p>
+<script type="application/json" id="mascot-data">{{ mascot_data() | tojson }}</script>
