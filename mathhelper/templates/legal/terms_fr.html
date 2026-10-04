@@ -1,0 +1,49 @@
+{% extends "legal/_layout.html" %}
+{% block title %}Conditions d'utilisation | {{ app_name }}{% endblock %}
+
+{% block legal %}
+<h1>Conditions d'utilisation</h1>
+<p class="updated">Dernière mise à jour : 1er octobre 2026</p>
+
+<p style="margin-top:20px">Ces conditions expliquent les règles d'utilisation de {{ app_name }}. En créant un compte ou en utilisant l'appli, tu les acceptes.</p>
+
+<h2>Ce qu'est l'appli</h2>
+<p>{{ app_name }} est un outil d'apprentissage. Il résout des problèmes de maths à partir de photos ou de questions tapées, explique les étapes et propose des leçons et des exercices.</p>
+
+<h2>Les réponses viennent d'une IA</h2>
+<p>Les solutions et les réponses du tuteur sont produites par un modèle d'IA. Elles sont généralement justes, mais elles peuvent être fausses. Vérifie les réponses importantes par toi-même ou avec un enseignant, et ne te fie pas à l'appli quand une erreur pourrait causer du tort.</p>
+
+<h2>Utilise-la pour apprendre</h2>
+<p>L'appli est là pour t'aider à comprendre les maths. Respecte les règles de ton établissement sur l'aide aux devoirs et n'utilise pas l'appli pour tricher lors d'un contrôle ou d'un examen.</p>
+
+<h2>Ton compte</h2>
+<ul>
+  <li>Donne des informations exactes à l'inscription et garde ton mot de passe secret.</li>
+  <li>Tu es responsable de ce qui se passe sur ton compte.</li>
+  <li>Si tu as moins de 13 ans, ou moins que l'âge requis dans ton pays pour accepter des services en ligne, un parent ou un tuteur légal doit créer le compte et accepter ces conditions pour toi.</li>
+</ul>
+
+<h2>Ce qui est interdit</h2>
+<ul>
+  <li>Envoyer du contenu illégal, nuisible, ou qui appartient à quelqu'un d'autre sans autorisation.</li>
+  <li>Essayer de casser, de surcharger ou de contourner les limites de l'appli.</li>
+  <li>Utiliser des outils automatiques pour envoyer un grand nombre de requêtes.</li>
+</ul>
+
+<h2>Ton contenu</h2>
+<p>Les problèmes et les photos que tu envoies restent à toi. Tu nous autorises à les stocker et à les traiter pour que l'appli fonctionne, comme décrit dans la <a href="{{ url_for('main.privacy') }}">Politique de confidentialité</a>.</p>
+
+<h2>Disponibilité</h2>
+<p>L'appli est fournie telle quelle, sans garantie. Elle peut être modifiée, limitée ou indisponible par moments, et des limites d'utilisation peuvent s'appliquer.</p>
+
+<h2>Arrêter d'utiliser l'appli</h2>
+<p>Tu peux arrêter d'utiliser l'appli et supprimer ton compte à tout moment depuis les Paramètres. Nous pouvons suspendre les comptes qui ne respectent pas ces conditions.</p>
+
+<h2>Modifications</h2>
+<p>Si ces conditions changent, la nouvelle version sera publiée sur cette page avec une nouvelle date.</p>
+
+{% if support_email %}
+<h2>Contact</h2>
+<p>Une question sur ces conditions ? Écris à <a href="mailto:{{ support_email }}">{{ support_email }}</a>.</p>
+{% endif %}
+{% endblock %}
