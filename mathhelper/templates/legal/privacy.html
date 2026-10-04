@@ -1,0 +1,65 @@
+{% extends "legal/_layout.html" %}
+{% block title %}Privacy Policy | {{ app_name }}{% endblock %}
+
+{% block legal %}
+<h1>Privacy Policy</h1>
+<p class="updated">Last updated: October 1, 2026</p>
+
+<p style="margin-top:20px">{{ app_name }} helps students solve and understand math problems. This page explains, in plain words, what information the app collects, why, and what you can do about it.</p>
+
+<h2>What we collect</h2>
+<ul>
+  <li><strong>Account details:</strong> your name and email address. If you sign up with a password, we store a scrambled (hashed) version of it, never the password itself. If you sign in with Google, we receive your name, email address and Google account ID from Google.</li>
+  <li><strong>Your math work:</strong> the problems you type, the photos you upload, the solutions the app produces and your chats with the tutor. Photos are resized before they are stored.</li>
+  <li><strong>Your progress:</strong> practice scores, completed lessons and the days you were active, which power your streak.</li>
+  <li><strong>Preferences:</strong> your theme, sound and step display settings, and your time zone so dates show correctly.</li>
+  <li><strong>Security records:</strong> failed login attempts, with a scrambled form of your network address, kept for up to a day to block password guessing.</li>
+  <li><strong>Email records:</strong> the time a password reset email was sent to your address, so we can limit how many are sent.</li>
+</ul>
+
+<h2>How we use it</h2>
+<ul>
+  <li>To solve your problems and explain the steps.</li>
+  <li>To save your library, progress and settings so they are there when you come back.</li>
+  <li>To sign you in and keep your account secure.</li>
+  <li>To send a password reset email when you ask for one.</li>
+</ul>
+<p>We do not sell your information, and we do not show ads.</p>
+
+<h2>Services that help run the app</h2>
+<p>We share only what each service needs to do its job:</p>
+<ul>
+  <li><strong>Google Gemini:</strong> the problems, photos and tutor questions you submit are sent to Google's AI service to produce solutions. Google handles this content under its own terms, which may allow Google to use it to improve its services. Please do not include personal information in the problems or photos you submit.</li>
+  <li><strong>Google Sign In:</strong> used only if you choose to sign in with Google.</li>
+  <li><strong>Vercel:</strong> hosts the app. Like most hosts, it keeps technical logs such as IP addresses.</li>
+  <li><strong>Neon:</strong> stores the app's database.</li>
+  <li><strong>Email delivery:</strong> {{ mail_provider }} delivers password reset emails to your email address.</li>
+</ul>
+
+<h2>Cookies</h2>
+<p>The app uses only the cookies needed to keep you signed in, remember your language and protect forms. It does not use advertising or tracking cookies.</p>
+
+<h2>Your choices</h2>
+<ul>
+  <li><strong>See and change your details:</strong> open Settings to update your name, email and password.</li>
+  <li><strong>Delete single solutions:</strong> open a solution and use the delete button.</li>
+  <li><strong>Clear your history:</strong> Settings has a button that removes all solved problems, photos and tutor chats.</li>
+  <li><strong>Delete your account:</strong> Settings has a button that permanently removes your account and everything stored with it.</li>
+</ul>
+
+<h2>How long we keep it</h2>
+<p>We keep your information for as long as your account exists. When you delete your account, your details, solutions, photos, chats, progress and email records are removed from our database.</p>
+
+<h2>Children</h2>
+<p>The app is meant for students of all ages. If you are under 13, or under the age at which you can agree to online services in your country, please ask a parent or guardian to create the account and use the app with you.</p>
+
+<h2>Changes</h2>
+<p>If this policy changes, the new version will be posted on this page with a new date.</p>
+
+<h2>Contact</h2>
+{% if support_email %}
+<p>Questions about your privacy? Email <a href="mailto:{{ support_email }}">{{ support_email }}</a>.</p>
+{% else %}
+<p>You can manage or delete your information at any time from the Settings page of your account.</p>
+{% endif %}
+{% endblock %}
