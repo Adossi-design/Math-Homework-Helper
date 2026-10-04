@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% set active_nav = "practice" %}
+{% block title %}{{ _(skill.title) }} | {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="quiz" data-quiz>
+  <div class="quiz-top">
+    <a class="btn btn-ghost btn-icon" href="{{ url_for('practice.index') }}" aria-label="{{ _("Leave this round") }}" data-quit>{{ icon("x") }}</a>
+    <div class="progress" role="progressbar" aria-label="{{ _("Round progress") }}"><span data-progress style="width:0%"></span></div>
+    <span class="count" data-count>1 / {{ questions | length }}</span>
+  </div>
+  <div class="row" style="justify-content:space-between;margin-bottom:10px">
+    <span class="small faint">{{ _(skill.title) }}</span>
+    {% if lesson %}<a class="small" href="{{ url_for('learn.lesson', course_id=course.id, lesson_id=lesson.id) }}" target="_blank" rel="noopener">{{ icon("book", "sm") }} {{ _("Open the lesson") }}</a>{% endif %}
+  </div>
+  <div class="card card-body">
+    <div class="question tex" data-question></div>
+    <div class="choices tex" data-choices></div>
+    <div class="feedback tex" data-feedback hidden></div>
+  </div>
+  <div class="quiz-actions">
+    <button class="btn btn-primary btn-lg" type="button" data-next hidden><span>{{ _("Next") }}</span> {{ icon("arrow-right") }}</button>
+  </div>
+  <p class="kbd-hint">{{ _("Press") }} <span class="kbd">1</span> {{ _("to", "range") }} <span class="kbd">4</span> {{ _("to answer and") }} <span class="kbd">{{ _("Enter") }}</span> {{ _("to continue.") }}</p>
+  <form method="post" action="{{ url_for('practice.finish', skill_id=skill.id) }}" data-finish-form hidden>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="seed" value="{{ seed }}">
+    <input type="hidden" name="answers" value="">
+  </form>
+</div>
+<script type="application/json" id="quiz-data">{{ questions | tojson }}</script>
+{% endblock %}
