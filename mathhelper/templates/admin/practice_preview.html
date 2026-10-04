@@ -1,0 +1,27 @@
+{% extends "admin/_base.html" %}
+{% block page_class %}narrow{% endblock %}
+{% block admin_back %}<a class="back-link" href="{{ url_for('admin.practice') }}">{{ icon("arrow-left", "sm") }} {{ _("All practice sets") }}</a>{% endblock %}
+{% block admin_title %}{{ _(skill.title) }}{% endblock %}
+{% block admin_lead %}{{ _(skill.blurb) }}{% endblock %}
+{% block admin_action %}<a class="btn btn-outline" href="{{ url_for('admin.edit_practice', skill_id=skill.id) }}">{{ icon("pencil", "sm") }} {{ _("Edit") }}</a>{% endblock %}
+
+{% block admin %}
+<div class="alert alert-info preview-banner">
+  {{ icon("eye") }}
+  <span>{{ _("A sample round, with the right answers marked.") }}</span>
+  <a class="btn btn-soft btn-sm" href="{{ url_for('admin.preview_practice', skill_id=skill.id) }}">{{ icon("refresh", "sm") }} {{ _("Another round") }}</a>
+</div>
+<div class="card tex">
+  {% for question in questions %}
+  <div class="review-item">
+    <div class="q"><span class="lesson-num" style="width:26px;height:26px;font-size:12px">{{ loop.index }}</span><div style="min-width:0">{{ question.prompt | rich_inline }}</div></div>
+    <div class="answers">
+      {% for choice in question.choices %}
+      <div class="preview-choice {{ 'is-correct' if loop.index0 == question.answer }}"><span class="key">{{ "ABCD"[loop.index0] }}</span><span>{{ choice | rich_inline }}</span></div>
+      {% endfor %}
+    </div>
+    {% if question.explanation %}<div class="explain">{{ question.explanation | rich_inline }}</div>{% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
