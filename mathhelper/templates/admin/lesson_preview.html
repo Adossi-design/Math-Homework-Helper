@@ -1,0 +1,11 @@
+{% extends "admin/_base.html" %}
+{% block page_class %}narrow{% endblock %}
+{% block admin_back %}<a class="back-link" href="{{ url_for('admin.lessons') }}">{{ icon("arrow-left", "sm") }} {{ _("All lessons") }}</a>{% endblock %}
+{% block admin_title %}{{ lesson.title }}{% endblock %}
+{% block admin_lead %}{{ course.title }}, {{ _("{n} min read", n=lesson.minutes) }}{% endblock %}
+{% block admin_action %}<a class="btn btn-outline" href="{{ url_for('admin.edit_lesson', course_id=course.id, slug=lesson.id) }}">{{ icon("pencil", "sm") }} {{ _("Edit") }}</a>{% endblock %}
+
+{% block admin %}
+<div class="alert alert-info preview-banner">{{ icon("eye") }}<span>{{ _("This is how students see the lesson.") }}{% if skill %} {{ _("It links to the practice set {title}.", title=_(skill.title)) }}{% endif %}</span></div>
+{% include "learn/_lesson_body.html" %}
+{% endblock %}
