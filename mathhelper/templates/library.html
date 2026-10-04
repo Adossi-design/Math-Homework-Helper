@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+{% block title %}{{ _("Library") }} | {{ app_name }}{% endblock %}
+
+{% block content %}
+{% set saved_tab = "saved" if tab == "saved" else None %}
+<div class="page-head">
+  <div>
+    <h1>{{ _("Library") }}</h1>
+    <p>{{ ngettext("{n} solved problem.", "{n} solved problems.", total) }} {{ _("Search, filter and revisit any of them.") }}</p>
+  </div>
+  <a class="btn btn-primary" href="{{ url_for('solve.new') }}">{{ icon("plus") }} {{ _("New problem") }}</a>
+</div>
+
+<form class="searchbar" method="get" role="search">
+  {% if saved_tab %}<input type="hidden" name="tab" value="saved">{% endif %}
+  {% if topic %}<input type="hidden" name="topic" value="{{ topic }}">{% endif %}
+  <div class="input-wrap">{{ icon("search") }}<input class="input" type="search" name="q" value="{{ query }}" placeholder="{{ _("Search your problems") }}" aria-label="{{ _("Search your problems") }}"></div>
+  <div class="segmented">
+    <a class="{{ 'is-active' if not saved_tab }}" href="{{ url_for('library.index', q=query or None, topic=topic or None) }}">{{ _("All") }}</a>
+    <a class="{{ 'is-active' if saved_tab }}" href="{{ url_for('library.index', tab='saved', q=query or None, topic=topic or None) }}">{{ icon("star", "sm") }} {{ _("Saved", "tab") }}</a>
+  </div>
+</form>
+
+{% if topics | length > 1 %}
+<div class="chips" style="margin-bottom:22px">
+  <a class="chip {{ 'is-active' if not topic }}" href="{{ url_for('library.index', tab=saved_tab, q=query or None) }}">{{ _("All topics") }}</a>
+  {% for name in topics %}
+  <a class="chip {{ 'is-active' if topic == name }}" href="{{ url_for('library.index', tab=saved_tab, q=query or None, topic=name) }}">{{ _(name) }}</a>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if results.items %}
+<div class="library-grid">
+  {% for solution in results.items %}
+  <a class="card card-link sol-card" href="{{ url_for('solve.show', solution_id=solution.id) }}">
+    <div class="cover">
+      {% if solution.image_name %}
+      <img src="{{ url_for('main.upload', name=solution.image_name) }}" alt="" loading="lazy">
+      {% else %}
+      <div class="typed">{{ solution.title | plain(80) }}</div>
+      {% endif %}
+      {% if solution.starred %}<span class="star-badge" title="{{ _("Saved") }}">{{ icon("star") }}</span>{% endif %}
+    </div>
+    <div class="card-body">
+      <div class="title">{{ solution.title | plain(120) }}</div>
+      <div class="foot">
+        <span class="tag">{{ _(solution.topic) }}</span>
+        <span>{% if solution.problems | length > 1 %}{{ _("{n} problems", n=solution.problems | length) }}, {% endif %}{{ solution.created_at | ago }}</span>
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% if results.pages > 1 %}
+<nav class="pager" aria-label="Pages">
+  {% if results.has_prev %}<a class="btn btn-outline btn-sm" href="{{ url_for('library.index', tab=saved_tab, q=query or None, topic=topic or None, page=results.prev_num) }}">{{ icon("chevron-left", "sm") }} {{ _("Newer") }}</a>{% endif %}
+  <span>{{ _("Page {page} of {pages}", page=results.page, pages=results.pages) }}</span>
+  {% if results.has_next %}<a class="btn btn-outline btn-sm" href="{{ url_for('library.index', tab=saved_tab, q=query or None, topic=topic or None, page=results.next_num) }}">{{ _("Older") }} {{ icon("chevron-right", "sm") }}</a>{% endif %}
+</nav>
+{% endif %}
+{% else %}
+<div class="card">
+  {% if query or topic or saved_tab %}
+  <div class="empty">
+    <div class="bubble">{{ icon("search", "lg") }}</div>
+    <h3>{{ _("Nothing matches") }}</h3>
+    <p>{% if saved_tab and not query and not topic %}{{ _("Tap Save on any solution to keep it here.") }}{% else %}{{ _("Try a different search or clear the filters.") }}{% endif %}</p>
+    <a class="btn btn-outline" href="{{ url_for('library.index') }}">{{ _("Show everything") }}</a>
+  </div>
+  {% else %}
+  <div class="empty">
+    <div class="bubble">{{ icon("folder", "lg") }}</div>
+    <h3>{{ _("Your library is empty") }}</h3>
+    <p>{{ _("Every problem you solve is saved here so you can come back to it before a test.") }}</p>
+    <a class="btn btn-primary" href="{{ url_for('solve.new') }}">{{ icon("camera") }} {{ _("Solve a problem") }}</a>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}
