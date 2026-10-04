@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} | {{ _("Math help, one step at a time") }}{% endblock %}
+{% block body_class %}landing{% endblock %}
+
+{% block body %}
+<header class="public-nav">
+  <a class="brand" href="{{ url_for('main.landing') }}">{% include "partials/logo.html" %}<span>{{ app_name }}</span></a>
+  <div class="row">
+    {% include "partials/lang_switch.html" %}
+    <a class="btn btn-ghost nav-login" href="{{ url_for('auth.login') }}">{{ _("Log in") }}</a>
+    <a class="btn btn-primary desk-only" href="{{ url_for('auth.signup') }}">{{ _("Get started") }}</a>
+  </div>
+</header>
+
+<section class="landing-hero">
+  <div>
+    <div class="landing-art touch-only" aria-hidden="true">
+      <div class="art-cards">
+        <span class="art-card tex">$2x + 3 = 11$</span>
+        <span class="art-card answer">{{ icon("check", "sm") }}<span class="tex">$x = 4$</span></span>
+      </div>
+      <img src="{{ url_for('static', filename='mascot/mascot_welcome_large.webp') }}" alt="" loading="lazy">
+    </div>
+    <span class="eyebrow desk-only">{{ icon("sparkles", "sm") }} {{ _("Homework help that actually teaches") }}</span>
+    <h1>{{ _("Stuck on a math problem?") }} <em>{{ _("See every step.") }}</em></h1>
+    <p class="lead desk-only">{{ _("Snap a photo or type the question. You get the answer, a clear walkthrough in plain words, and a tutor you can ask when a step does not click.") }}</p>
+    <div class="quick-points touch-only">
+      <span>{{ icon("camera") }} {{ _("Snap") }}</span>
+      <span>{{ icon("check-circle") }} {{ _("Solve") }}</span>
+      <span>{{ icon("target") }} {{ _("Practice") }}</span>
+    </div>
+    <div class="row wrap">
+      <a class="btn btn-primary btn-lg" href="{{ url_for('auth.signup') }}">{{ _("Create a free account") }} {{ icon("arrow-right") }}</a>
+      <a class="btn btn-outline btn-lg" href="{{ url_for('auth.login') }}">{{ _("I have an account") }}</a>
+    </div>
+    <a class="about-link touch-only" href="{{ url_for('main.about') }}">{{ icon("info", "sm") }} {{ _("About the app") }}</a>
+  </div>
+
+  <div class="demo desk-only">
+    <div class="float one">{{ icon("flame", "sm") }} {{ _("12 day streak") }}</div>
+    <div class="card">
+      <div class="problem-head"><span class="tag">{{ _("Algebra") }}</span><span class="tag neutral">{{ icon("camera", "sm") }} {{ _("From a photo") }}</span></div>
+      <p class="problem-text tex">{{ _("Solve $3x - 7 = 2x + 5$") }}</p>
+      <div class="answer">
+        <span class="check-bubble">{{ icon("check") }}</span>
+        <div><div class="label">{{ _("Answer") }}</div><div class="value tex">$x = 12$</div></div>
+      </div>
+      <ol class="steps tex">
+        <li class="step"><div class="step-result">$x - 7 = 5$</div><div class="step-title">{{ _("Gather the x terms") }}</div><div class="work">{{ _("Subtract $2x$ from both sides.") }}</div></li>
+        <li class="step"><div class="step-result">$x = 12$</div><div class="step-title">{{ _("Isolate x") }}</div><div class="work">{{ _("Add $7$ to both sides.") }}</div></li>
+        <li class="step"><div class="step-result">$29 = 29$</div><div class="step-title">{{ _("Check it") }}</div><div class="work">{{ _("Put $x = 12$ back in. Both sides give $29$.") }}</div></li>
+      </ol>
+    </div>
+    <div class="float two">{{ icon("message", "sm") }} {{ _("Why subtract 2x first?") }}</div>
+    <img class="demo-mascot" src="{{ url_for('static', filename='mascot/mascot_welcome_large.webp') }}" alt="" loading="lazy">
+  </div>
+</section>
+
+<div class="desk-only">
+{% include "partials/about_sections.html" %}
+
+<section class="cta-band">
+  <h2>{{ _("Ready for your next problem?") }}</h2>
+  <p>{{ _("It takes less than a minute to set up your account.") }}</p>
+  <a class="btn btn-white btn-lg" href="{{ url_for('auth.signup') }}">{{ _("Get started") }} {{ icon("arrow-right") }}</a>
+</section>
+</div>
+
+{% include "partials/footer.html" %}
+{% endblock %}
