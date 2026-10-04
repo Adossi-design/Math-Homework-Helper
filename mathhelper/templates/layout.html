@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% if current_user.is_admin %}
+{% set nav_items = [
+  ("admin.index", "chart", "Overview", "overview"),
+  ("admin.users", "users", "Users", "users"),
+  ("admin.lessons", "book", "Lessons", "lessons"),
+  ("admin.practice", "target", "Practice", "practice"),
+] %}
+{% set home_endpoint = "admin.index" %}
+{% set current = tab | default("") %}
+{% else %}
+{% set nav_items = [
+  ("main.home", "home", "Home", "main"),
+  ("solve.new", "camera", "Solve", "solve"),
+  ("library.index", "folder", "Library", "library"),
+  ("learn.index", "book", "Learn", "learn"),
+  ("practice.index", "target", "Practice", "practice"),
+] %}
+{% set home_endpoint = "main.home" %}
+{% set current = active_nav | default(request.blueprint) %}
+{% endif %}
+
+{% block body %}
+<div class="app">
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for(home_endpoint) }}">{% include "partials/logo.html" %}<span>{{ app_name }}</span></a>
+    {% if current_user.is_admin %}<span class="role-tag">{{ icon("shield", "sm") }} {{ _("Admin") }}</span>{% endif %}
+    <nav class="side-nav" aria-label="{{ _("Main") }}">
+      {% for endpoint, glyph, label, key in nav_items %}
+      <a class="side-link {{ 'is-active' if current == key }}" href="{{ url_for(endpoint) }}">{{ icon(glyph) }}<span>{{ _(label) }}</span></a>
+      {% endfor %}
+    </nav>
+    <div class="sidebar-foot">
+      {% include "partials/lang_switch.html" %}
+      <a class="side-link {{ 'is-active' if request.blueprint == 'settings' }}" href="{{ url_for('settings.index') }}">{{ icon("sliders") }}<span>{{ _("Settings") }}</span></a>
+      <form method="post" action="{{ url_for('auth.logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="side-link" type="submit">{{ icon("logout") }}<span>{{ _("Log out") }}</span></button>
+      </form>
+      <a class="user-chip" href="{{ url_for('settings.index') }}">
+        <span class="avatar">{{ current_user.initials }}</span>
+        <span class="who"><strong>{{ current_user.name }}</strong><span>{{ current_user.email }}</span></span>
+      </a>
+    </div>
+  </aside>
+
+  <header class="topbar">
+    <a class="brand" href="{{ url_for(home_endpoint) }}" aria-label="{{ app_name }}">{% include "partials/logo.html" %}<span>{{ app_name }}</span></a>
+    <div class="row">
+    {% include "partials/lang_switch.html" %}
+    <details class="account-menu" data-menu>
+      <summary class="avatar" aria-label="{{ _("Account") }}">{{ current_user.initials }}</summary>
+      <div class="menu">
+        <div class="menu-who"><strong>{{ current_user.name }}</strong><span>{{ current_user.email }}</span></div>
+        <a class="side-link" href="{{ url_for('settings.index') }}">{{ icon("sliders") }}<span>{{ _("Settings") }}</span></a>
+        <form method="post" action="{{ url_for('auth.logout') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="side-link" type="submit">{{ icon("logout") }}<span>{{ _("Log out") }}</span></button>
+        </form>
+      </div>
+    </details>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="page {% block page_class %}{% endblock %}">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  {% if current_user.is_admin %}
+  <nav class="tabbar admin-tabbar" aria-label="{{ _("Main") }}">
+    {% for endpoint, glyph, label, key in nav_items %}
+    <a class="tab {{ 'is-active' if current == key }}" href="{{ url_for(endpoint) }}">{{ icon(glyph) }}<span>{{ _(label) }}</span></a>
+    {% endfor %}
+  </nav>
+  {% else %}
+  <nav class="tabbar" aria-label="{{ _("Main") }}">
+    {% for endpoint, glyph, label, key in [nav_items[0], nav_items[2], nav_items[1], nav_items[3], nav_items[4]] %}
+      {% if endpoint == "solve.new" %}
+      <a class="tab tab-solve" href="{{ url_for(endpoint) }}" aria-label="{{ _("Solve a problem") }}"><span class="fab">{{ icon("camera") }}</span></a>
+      {% else %}
+      <a class="tab {{ 'is-active' if current == key }}" href="{{ url_for(endpoint) }}">{{ icon(glyph) }}<span>{{ _(label) }}</span></a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}
