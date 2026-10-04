@@ -1,0 +1,49 @@
+{% extends "legal/_layout.html" %}
+{% block title %}Terms of Service | {{ app_name }}{% endblock %}
+
+{% block legal %}
+<h1>Terms of Service</h1>
+<p class="updated">Last updated: October 1, 2026</p>
+
+<p style="margin-top:20px">These terms explain the rules for using {{ app_name }}. By creating an account or using the app, you agree to them.</p>
+
+<h2>What the app is</h2>
+<p>{{ app_name }} is a learning tool. It solves math problems from photos or typed questions, explains the steps, and offers lessons and practice.</p>
+
+<h2>Answers come from AI</h2>
+<p>Solutions and tutor replies are produced by an AI model. They are usually right, but they can be wrong. Check important answers yourself or with a teacher, and do not rely on the app for anything where a mistake would cause harm.</p>
+
+<h2>Use it to learn</h2>
+<p>The app is here to help you understand math. Follow your school's rules about homework help, and do not use the app to cheat on tests or exams.</p>
+
+<h2>Your account</h2>
+<ul>
+  <li>Give accurate details when you sign up and keep your password private.</li>
+  <li>You are responsible for what happens in your account.</li>
+  <li>If you are under 13, or under the age at which you can agree to online services in your country, a parent or guardian must create the account and agree to these terms for you.</li>
+</ul>
+
+<h2>What you may not do</h2>
+<ul>
+  <li>Upload content that is illegal, harmful, or that belongs to someone else without permission.</li>
+  <li>Try to break, overload or get around the limits of the app.</li>
+  <li>Use automated tools to send large numbers of requests.</li>
+</ul>
+
+<h2>Your content</h2>
+<p>The problems and photos you submit stay yours. You allow us to store and process them so the app can work, as described in the <a href="{{ url_for('main.privacy') }}">Privacy Policy</a>.</p>
+
+<h2>Availability</h2>
+<p>The app is provided as it is, without guarantees. It may be changed, limited or unavailable at times, and usage limits may apply.</p>
+
+<h2>Ending your use</h2>
+<p>You can stop using the app and delete your account at any time from Settings. We may suspend accounts that break these terms.</p>
+
+<h2>Changes</h2>
+<p>If these terms change, the new version will be posted on this page with a new date.</p>
+
+{% if support_email %}
+<h2>Contact</h2>
+<p>Questions about these terms? Email <a href="mailto:{{ support_email }}">{{ support_email }}</a>.</p>
+{% endif %}
+{% endblock %}
