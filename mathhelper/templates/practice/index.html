@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}{{ _("Practice") }} | {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{{ _("Practice") }}</h1>
+    <p>{{ _("Ten fresh questions every round, instant feedback and a full review at the end.") }}</p>
+  </div>
+</div>
+
+<div class="grid grid-3">
+  {% for skill in skills.values() %}
+  {% set score = best.get(skill.id) %}
+  <div class="card card-body skill-card">
+    <span class="tag neutral" style="align-self:flex-start">{{ _(skill.topic) }}</span>
+    <div><h3>{{ _(skill.title) }}</h3><p style="margin-top:4px">{{ _(skill.blurb) }}</p></div>
+    {% if score %}<div class="progress {{ 'success' if score.best == score.total }}"><span style="width:{{ (100 * score.best / score.total) | round | int }}%"></span></div>{% endif %}
+    <div class="foot">
+      <span class="score">{% if score %}{{ ngettext("Best {score}/{total} in {n} round", "Best {score}/{total} in {n} rounds", score.rounds, score=score.best, total=score.total) }}{% else %}{{ _("Not tried yet") }}{% endif %}</span>
+      <a class="btn btn-primary btn-sm" href="{{ url_for('practice.play', skill_id=skill.id) }}">{{ icon("play", "sm") }} {{ _("Again") if score else _("Start") }}</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% if recent %}
+<section class="section">
+  <div class="section-head"><h2>{{ _("Recent rounds") }}</h2></div>
+  <div class="card list">
+    {% for attempt in recent %}
+    <a class="list-item" href="{{ url_for('practice.results', attempt_id=attempt.id) }}">
+      <span class="thumb-icon" style="width:44px;height:44px">{{ icon("trophy" if attempt.percent >= 80 else "target") }}</span>
+      <div class="body">
+        <div class="title">{{ _(skills[attempt.skill_id].title) if attempt.skill_id in skills else attempt.skill_id }}</div>
+        <div class="meta"><span class="tag {{ 'success' if attempt.percent >= 80 else 'neutral' }}">{{ attempt.correct }}/{{ attempt.total }}</span><span>{{ attempt.created_at | ago }}</span></div>
+      </div>
+      {{ icon("chevron-right") }}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
