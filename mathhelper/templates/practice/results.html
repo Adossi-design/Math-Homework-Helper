@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% set active_nav = "practice" %}
+{% block title %}{{ _("Results") }} | {{ app_name }}{% endblock %}
+{% block page_class %}narrow{% endblock %}
+
+{% block content %}
+{% set ring = "success" if attempt.percent >= 80 else ("primary" if attempt.percent >= 50 else "danger") %}
+<a class="back-link" href="{{ url_for('practice.index') }}">{{ icon("arrow-left", "sm") }} {{ _("Practice") }}</a>
+
+<div class="card card-body result-hero">
+  <div class="ring" style="--value: {{ attempt.percent }}; --ring-color: var(--{{ ring }})"><strong>{{ attempt.correct }}/{{ attempt.total }}</strong></div>
+  <div class="grow">
+    {% if new_best %}<span class="tag warning">{{ icon("trophy", "sm") }} {{ _("New personal best") }}</span>{% endif %}
+    <h1 style="margin-top:8px">{{ headline }}</h1>
+    <p class="muted" style="margin-top:6px">{{ _("You got {correct} of {total} right in {skill}, {when}.", correct=attempt.correct, total=attempt.total, skill=_(skill.title), when=attempt.created_at | ago) }}</p>
+    <div class="row wrap" style="margin-top:18px">
+      <a class="btn btn-primary" href="{{ url_for('practice.play', skill_id=skill.id) }}">{{ icon("refresh") }} {{ _("New round") }}</a>
+      {% if lesson %}<a class="btn btn-outline" href="{{ url_for('learn.lesson', course_id=course.id, lesson_id=lesson.id) }}">{{ icon("book") }} {{ _("Review the lesson") }}</a>{% endif %}
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("Review your answers") }}</h2></div>
+  <div class="card tex">
+    {% for question, pick in review %}
+    {% set good = pick == question.answer %}
+    <div class="review-item">
+      <div class="q">
+        <span class="mark {{ 'good' if good else 'bad' }}">{{ icon("check" if good else "x") }}</span>
+        <div style="min-width:0">{{ question.prompt | rich_inline }}</div>
+      </div>
+      <div class="answers">
+        {% if not good %}
+        <div><span class="muted">{{ _("Your answer:") }}</span> {% if pick >= 0 %}{{ question.choices[pick] | rich_inline }}{% else %}<em class="faint">{{ _("Skipped") }}</em>{% endif %}</div>
+        {% endif %}
+        <div><span class="muted">{{ _("Correct answer:") }}</span> <strong>{{ question.choices[question.answer] | rich_inline }}</strong></div>
+      </div>
+      <div class="explain">{{ question.explanation | rich_inline }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
