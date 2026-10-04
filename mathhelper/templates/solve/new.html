@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block title %}{{ _("Solve a problem") }} | {{ app_name }}{% endblock %}
+{% block page_class %}narrow{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{{ _("Solve a problem") }}</h1>
+    <p>{{ _("Use a photo or type it in. You get the answer and every step explained.") }}</p>
+  </div>
+</div>
+
+{% if error %}<div class="alert alert-error" role="alert" style="margin-bottom:18px">{{ icon("alert") }}<span>{{ error }}</span></div>{% endif %}
+
+<form class="card" method="post" enctype="multipart/form-data" data-solve-form>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="mode" value="{{ mode }}" data-mode-field>
+  <div class="card-body">
+    <div class="segmented" role="tablist" aria-label="{{ _("How to enter your problem") }}">
+      <button type="button" role="tab" class="{{ 'is-active' if mode == 'photo' }}" aria-selected="{{ 'true' if mode == 'photo' else 'false' }}" data-mode="photo">{{ icon("camera", "sm") }} {{ _("Photo") }}</button>
+      <button type="button" role="tab" class="{{ 'is-active' if mode == 'type' }}" aria-selected="{{ 'true' if mode == 'type' else 'false' }}" data-mode="type">{{ icon("pencil", "sm") }} {{ _("Type it") }}</button>
+    </div>
+
+    <div data-panel="photo" style="margin-top:20px" {{ 'hidden' if mode != 'photo' }}>
+      <input type="file" name="photo" accept="image/*" hidden data-photo-input>
+      <input type="file" accept="image/*" capture="environment" hidden data-camera-input>
+      <div class="dropzone" data-dropzone tabindex="0" role="button" aria-label="{{ _("Choose a photo of your problem") }}">
+        <div class="bubble">{{ icon("upload", "lg") }}</div>
+        <h3>{{ _("Add a photo of your problem") }}</h3>
+        <p class="desk-only">{{ _("Drag it here, paste it, or use a button below. JPG, PNG or WebP up to 12 MB.") }}</p>
+        <div class="row">
+          <button type="button" class="btn btn-primary" data-open-camera>{{ icon("camera") }} {{ _("Take a photo") }}</button>
+          <button type="button" class="btn btn-outline" data-open-files>{{ icon("image") }} {{ _("Choose a file") }}</button>
+        </div>
+      </div>
+      <div class="preview" data-preview hidden>
+        <img alt="{{ _("Preview of your photo") }}" data-preview-img>
+        <button type="button" class="btn btn-white btn-sm" data-clear-photo>{{ icon("x", "sm") }} {{ _("Remove") }}</button>
+        <span class="file-name" data-file-name></span>
+      </div>
+    </div>
+
+    <div data-panel="type" style="margin-top:20px" {{ 'hidden' if mode != 'type' }}>
+      <label class="label" for="problem">{{ _("Your problem") }}</label>
+      <textarea class="textarea" id="problem" name="problem" maxlength="2000" style="margin-top:6px"
+        placeholder="{{ _("For example: Solve 2x^2 - 8 = 0") }}" data-problem>{{ text }}</textarea>
+      <div class="keypad" aria-label="{{ _("Insert a math symbol") }}">
+        {% for key in ["^", "√", "π", "×", "÷", "±", "≤", "≥", "≠", "∫", "θ", "°", "(", ")"] %}<button type="button" data-insert="{{ key }}" aria-label="{{ _("Insert") }} {{ key }}">{{ key }}</button>{% endfor %}
+      </div>
+      <p class="label" style="margin:20px 0 8px">{{ _("Or try an example") }}</p>
+      <div class="chips">
+        {% for example in examples %}<button type="button" class="chip" data-example="{{ example }}">{{ example }}</button>{% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="card-body row wrap solve-foot" style="border-top:1px solid var(--border);justify-content:space-between">
+    <span class="small muted row desk-only" style="gap:6px">{{ icon("cap", "sm") }} {{ _("You get every line of working, explained.") }}</span>
+    <button class="btn btn-primary btn-lg" type="submit">{{ icon("sparkles") }} {{ _("Solve it") }}</button>
+  </div>
+</form>
+
+<section class="section card card-body desk-only">
+  <h3>{{ _("Tips for the best result") }}</h3>
+  <ul class="tips plain-list" style="margin-top:14px">
+    <li>{{ icon("check", "sm") }} {{ _("Hold the camera straight above the page in good light.") }}</li>
+    <li>{{ icon("check", "sm") }} {{ _("Crop close to the problems you need. Several at once is fine.") }}</li>
+    <li>{{ icon("check", "sm") }} {{ _("Handwriting works best when it is neat and dark.") }}</li>
+    <li>{{ icon("check", "sm") }} {{ _("When typing, use ^ for powers like x^2 and / for fractions like 3/4.") }}</li>
+  </ul>
+</section>
+
+<div class="overlay" data-loading hidden>
+  <div class="card" role="status" aria-live="polite">
+    <div class="spinner"></div>
+    <h3>{{ _("Working on it") }}</h3>
+    <p data-loading-text>{{ _("Reading your problem") }}</p>
+  </div>
+</div>
+{% endblock %}
