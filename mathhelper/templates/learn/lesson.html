@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block title %}{{ lesson.title }} | {{ app_name }}{% endblock %}
+{% block page_class %}narrow{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{{ url_for('learn.course', course_id=course.id) }}">{{ icon("arrow-left", "sm") }} {{ course.title }}</a>
+<div class="page-head">
+  <div>
+    <div class="small faint">{{ _("Lesson {n} of {total}", n=index + 1, total=course.lessons | length) }}, {{ _("{n} min read", n=lesson.minutes) }}</div>
+    <h1 style="margin-top:6px">{{ lesson.title }}</h1>
+  </div>
+  {% if is_done %}<span class="tag success">{{ icon("check", "sm") }} {{ _("Completed") }}</span>{% endif %}
+</div>
+
+{% include "learn/_lesson_body.html" %}
+
+<div class="card card-body section row wrap" style="justify-content:space-between">
+  <form method="post" action="{{ url_for('learn.complete', course_id=course.id, lesson_id=lesson.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    {% if is_done %}
+    <button class="btn btn-outline" type="submit">{{ icon("refresh", "sm") }} {{ _("Mark as not done") }}</button>
+    {% else %}
+    <button class="btn btn-primary" type="submit">{{ icon("check") }} {{ _("Mark complete and continue") if upcoming else _("Mark complete") }}</button>
+    {% endif %}
+  </form>
+  {% if skill %}<a class="btn btn-soft" href="{{ url_for('practice.play', skill_id=skill.id) }}">{{ icon("target") }} {{ _("Practice this skill") }}</a>{% endif %}
+</div>
+
+<nav class="lesson-nav" aria-label="{{ _("Lessons") }}">
+  {% if previous %}<a class="btn btn-ghost" href="{{ url_for('learn.lesson', course_id=course.id, lesson_id=previous.id) }}">{{ icon("chevron-left") }} {{ previous.title }}</a>{% else %}<span></span>{% endif %}
+  {% if upcoming %}<a class="btn btn-ghost" href="{{ url_for('learn.lesson', course_id=course.id, lesson_id=upcoming.id) }}">{{ upcoming.title }} {{ icon("chevron-right") }}</a>{% endif %}
+</nav>
+{% endblock %}
