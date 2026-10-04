@@ -1,0 +1,11 @@
+.venv
+.env
+.env.*
+instance
+tests
+__pycache__
+.pytest_cache
+pytest.ini
+requirements-dev.txt
+run.py
+docs
