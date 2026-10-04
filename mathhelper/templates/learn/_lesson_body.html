@@ -1,0 +1,26 @@
+<div class="stack tex">
+  <p class="lesson-intro">{{ lesson.intro | rich_inline }}</p>
+
+  <section class="card card-body">
+    <h2 style="font-size:17px;margin-bottom:16px">{{ _("Key ideas") }}</h2>
+    <ul class="key-points">
+      {% for point in lesson.points %}<li><span class="dot">{{ icon("check") }}</span><span>{{ point | rich_inline }}</span></li>{% endfor %}
+    </ul>
+  </section>
+
+  <section class="card card-body tone-{{ course.tone }}">
+    <div class="row" style="align-items:flex-start">
+      <span class="glyph sm">{{ icon("pencil") }}</span>
+      <div style="min-width:0"><div class="small faint">{{ _("Worked example") }}</div><h3 style="margin-top:2px">{{ lesson.example.problem | rich_inline }}</h3></div>
+    </div>
+    <ol class="example-steps">
+      {% for step in lesson.example.steps %}<li><span>{{ step | rich_inline }}</span></li>{% endfor %}
+    </ol>
+    <div class="answer">
+      <span class="check-bubble">{{ icon("check") }}</span>
+      <div style="min-width:0"><div class="label">{{ _("Answer") }}</div><div class="value">{{ lesson.example.answer | rich_inline }}</div></div>
+    </div>
+  </section>
+
+  <div class="callout">{{ icon("alert") }}<div><strong>{{ _("Watch out") }}</strong>{{ lesson.mistake | rich_inline }}</div></div>
+</div>
