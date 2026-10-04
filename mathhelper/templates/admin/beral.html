@@ -1,0 +1,96 @@
+{% extends "admin/_base.html" %}
+{% block admin_back %}<a class="back-link" href="{{ url_for('admin.index') }}">{{ icon("arrow-left", "sm") }} {{ _("Overview") }}</a>{% endblock %}
+{% block admin_title %}{{ _("Beral 3D") }}{% endblock %}
+{% block admin_lead %}{{ _("Check the 3D model and play each of Beral's animations.") }}{% endblock %}
+
+{% block admin %}
+{% set states = [
+  ("idle", "Idle", true), ("welcome", "Welcome, Wave", false), ("thinking", "Thinking", true),
+  ("success", "Success, ThumbsUp, Yes", false), ("celebrate", "Celebrate, Jump + Turn, Jump", false),
+  ("encourage", "Encourage, ThumbsUp, Yes", false),
+] %}
+{% if not three %}
+<div class="alert alert-info" style="margin-bottom:20px">{{ icon("info") }}<span>{{ _("No 3D model is installed yet, so the app shows the Beral pictures.") }} {{ _("Add the rigged model at {path} and deploy the app. The brief for the 3D artist is in docs/beral-3d.md.", path="public/static/" ~ model_file) }}</span></div>
+{% endif %}
+
+<div class="beral-preview">
+  <div>
+    <div class="preview-stage" data-preview-stage>
+      {% if not three %}<img src="{{ url_for('static', filename='mascot/mascot_welcome_large.webp') }}" alt="">{% endif %}
+    </div>
+    {% if three %}<p class="small muted" style="margin-top:10px" data-preview-status>{{ _("Loading the model") }}</p>{% endif %}
+  </div>
+
+  <div class="stack">
+    {% if three %}
+    <div class="card card-body">
+      <div class="row wrap" style="justify-content:space-between;margin-bottom:12px">
+        <strong>{{ _("Now playing") }}: <code data-current>-</code></strong>
+      </div>
+      <div class="state-buttons">
+        {% for name, clips, looping in states %}<button class="btn btn-outline btn-sm" type="button" data-play="{{ name }}" disabled>{{ name }}</button>{% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="card">
+      <table class="clip-table">
+        <thead><tr><th>{{ _("State") }}</th><th>{{ _("Clips it looks for") }}</th>{% if three %}<th>{{ _("In this model") }}</th>{% endif %}</tr></thead>
+        <tbody>
+          {% for name, clips, looping in states %}
+          <tr>
+            <td><code>{{ name }}</code><div class="small faint">{{ _("Plays in a loop") if looping else _("Plays once, then back to idle") }}</div></td>
+            <td>{{ clips }}</td>
+            {% if three %}<td data-check="{{ name }}">-</td>{% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if three %}
+    <div class="card card-body small" data-details hidden>
+      <p><strong>{{ _("Clips in the file") }}:</strong> <span data-clips></span></p>
+      <p style="margin-top:8px"><strong>{{ _("Bones") }}:</strong> <span data-bones></span></p>
+      <p style="margin-top:8px"><strong>{{ _("Face shapes") }}:</strong> <span data-morphs></span></p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% if three %}
+<script type="module">
+  import { createBeral } from "{{ three.module }}";
+  import { STATES } from "{{ url_for('static', filename='js/beral/animations.js') }}";
+
+  const words = {{ {"found": _("Found"), "missing": _("Missing"), "none": _("None"), "failed": _("The model could not be shown: {error}")} | tojson }};
+  const $ = (selector) => document.querySelector(selector);
+  const status = $("[data-preview-status]");
+  try {
+    const beral = await createBeral({
+      container: $("[data-preview-stage]"), modelUrl: {{ three.model | tojson }}, decoderPath: {{ three.decoders | tojson }},
+      onState: (name) => ($("[data-current]").textContent = name),
+    });
+    window.beralPreview = beral;
+    const clips = new Set(beral.clipNames().map((name) => name.split("|").pop().toLowerCase()));
+    const available = beral.available();
+    for (const button of document.querySelectorAll("[data-play]")) {
+      const name = button.dataset.play;
+      button.disabled = !available.includes(name);
+      button.addEventListener("click", () => beral.play(name));
+      const option = STATES[name].options.find((names) => names.every((clip) => clips.has(clip.toLowerCase())));
+      const cell = document.querySelector(`[data-check="${name}"]`);
+      cell.textContent = option ? `${words.found}: ${option.join(" + ")}` : words.missing;
+      cell.className = option ? "" : "faint";
+    }
+    $("[data-clips]").textContent = beral.clipNames().join(", ") || words.none;
+    $("[data-bones]").textContent = `${beral.boneNames().length}: ${beral.boneNames().join(", ")}`;
+    $("[data-morphs]").textContent = beral.morphNames().join(", ") || words.none;
+    $("[data-details]").hidden = false;
+    status.hidden = true;
+  } catch (error) {
+    status.textContent = words.failed.replace("{error}", error.message);
+  }
+</script>
+{% endif %}
+{% endblock %}
