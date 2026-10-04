@@ -1,0 +1,10 @@
+{% set toast_icons = {"success": "check-circle", "error": "alert", "info": "info", "message": "info"} %}
+<div class="toasts" aria-live="polite">
+  {% for category, message in get_flashed_messages(with_categories=true) %}
+  <div class="toast toast-{{ category }}" role="status">
+    {{ icon(toast_icons.get(category, "info")) }}
+    <p>{{ message }}</p>
+    <button type="button" data-dismiss aria-label="{{ _("Dismiss") }}">{{ icon("x", "sm") }}</button>
+  </div>
+  {% endfor %}
+</div>
