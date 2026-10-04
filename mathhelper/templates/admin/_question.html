@@ -1,0 +1,46 @@
+<section class="card card-body question-block" data-question>
+  <div class="q-head">
+    <h3 style="margin:0">{{ _("Question") }} <span data-question-number>{{ number }}</span></h3>
+    <button class="btn btn-ghost btn-sm" type="button" data-remove-question>{{ icon("trash", "sm") }} {{ _("Remove") }}</button>
+  </div>
+  <div class="field">
+    <label class="label" for="q-{{ index }}-prompt">{{ _("Question text") }}</label>
+    <textarea class="textarea short" id="q-{{ index }}-prompt" name="q-{{ index }}-prompt">{{ block.prompt }}</textarea>
+  </div>
+  <div class="field">
+    <span class="label">{{ _("Choices") }}</span>
+    <span class="hint">{{ _("Fill in two to four choices and mark the right one.") }}</span>
+    {% for choice in block.choices %}
+    <div class="choice-row">
+      <span class="key">{{ "ABCD"[loop.index0] }}</span>
+      <input class="input" name="q-{{ index }}-choice-{{ loop.index0 }}" value="{{ choice }}" aria-label="{{ _("Choice") }} {{ "ABCD"[loop.index0] }}">
+      <label class="correct-pick"><input type="radio" name="q-{{ index }}-answer" value="{{ loop.index0 }}" {{ 'checked' if block.answer == loop.index0 }}><span>{{ _("Right answer") }}</span></label>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="field">
+    <label class="label" for="q-{{ index }}-explanation">{{ _("Explanation (optional)") }}</label>
+    <input class="input" id="q-{{ index }}-explanation" name="q-{{ index }}-explanation" value="{{ block.explanation }}">
+    <span class="hint">{{ _("Shown after the student answers.") }}</span>
+  </div>
+  <details {{ 'open' if block.fr.prompt }}>
+    <summary class="small" style="font-weight:600">{{ _("French version (optional)") }}</summary>
+    <div class="field" style="margin-top:12px">
+      <label class="label" for="q-{{ index }}-fr-prompt">{{ _("Question text") }}</label>
+      <textarea class="textarea short" id="q-{{ index }}-fr-prompt" name="q-{{ index }}-fr-prompt">{{ block.fr.prompt }}</textarea>
+    </div>
+    <div class="field">
+      <span class="label">{{ _("Choices") }}</span>
+      {% for choice in block.fr.choices %}
+      <div class="choice-row">
+        <span class="key">{{ "ABCD"[loop.index0] }}</span>
+        <input class="input" name="q-{{ index }}-fr-choice-{{ loop.index0 }}" value="{{ choice }}" aria-label="{{ _("Choice") }} {{ "ABCD"[loop.index0] }}">
+      </div>
+      {% endfor %}
+    </div>
+    <div class="field">
+      <label class="label" for="q-{{ index }}-fr-explanation">{{ _("Explanation (optional)") }}</label>
+      <input class="input" id="q-{{ index }}-fr-explanation" name="q-{{ index }}-fr-explanation" value="{{ block.fr.explanation }}">
+    </div>
+  </details>
+</section>
