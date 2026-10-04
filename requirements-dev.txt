@@ -1,0 +1,3 @@
+-r requirements.txt
+waitress>=3.0,<4
+pytest>=8,<10
