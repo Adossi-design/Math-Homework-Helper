@@ -1,0 +1,8 @@
+{{ _("Hi {name},", name=user.first_name) }}
+
+{{ _("Choose a new {name} password here:", name=app_name) }}
+{{ link }}
+
+{{ _("The link works for {n} minutes.", n=minutes) }}
+
+{{ _("Did not ask for this? Ignore this email.") }}
