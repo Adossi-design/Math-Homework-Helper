@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}{{ self.admin_title() | striptags }} | {{ app_name }}{% endblock %}
+
+{% block content %}
+{% block admin_back %}{% endblock %}
+<div class="page-head">
+  <div>
+    <h1>{% block admin_title %}{% endblock %}</h1>
+    <p>{% block admin_lead %}{% endblock %}</p>
+  </div>
+  {% block admin_action %}{% endblock %}
+</div>
+
+{% block admin %}{% endblock %}
+{% endblock %}
