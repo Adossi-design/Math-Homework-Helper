@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="{{ lang }}" data-theme="{{ theme }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}{{ app_name }}{% endblock %}</title>
+  <meta name="description" content="{{ _("Snap or type a math problem and get a clear answer with every step explained.") }}">
+  <meta name="theme-color" content="#4f5bd5">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <link rel="preload" href="{{ url_for('static', filename='fonts/inter-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/katex/katex.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <script defer src="{{ url_for('static', filename='vendor/katex/katex.min.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='vendor/katex/auto-render.min.js') }}"></script>
+  {% if beral_model %}
+  <script type="importmap">{"imports": {"three": "{{ url_for('static', filename='vendor/three/three.module.min.js') }}", "three/addons/": "{{ url_for('static', filename='vendor/three/addons/') }}"}}</script>
+  {% endif %}
+  <script defer src="{{ url_for('static', filename='js/app.js') }}"></script>
+</head>
+<body class="{% block body_class %}{% endblock %}" data-csrf="{{ csrf_token() }}"
+  {%- if current_user.is_authenticated %} data-timezone="{{ current_user.timezone }}" data-sounds="{{ 'on' if current_user.sounds else 'off' }}" data-timezone-url="{{ url_for('settings.timezone') }}"{% endif %}>
+  {% include "partials/icons.svg" %}
+  {% block body %}{% endblock %}
+  {% include "partials/toasts.html" %}
+  {% include "partials/mascot.html" %}
+  <script type="application/json" id="i18n">{{ js_strings | tojson }}</script>
+</body>
+</html>
