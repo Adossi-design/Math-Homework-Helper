@@ -1,0 +1,14 @@
+<aside class="auth-side">
+  <span class="shape" style="width:420px;height:420px;right:-160px;top:-140px"></span>
+  <a class="brand" href="{{ url_for('main.landing') }}">{% include "partials/logo.html" %}<span>{{ app_name }}</span></a>
+  <div class="side-copy">
+    <blockquote>{{ _("Understand the steps, not just the answer.") }}</blockquote>
+    <div class="perks">
+      <div>{{ icon("camera") }} {{ _("Solve from a photo or typed question") }}</div>
+      <div>{{ icon("message") }} {{ _("Ask a tutor about any step") }}</div>
+      <div>{{ icon("target") }} {{ _("Practice with fresh questions every time") }}</div>
+    </div>
+    <p class="small side-note">{{ _("Your solutions and progress are saved to your account.") }}</p>
+  </div>
+  <div class="side-stage"><img class="side-mascot" src="{{ url_for('static', filename='mascot/mascot_' ~ (pose | default('welcome')) ~ '_large.webp') }}" alt="" loading="lazy"></div>
+</aside>
