@@ -1,0 +1,65 @@
+{% extends "legal/_layout.html" %}
+{% block title %}Politique de confidentialité | {{ app_name }}{% endblock %}
+
+{% block legal %}
+<h1>Politique de confidentialité</h1>
+<p class="updated">Dernière mise à jour : 1er octobre 2026</p>
+
+<p style="margin-top:20px">{{ app_name }} aide les élèves à résoudre et à comprendre des problèmes de maths. Cette page explique, avec des mots simples, quelles informations l'appli recueille, pourquoi, et ce que tu peux faire.</p>
+
+<h2>Ce que nous recueillons</h2>
+<ul>
+  <li><strong>Informations du compte :</strong> ton nom et ton adresse e-mail. Si tu t'inscris avec un mot de passe, nous en gardons une version brouillée (hachée), jamais le mot de passe lui-même. Si tu te connectes avec Google, nous recevons de Google ton nom, ton adresse e-mail et ton identifiant de compte Google.</li>
+  <li><strong>Ton travail en maths :</strong> les problèmes que tu tapes, les photos que tu envoies, les solutions produites par l'appli et tes discussions avec le tuteur. Les photos sont redimensionnées avant d'être enregistrées.</li>
+  <li><strong>Ta progression :</strong> tes scores aux exercices, les leçons terminées et les jours où tu as été actif, qui servent à compter tes jours d'affilée.</li>
+  <li><strong>Préférences :</strong> tes réglages de thème, de son et d'affichage des étapes, ainsi que ton fuseau horaire pour afficher les bonnes dates.</li>
+  <li><strong>Sécurité :</strong> les tentatives de connexion échouées, avec une forme brouillée de ton adresse réseau, conservées un jour au maximum pour bloquer les essais de mots de passe.</li>
+  <li><strong>Suivi des e-mails :</strong> l'heure d'envoi d'un e-mail de réinitialisation à ton adresse, pour limiter le nombre d'envois.</li>
+</ul>
+
+<h2>Comment nous l'utilisons</h2>
+<ul>
+  <li>Pour résoudre tes problèmes et expliquer les étapes.</li>
+  <li>Pour enregistrer ta bibliothèque, ta progression et tes réglages afin que tu les retrouves à ton retour.</li>
+  <li>Pour te connecter et protéger ton compte.</li>
+  <li>Pour t'envoyer un e-mail de réinitialisation quand tu le demandes.</li>
+</ul>
+<p>Nous ne vendons pas tes informations et nous n'affichons pas de publicité.</p>
+
+<h2>Les services qui font fonctionner l'appli</h2>
+<p>Nous ne partageons que ce dont chaque service a besoin :</p>
+<ul>
+  <li><strong>Google Gemini :</strong> les problèmes, les photos et les questions au tuteur que tu envoies sont transmis au service d'IA de Google pour produire les solutions. Google traite ce contenu selon ses propres conditions, qui peuvent l'autoriser à l'utiliser pour améliorer ses services. N'inclus pas d'informations personnelles dans les problèmes ou les photos que tu envoies.</li>
+  <li><strong>Connexion avec Google :</strong> utilisée seulement si tu choisis de te connecter avec Google.</li>
+  <li><strong>Vercel :</strong> héberge l'appli. Comme la plupart des hébergeurs, il conserve des journaux techniques, par exemple des adresses IP.</li>
+  <li><strong>Neon :</strong> stocke la base de données de l'appli.</li>
+  <li><strong>Envoi des e-mails :</strong> {{ mail_provider }} achemine les e-mails de réinitialisation jusqu'à ton adresse.</li>
+</ul>
+
+<h2>Cookies</h2>
+<p>L'appli utilise uniquement les cookies nécessaires pour te garder connecté, retenir ta langue et protéger les formulaires. Elle n'utilise aucun cookie publicitaire ou de pistage.</p>
+
+<h2>Tes choix</h2>
+<ul>
+  <li><strong>Voir et modifier tes informations :</strong> ouvre les Paramètres pour changer ton nom, ton e-mail et ton mot de passe.</li>
+  <li><strong>Supprimer une solution :</strong> ouvre une solution et utilise le bouton de suppression.</li>
+  <li><strong>Effacer ton historique :</strong> les Paramètres proposent un bouton qui supprime tous les problèmes résolus, les photos et les discussions avec le tuteur.</li>
+  <li><strong>Supprimer ton compte :</strong> les Paramètres proposent un bouton qui supprime définitivement ton compte et tout ce qui y est enregistré.</li>
+</ul>
+
+<h2>Durée de conservation</h2>
+<p>Nous conservons tes informations tant que ton compte existe. Quand tu supprimes ton compte, tes informations, tes solutions, tes photos, tes discussions, ta progression et le suivi des e-mails sont retirés de notre base de données.</p>
+
+<h2>Enfants</h2>
+<p>L'appli s'adresse aux élèves de tous âges. Si tu as moins de 13 ans, ou moins que l'âge requis dans ton pays pour accepter des services en ligne, demande à un parent ou à un tuteur légal de créer le compte et d'utiliser l'appli avec toi.</p>
+
+<h2>Modifications</h2>
+<p>Si cette politique change, la nouvelle version sera publiée sur cette page avec une nouvelle date.</p>
+
+<h2>Contact</h2>
+{% if support_email %}
+<p>Une question sur ta vie privée ? Écris à <a href="mailto:{{ support_email }}">{{ support_email }}</a>.</p>
+{% else %}
+<p>Tu peux gérer ou supprimer tes informations à tout moment depuis la page Paramètres de ton compte.</p>
+{% endif %}
+{% endblock %}
