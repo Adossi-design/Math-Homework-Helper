@@ -1,0 +1,10 @@
+<div class="lang-toggle {{ lang_class | default('') }}" role="group" aria-label="{{ _("Language") }}">
+  {{ icon("globe", "sm") }}
+  {% for code, label in languages.items() %}
+  {% if code == lang %}
+  <span class="is-active" aria-current="true"><span class="full">{{ label }}</span><span class="code">{{ code | upper }}</span></span>
+  {% else %}
+  <a href="{{ url_for('main.set_language', code=code, next=request.full_path.rstrip('?')) }}" hreflang="{{ code }}" lang="{{ code }}" aria-label="{{ label }}"><span class="full">{{ label }}</span><span class="code">{{ code | upper }}</span></a>
+  {% endif %}
+  {% endfor %}
+</div>
