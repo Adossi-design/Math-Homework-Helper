@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ _("Choose a new password") }} | {{ app_name }}{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+  {% set pose, show_lang = "thinking", false %}
+  {% include "auth/_side.html" %}
+  <main class="auth-main">
+    {% include "auth/_top.html" %}
+    <div class="auth-box">
+      <h1>{{ _("Choose a new password") }}</h1>
+      <p class="sub">{{ _("For") }} {{ email }}</p>
+
+      {% if error %}<div class="alert alert-error" role="alert" style="margin-bottom:16px">{{ icon("alert") }}<span>{{ error }}</span></div>{% endif %}
+
+      <form method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="field">
+          <label class="label" for="password">{{ _("New password") }}</label>
+          <div class="input-wrap">
+            {{ icon("lock") }}
+            <input class="input" id="password" name="password" type="password" autocomplete="new-password" minlength="8" required autofocus>
+            <button class="btn btn-ghost btn-icon btn-sm reveal" type="button" data-reveal="password" aria-label="{{ _("Show password") }}">{{ icon("eye", "sm") }}</button>
+          </div>
+          <span class="hint">{{ _("At least 8 characters.") }}</span>
+        </div>
+        <div class="field">
+          <label class="label" for="confirm">{{ _("Confirm new password") }}</label>
+          <div class="input-wrap">{{ icon("lock") }}<input class="input" id="confirm" name="confirm" type="password" autocomplete="new-password" minlength="8" required></div>
+        </div>
+        <div class="field"><button class="btn btn-primary btn-lg btn-block" type="submit">{{ _("Save new password") }}</button></div>
+      </form>
+    </div>
+  </main>
+</div>
+{% endblock %}
