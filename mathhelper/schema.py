@@ -18,6 +18,10 @@ NEW_COLUMNS = {
     "user": {
         "is_admin": ("BOOLEAN NOT NULL DEFAULT FALSE", "BOOLEAN NOT NULL DEFAULT 0"),
         "suspended_at": ("TIMESTAMP", "DATETIME"),
+        "grade": ("VARCHAR(10)", "VARCHAR(10)"),
+    },
+    "saved_lesson": {
+        "grade": ("VARCHAR(10)", "VARCHAR(10)"),
     },
 }
 

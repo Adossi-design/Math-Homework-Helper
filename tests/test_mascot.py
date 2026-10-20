@@ -106,6 +106,7 @@ def test_with_a_model_students_get_the_3d_beral_and_the_admin_preview_reports_it
                       "BERAL_MODEL_URL": "/static/mascot/beral.glb", "ADMIN_EMAIL": "boss@example.com", "ADMIN_PASSWORD": "correct-horse-battery"})
     student = app.test_client()
     student.post("/signup", data={"name": "Ama", "email": "ama@example.com", "password": "secret123"})
+    student.post("/settings/class", data={"grade": "3e"})
     page = student.get("/home").get_data(as_text=True)
     three = mascot(student.get("/home"))["three"]
     assert three == {"model": "/static/mascot/beral.glb", "module": "/static/js/beral/beral3d.js",

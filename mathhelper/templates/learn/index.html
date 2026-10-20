@@ -4,10 +4,22 @@
 {% block content %}
 <div class="page-head">
   <div>
-    <h1>{{ _("Learn") }}</h1>
-    <p>{{ _("Short lessons with the key ideas, a worked example and the mistakes to avoid.") }}</p>
+    <h1>{% if grade.id == mine %}{{ _("Lessons for your class") }}{% else %}{{ _("Lessons for {name}", name=_(grade.name)) }}{% endif %}</h1>
+    <p>{{ _("Short lessons with the key ideas, a worked example and the mistakes to avoid, written for what each class learns.") }}</p>
   </div>
 </div>
+
+<nav class="chips" style="margin-bottom:22px" aria-label="{{ _("Classes") }}">
+  {% for item in grades %}
+  <a class="chip {{ 'is-active' if item.id == grade.id }}" href="{{ url_for('learn.index', **({} if item.id == mine else {'class': item.id})) }}" {% if item.id == grade.id %}aria-current="page"{% endif %}>
+    {{ _(item.short) }}{% if item.id == mine %} {{ icon("user", "sm") }}{% endif %}
+  </a>
+  {% endfor %}
+</nav>
+
+{% if grade.id != mine %}
+<div class="alert alert-info" style="margin-bottom:22px">{{ icon("info") }}<span>{{ _("You are looking at another class. Solutions still follow your own class.") }} <a href="{{ url_for('learn.index') }}">{{ _("Back to my class") }}</a></span></div>
+{% endif %}
 
 {% if next_lesson %}
 <a class="card card-link card-body row tone-{{ next_course.tone }}" style="margin-bottom:24px" href="{{ url_for('learn.lesson', course_id=next_course.id, lesson_id=next_lesson.id) }}">
@@ -20,20 +32,23 @@
 </a>
 {% endif %}
 
-<div class="grid grid-3">
-  {% for course in courses %}
-  {% set total = course.lessons | length %}
-  {% set finished = progress[course.id] %}
-  <a class="card card-link card-body course-card tone-{{ course.tone }}" href="{{ url_for('learn.course', course_id=course.id) }}">
-    <div class="top">
-      <span class="glyph">{{ course.glyph }}</span>
-      <div><h3>{{ course.title }}</h3><p>{{ course.summary }}</p></div>
-    </div>
-    <div class="foot">
-      <div class="row"><span>{{ _("{n} lessons", n=total) }}</span><span>{% if finished == total %}{{ _("Completed") }}{% else %}{{ _("{done} of {total} done", done=finished, total=total) }}{% endif %}</span></div>
-      <div class="progress {{ 'success' if finished == total }}"><span style="width:{{ (100 * finished / total) | round | int }}%"></span></div>
-    </div>
-  </a>
-  {% endfor %}
-</div>
+<section class="stack">
+  {% with groups = groups %}{% include "learn/_lesson_list.html" %}{% endwith %}
+</section>
+
+{% if earlier %}
+<section class="section">
+  <div class="section-head"><h2>{{ _("Revise earlier classes") }}</h2></div>
+  <div class="stack">
+    {% for past, past_groups in earlier %}
+    <details class="card card-body">
+      <summary><strong>{{ _(past.name) }}</strong></summary>
+      <div class="stack" style="margin-top:14px">
+        {% with groups = past_groups %}{% include "learn/_lesson_list.html" %}{% endwith %}
+      </div>
+    </details>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
 {% endblock %}

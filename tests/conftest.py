@@ -21,9 +21,9 @@ def fake_result(topic="Algebra"):
 
 @pytest.fixture
 def app(tmp_path, monkeypatch):
-    monkeypatch.setattr(ai, "solve_text", lambda text: fake_result())
-    monkeypatch.setattr(ai, "solve_image", lambda data: fake_result("Fractions"))
-    monkeypatch.setattr(ai, "ask_tutor", lambda problems, history, question: f"Here is help with **{question}** and $x^2$.")
+    monkeypatch.setattr(ai, "solve_text", lambda text, grade=None: fake_result())
+    monkeypatch.setattr(ai, "solve_image", lambda data, grade=None: fake_result("Fractions"))
+    monkeypatch.setattr(ai, "ask_tutor", lambda problems, history, question, grade=None: f"Here is help with **{question}** and $x^2$.")
     app = create_app({
         "TESTING": True,
         "SQLALCHEMY_DATABASE_URI": f"sqlite:///{tmp_path / 'test.db'}",
@@ -56,9 +56,9 @@ def client(app):
 
 @pytest.fixture
 def make_user(app):
-    def make(email="ama@example.com", password="secret123", name="Ama Mensah"):
+    def make(email="ama@example.com", password="secret123", name="Ama Mensah", grade="4e"):
         with app.app_context():
-            user = User(name=name, email=email)
+            user = User(name=name, email=email, grade=grade)
             user.set_password(password)
             db.session.add(user)
             db.session.commit()

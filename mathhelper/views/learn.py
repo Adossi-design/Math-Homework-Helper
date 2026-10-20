@@ -6,6 +6,7 @@ from sqlalchemy import delete, select
 from .. import mascot, stats
 from ..content import courses, find_course, find_lesson, lesson_key
 from ..extensions import db
+from ..grades import GRADES, earlier_lessons, find_grade, lesson_grade, lessons_for
 from ..models import LessonCompletion
 from ..practice.catalog import find_skill
 
@@ -30,10 +31,14 @@ def load(course_id, lesson_id=None):
 @bp.get("/")
 @login_required
 def index():
+    # The student's own class, unless they are looking at another one with ?class=.
+    mine = current_user.grade
+    shown = find_grade(request.args.get("class")) or find_grade(mine)
     done = stats.completed_keys(current_user)
-    progress = {c.id: stats.course_progress(c, done) for c in courses()}
-    course, lesson = stats.next_lesson(done)
-    return render_template("learn/index.html", courses=courses(), progress=progress, next_course=course, next_lesson=lesson)
+    course, lesson = stats.next_lesson(done, mine) if shown.id == mine else (None, None)
+    return render_template("learn/index.html", grades=GRADES, grade=shown, mine=mine, key=lesson_key, done=done,
+                           groups=lessons_for(courses(), shown.id), earlier=earlier_lessons(courses(), shown.id),
+                           next_course=course, next_lesson=lesson)
 
 
 @bp.get("/<course_id>")
@@ -44,7 +49,8 @@ def course(course_id):
     skills = [s for s in (find_skill(i) for i in dict.fromkeys(lesson.skill for lesson in course.lessons)) if s]
     resume = next((item for item in course.lessons if lesson_key(course, item) not in done), None)
     return render_template("learn/course.html", course=course, done=done, key=lesson_key, resume=resume,
-                           finished=stats.course_progress(course, done), skills=skills)
+                           finished=stats.course_progress(course, done), skills=skills,
+                           grade_of=lambda item: find_grade(lesson_grade(course.id, item)), mine=current_user.grade)
 
 
 @bp.get("/<course_id>/<lesson_id>")

@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block title %}{{ _("Your class") }} | {{ app_name }}{% endblock %}
+{% block page_class %}narrow{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{% if welcome %}{{ _("Which class are you in?") }}{% else %}{{ _("Change your class") }}{% endif %}</h1>
+    <p>{{ _("Every solution uses the methods taught in your class, and your lessons are chosen for it. You can change it any time in Settings.") }}</p>
+  </div>
+</div>
+
+<form class="card card-body" method="post" action="{{ url_for('settings.choose_class', next=next) }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {% for stage, grades in stages %}
+  <fieldset class="grade-stage">
+    <legend class="label">{{ _(stage) }}</legend>
+    <div class="grade-options">
+      {% for grade in grades %}
+      <div class="theme-option">
+        <input type="radio" id="grade-{{ grade.id }}" name="grade" value="{{ grade.id }}" {{ 'checked' if current_user.grade == grade.id }} required>
+        <label for="grade-{{ grade.id }}">{{ _(grade.name) }}</label>
+      </div>
+      {% endfor %}
+    </div>
+  </fieldset>
+  {% endfor %}
+  <div class="field" style="margin-top:22px"><button class="btn btn-primary btn-lg" type="submit">{{ icon("check") }} {{ _("Save my class") }}</button></div>
+</form>
+{% endblock %}

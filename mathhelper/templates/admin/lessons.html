@@ -23,7 +23,7 @@
           {% else %}<span class="tag success">{{ _("Published") }}</span>{% endif %}
           {% if item.state == "edited" %}<span class="tag">{{ _("Edited") }}</span>{% elif item.state == "custom" %}<span class="tag">{{ _("Added by you") }}</span>{% endif %}
         </div>
-        <div class="meta">{{ _("{n} min read", n=item.lesson.minutes) }}{% if item.lesson.skill in skills %}, {{ _(skills[item.lesson.skill].title) }}{% endif %}</div>
+        <div class="meta">{{ _("{n} min read", n=item.lesson.minutes) }}{% if item.lesson.skill in skills %}, {{ _(skills[item.lesson.skill].title) }}{% endif %}, {{ _(grade_of(course, item.lesson).name) }}</div>
       </div>
       <div class="actions">
         {% if item.state == "deleted" %}

@@ -579,6 +579,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .lesson-num { width: 34px; height: 34px; border-radius: 50%; flex: none; display: grid; place-items: center; border: 2px solid var(--border-strong); color: var(--muted); font-weight: 700; font-size: 14px; }
 .lesson-num.done { background: var(--success); border-color: var(--success); color: #fff; }
 .lesson-row .body { flex: 1; min-width: 0; }
+.class-course-head { display: flex; align-items: center; gap: 12px; padding: 14px 22px; color: inherit; }
+.class-course-head strong { flex: 1; min-width: 0; }
+.class-course-head:hover { background: var(--surface-2); text-decoration: none; }
 .lesson-row .body span { display: block; font-size: 13px; color: var(--faint); }
 .key-points { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
 .key-points li { display: flex; gap: 12px; align-items: flex-start; }
@@ -654,6 +657,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .theme-option input:checked + label { border-color: var(--primary); background: var(--primary-soft); color: var(--accent); }
 .theme-option input:focus-visible + label { outline: 3px solid color-mix(in srgb, var(--primary) 45%, transparent); }
+.grade-stage { border: 0; padding: 0; margin: 0; }
+.grade-stage + .grade-stage { margin-top: 20px; }
+.grade-stage legend { margin-bottom: 10px; }
+.grade-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.grade-options .theme-option label { padding: 14px 10px; text-align: center; }
 .danger-zone { border-color: color-mix(in srgb, var(--danger) 35%, var(--border)); }
 @media (max-width: 760px) { .settings-section { grid-template-columns: minmax(0, 1fr); gap: 14px; } }
 

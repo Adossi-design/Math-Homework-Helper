@@ -52,7 +52,7 @@ def home():
     ).all()
     done = stats.completed_keys(current_user)
     best = stats.best_scores(current_user)
-    course, lesson = stats.next_lesson(done)
+    course, lesson = stats.next_lesson(done, current_user.grade)
     return render_template(
         "home.html",
         greeting=greeting(),
@@ -61,7 +61,8 @@ def home():
         recent=recent,
         next_course=course,
         next_lesson=lesson,
-        suggestion=stats.suggested_skill(best, lesson.skill if lesson else None),
+        suggestion=stats.suggested_skill(best, lesson.skill if lesson else None,
+                                         stats.class_skills(current_user.grade, earlier=True)),
         best=best,
     )
 

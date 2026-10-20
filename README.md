@@ -6,11 +6,12 @@ Built with Python (Flask), SQLite and Google Gemini. The AI key stays on the ser
 
 ## Features
 
-- **Solve**: take or upload a photo (or paste one), or type the problem. Every problem on the page gets an answer, the full working line by line, each step's math line with its explanation underneath, and a tip. There is no level to choose: explanations are written so learners of any age and teachers can follow them.
+- **Your class**: each student picks their class in the French system (CM1, CM2, Sixième, Cinquième, Quatrième, Troisième, Seconde, Première, Terminale or University) right after signing up, and can change it in Settings. The class list, what each class is taught and which lesson belongs to which class live in `mathhelper/grades.py`.
+- **Solve**: take or upload a photo (or paste one), or type the problem. Every problem on the page gets an answer, the full working line by line, each step's math line with its explanation underneath, and a tip. The AI solves with the methods taught in the student's class (a Sixième student never gets a Terminale method), and says so when a problem goes beyond what the class has learned.
 - **Ask the tutor**: a chat under each solution for simpler explanations, checking your own work, or a similar problem to try.
 - **Library**: every solution is saved, with search, topic filters and a Saved tab.
-- **Learn**: 13 courses and 39 short lessons from elementary arithmetic to college linear algebra. Each lesson has key ideas, a worked example and a common mistake.
-- **Practice**: 23 skills that generate fresh questions every round, with instant feedback, sounds, keyboard shortcuts, scores and a full review.
+- **Learn**: 39 short lessons from CM1 to University, shown by class: students see their own class's lessons first, can revise earlier classes, and can look at any other class. Each lesson has key ideas, a worked example and a common mistake. The admin picks the class of each new lesson.
+- **Practice**: the skills for the student's class come first, out of 23 skills that generate fresh questions every round, with instant feedback, sounds, keyboard shortcuts, scores and a full review.
 - **Progress**: day streak, weekly activity, practice accuracy, lessons completed and personal bests.
 - **Admin dashboard**: one admin account runs the platform at `/admin`: an overview of activity, users (view, suspend, reactivate, delete), lessons (add, edit, preview, delete, restore) and practice sets (write your own questions, edit, preview, delete, restore). The admin account has no student pages, and every admin page and action is checked on the server.
 - **Accounts**: email and password sign up, Google sign in, password reset by email, profile, theme (light, dark or system), password change and account deletion.

@@ -7,6 +7,7 @@ from flask import g
 
 from mathhelper import ai
 from mathhelper.content.courses import COURSES, LOCALIZED
+from mathhelper.grades import GRADES, STAGES
 from mathhelper.i18n import JS_KEYS
 from mathhelper.models import LEVELS
 from mathhelper.practice import SKILLS, build_round
@@ -39,6 +40,7 @@ def source_strings():
 def test_every_translated_string_has_french_text():
     dynamic = set(JS_KEYS) | set(LEVELS) | set(ai.TOPICS) | set(EXAMPLES) | {"Math"}
     dynamic |= {"Home", "Solve", "Library", "Learn", "Practice", "System", "Light", "Dark"}
+    dynamic |= set(STAGES) | {grade.name for grade in GRADES} | {grade.short for grade in GRADES}
     for skill in SKILLS.values():
         dynamic |= {skill.title, skill.blurb, skill.topic}
     missing = sorted((source_strings() | dynamic) - set(FR))

@@ -78,7 +78,7 @@ def test_missing_key_is_explained(app):
         real_solve_text("2+2")
 
 
-def test_the_solver_asks_for_the_full_working_and_mentions_no_level(app, monkeypatch):
+def test_the_solver_asks_for_the_full_working(app, monkeypatch):
     seen = {}
 
     class Recorder(FakeModels):
@@ -91,7 +91,7 @@ def test_the_solver_asks_for_the_full_working_and_mentions_no_level(app, monkeyp
     with app.app_context():
         real_solve_text("3x - 2 = -x + 6")
     assert '"start"' in seen["instructions"] and '"result"' in seen["instructions"] and "teachers" in seen["instructions"]
-    assert "level" not in seen["instructions"].lower()
+    assert "French school system" not in seen["instructions"]
     assert set(ai.Step.model_fields) == {"title", "result", "work"} and "start" in ai.Problem.model_fields
 
 

@@ -80,7 +80,7 @@ def signup():
             db.session.add(user)
             db.session.commit()
             login_user(user, remember=True)
-            return redirect(url_for("main.home"))
+            return redirect(url_for("settings.choose_class"))
     return render_template("auth/signup.html", form=form, errors=errors)
 
 

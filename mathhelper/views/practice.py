@@ -59,7 +59,10 @@ def index():
         select(PracticeAttempt).where(PracticeAttempt.user_id == current_user.id, PracticeAttempt.skill_id.in_(list(skills)))
         .order_by(PracticeAttempt.created_at.desc()).limit(5)
     ).all()
-    return render_template("practice/index.html", best=stats.best_scores(current_user), recent=recent, skills=skills)
+    mine = [skills[i] for i in stats.class_skills(current_user.grade) if i in skills]
+    others = [skill for skill in skills.values() if skill not in mine]
+    return render_template("practice/index.html", best=stats.best_scores(current_user), recent=recent, skills=skills,
+                           mine=mine, others=others)
 
 
 @bp.get("/<skill_id>")

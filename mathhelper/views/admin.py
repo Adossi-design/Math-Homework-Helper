@@ -14,6 +14,7 @@ from ..content import COURSES, courses, forget_lessons, lesson_from_row, stored_
 from ..content.courses import LOCALIZED
 from ..content.courses_fr import FR_COURSES
 from ..extensions import db
+from ..grades import GRADE_IDS, by_stage, find_grade, lesson_grade
 from ..i18n import gettext as _
 from ..i18n import language
 from ..models import LessonCompletion, PracticeAttempt, SavedLesson, SavedPractice, Solution, User, utcnow
@@ -202,8 +203,9 @@ def read_lesson_form():
                "fr": {**{name: text(f"fr_{name}") for name in TEXT_FIELDS}, **{name: lines(f"fr_{name}") for name in LIST_FIELDS}}}
     content["en"]["title"], content["fr"]["title"] = content["en"]["title"][:120], content["fr"]["title"][:120]
     minutes = min(max(request.form.get("minutes", 5, type=int) or 5, 1), 60)
+    grade = request.form.get("grade", "")
     values = {"content": content, "minutes": minutes, "skill": request.form.get("skill", ""),
-              "published": request.form.get("published") == "on"}
+              "grade": grade if grade in GRADE_IDS else None, "published": request.form.get("published") == "on"}
     error = None
     if not all(content["en"].values()):
         error = _("Fill in every English field. The French fields are optional.")
@@ -215,7 +217,8 @@ def read_lesson_form():
 def lesson_form(values, error, **extra):
     """Show the lesson form with the course and skill choices."""
     return render_template("admin/lesson_form.html", tab="lessons", form=values, error=error,
-                           course_choices=LOCALIZED.get(language(), COURSES), skills=all_skills().values(), **extra)
+                           course_choices=LOCALIZED.get(language(), COURSES), skills=all_skills().values(),
+                           grade_stages=by_stage(), **extra)
 
 
 def lesson_for_preview(course_id, slug):
@@ -245,7 +248,8 @@ def lessons():
         for row in [row for key, row in rows.items() if key[0] == course.id]:
             items.append({"lesson": lesson_from_row(row, lang), "state": "custom", "draft": not row.published})
         groups.append((course, items))
-    return render_template("admin/lessons.html", tab="lessons", groups=groups, skills=all_skills(hidden=True))
+    return render_template("admin/lessons.html", tab="lessons", groups=groups, skills=all_skills(hidden=True),
+                           grade_of=lambda course, item: find_grade(lesson_grade(course.id, item)))
 
 
 @bp.get("/lessons/<course_id>/<slug>/preview")
@@ -258,7 +262,7 @@ def preview_lesson(course_id, slug):
 @bp.route("/lessons/new", methods=["GET", "POST"])
 def new_lesson():
     blank = {name: "" for name in TEXT_FIELDS} | {name: [] for name in LIST_FIELDS}
-    values = {"content": {"en": dict(blank), "fr": dict(blank)}, "minutes": 5, "skill": "", "published": True}
+    values = {"content": {"en": dict(blank), "fr": dict(blank)}, "minutes": 5, "skill": "", "grade": "", "published": True}
     course_id, error = request.values.get("course_id", ""), None
     if request.method == "POST":
         values, error = read_lesson_form()
@@ -285,17 +289,18 @@ def edit_lesson(course_id, slug):
             if row is None:
                 row = SavedLesson(course_id=course_id, slug=slug)
                 db.session.add(row)
-            row.content, row.minutes, row.skill = values["content"], values["minutes"], values["skill"]
+            row.content, row.minutes, row.skill, row.grade = values["content"], values["minutes"], values["skill"], values["grade"]
             row.published, row.deleted = values["published"], False
             db.session.commit()
             forget_lessons()
             flash(_("Lesson updated."), "success")
             return redirect(url_for("admin.lessons"))
     elif row is not None and row.content:
-        values = {"content": row.content, "minutes": row.minutes, "skill": row.skill, "published": row.published}
+        values = {"content": row.content, "minutes": row.minutes, "skill": row.skill,
+                  "grade": row.grade or (lesson_grade(course_id, original) if original else ""), "published": row.published}
     else:
         values = {"content": builtin_content(course_id, original), "minutes": original.minutes, "skill": original.skill,
-                  "published": True}
+                  "grade": lesson_grade(course_id, original), "published": True}
     return lesson_form(values, error, course_id=course_id, editing=slug)
 
 

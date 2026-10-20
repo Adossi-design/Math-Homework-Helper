@@ -27,6 +27,7 @@ class Lesson:
     example: Example
     mistake: str
     skill: str
+    grade: str = ""
 
 
 @dataclass
@@ -614,7 +615,8 @@ def lesson_from_row(row, lang):
     text = {name: polish(local.get(name) or english.get(name) or "", lang) for name in TEXT_FIELDS}
     lists = {name: [polish(item, lang) for item in local.get(name) or english.get(name) or []] for name in LIST_FIELDS}
     example = Example(text["problem"], lists["steps"], text["answer"])
-    return Lesson(row.slug, text["title"], row.minutes, text["intro"], lists["points"], example, text["mistake"], row.skill)
+    return Lesson(row.slug, text["title"], row.minutes, text["intro"], lists["points"], example, text["mistake"], row.skill,
+                  row.grade or "")
 
 
 def _merge(base, rows, lang):
