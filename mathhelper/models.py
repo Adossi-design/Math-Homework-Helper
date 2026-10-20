@@ -33,6 +33,8 @@ class User(UserMixin, db.Model):
     created_at: Mapped[datetime] = mapped_column(default=utcnow)
     is_admin: Mapped[bool] = mapped_column(default=False)
     suspended_at: Mapped[datetime | None] = mapped_column()
+    country: Mapped[str | None] = mapped_column(String(20))
+    grade: Mapped[str | None] = mapped_column(String(10))
 
     solutions: Mapped[list["Solution"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     attempts: Mapped[list["PracticeAttempt"]] = relationship(back_populates="user", cascade="all, delete-orphan")
@@ -207,6 +209,65 @@ class SavedPractice(db.Model):
     def visible(self):
         """Return True when students can see this practice set."""
         return self.published and not self.deleted
+
+
+class ExerciseResult(db.Model):
+    """How a student is doing on one curriculum exercise, kept as a running tally."""
+
+    __table_args__ = (UniqueConstraint("user_id", "exercise_id"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), index=True)
+    exercise_id: Mapped[str] = mapped_column(String(80))
+    attempts: Mapped[int] = mapped_column(default=0)
+    solved: Mapped[bool] = mapped_column(default=False)
+    updated_at: Mapped[datetime] = mapped_column(default=utcnow, onupdate=utcnow)
+
+
+class ChapterAttempt(db.Model):
+    """A finished chapter assessment, stored with its seed so the same questions can be rebuilt for the corrections."""
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), index=True)
+    chapter_id: Mapped[str] = mapped_column(String(60), index=True)
+    seed: Mapped[str] = mapped_column(String(32))
+    answers: Mapped[list] = mapped_column(JSON, default=list)
+    correct: Mapped[int] = mapped_column(default=0)
+    total: Mapped[int] = mapped_column(default=0)
+    by_concept: Mapped[dict] = mapped_column(JSON, default=dict)
+    version: Mapped[int] = mapped_column(default=1)
+    created_at: Mapped[datetime] = mapped_column(default=utcnow, index=True)
+
+    @property
+    def percent(self):
+        """Return the score as a whole number percentage."""
+        return round(100 * self.correct / self.total) if self.total else 0
+
+
+class TranslationCache(db.Model):
+    """A translated piece of lesson text, kept so it is only translated once and can be corrected by the admin."""
+
+    __table_args__ = (UniqueConstraint("digest", "lang"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    digest: Mapped[str] = mapped_column(String(64), index=True)
+    lang: Mapped[str] = mapped_column(String(5))
+    source: Mapped[str] = mapped_column(Text)
+    text: Mapped[str] = mapped_column(Text)
+    reviewed: Mapped[bool] = mapped_column(default=False)
+    created_at: Mapped[datetime] = mapped_column(default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(default=utcnow, onupdate=utcnow)
+
+
+class TutorQuestion(db.Model):
+    """One question a student asked the tutor while studying a lesson, with the answer."""
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), index=True)
+    section_key: Mapped[str] = mapped_column(String(80), index=True)
+    question: Mapped[str] = mapped_column(Text)
+    answer: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(default=utcnow, index=True)
 
 
 class Setting(db.Model):

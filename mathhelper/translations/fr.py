@@ -644,3 +644,8 @@ FR = {
     "{n} week ago": "il y a {n} semaine",
     "{n} weeks ago": "il y a {n} semaines",
 }
+
+
+from .fr_curriculum import CURRICULUM  # noqa: E402
+
+FR.update(CURRICULUM)

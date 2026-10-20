@@ -3,6 +3,7 @@ from flask import Blueprint, current_app, flash, redirect, render_template, requ
 from flask_login import current_user, login_required
 
 from .. import ai, mascot
+from ..curriculum.context import profile
 from ..extensions import db
 from ..images import ImageError, delete_image, prepare_image, save_image
 from ..models import Message, Solution
@@ -50,11 +51,11 @@ def create():
             if not upload or not upload.filename:
                 return solve_form(mode, text, _("Choose or take a photo of your problem first."), 400)
             image_bytes = prepare_image(upload.stream)
-            result = ai.solve_image(image_bytes)
+            result = ai.solve_image(image_bytes, profile(current_user))
         else:
             if len(text) < 2:
                 return solve_form(mode, text, _("Type the problem you want solved."), 400)
-            result = ai.solve_text(text)
+            result = ai.solve_text(text, profile(current_user))
     except ImageError as exc:
         return solve_form(mode, text, str(exc), 400)
     except ai.AIError as exc:
@@ -116,8 +117,10 @@ def delete(solution_id):
 @login_required
 def ask(solution_id):
     solution = owned_solution(solution_id)
-    payload = request.get_json(silent=True) or request.form
-    question = (payload.get("question") or "").strip()
+    payload = request.get_json(silent=True)
+    payload = payload if isinstance(payload, dict) else request.form
+    question = payload.get("question")
+    question = question.strip() if isinstance(question, str) else ""
     if not question:
         return {"error": _("Type a question for the tutor first.")}, 400
     if len(question) > MAX_QUESTION_LENGTH:
@@ -127,7 +130,7 @@ def ask(solution_id):
 
     history = [(m.role, m.content) for m in solution.messages]
     try:
-        reply = ai.ask_tutor(solution.problems, history, question)
+        reply = ai.ask_tutor(solution.problems, history, question, profile(current_user))
     except ai.AIError as exc:
         return {"error": str(exc)}, 503
 

@@ -11,6 +11,8 @@ from mathhelper.i18n import JS_KEYS
 from mathhelper.models import LEVELS
 from mathhelper.practice import SKILLS, build_round
 from mathhelper.translations.fr import FR
+from mathhelper.curriculum.sources import SOURCES
+from mathhelper.views.curriculum import MESSAGES
 from mathhelper.views.solve import EXAMPLES
 
 ROOT = Path(__file__).resolve().parent.parent / "mathhelper"
@@ -38,6 +40,7 @@ def source_strings():
 
 def test_every_translated_string_has_french_text():
     dynamic = set(JS_KEYS) | set(LEVELS) | set(ai.TOPICS) | set(EXAMPLES) | {"Math"}
+    dynamic |= set(MESSAGES.values()) | {s.licence for s in SOURCES.values()} | {s.use for s in SOURCES.values()}
     dynamic |= {"Home", "Solve", "Library", "Learn", "Practice", "System", "Light", "Dark"}
     for skill in SKILLS.values():
         dynamic |= {skill.title, skill.blurb, skill.topic}

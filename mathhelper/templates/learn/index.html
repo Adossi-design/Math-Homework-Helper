@@ -9,6 +9,15 @@
   </div>
 </div>
 
+<a class="card card-link card-body row tone-indigo" style="margin-bottom:16px" href="{{ url_for('curriculum.index') }}">
+  <span class="glyph">{{ icon("book") }}</span>
+  <div style="flex:1;min-width:0">
+    <div class="small faint">{{ _("My curriculum") }}</div>
+    <h3>{{ _("Complete chapters by country and level") }}</h3>
+  </div>
+  <span class="btn btn-soft btn-sm">{{ _("Open") }} {{ icon("arrow-right", "sm") }}</span>
+</a>
+
 {% if next_lesson %}
 <a class="card card-link card-body row tone-{{ next_course.tone }}" style="margin-bottom:24px" href="{{ url_for('learn.lesson', course_id=next_course.id, lesson_id=next_lesson.id) }}">
   <span class="glyph">{{ next_course.glyph }}</span>

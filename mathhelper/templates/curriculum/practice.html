@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% from "curriculum/_macros.html" import exercise with context %}
+{% block title %}{{ _("Independent practice") }} | {{ app_name }}{% endblock %}
+{% block page_class %}narrow{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{{ url_for('curriculum.chapter', chapter_id=chapter.id) }}">{{ icon("arrow-left", "sm") }} {{ view.title }}</a>
+<div class="page-head">
+  <div>
+    <h1>{{ _("Independent practice") }}</h1>
+    <p>{{ _("From easy to challenging. Your answers are checked exactly, so 3,5 and 3,50 and 7/2 all count as the same number.") }}</p>
+  </div>
+</div>
+{% if fallback %}<div class="notice">{{ icon("info") }}<span>{{ _("Part of this lesson is shown in its original language because the automatic translation was not available. Try again in a moment.") }}</span></div>{% endif %}
+
+{% for level_number, heading in [(1, _("Level 1, getting started")), (2, _("Level 2, building up")), (3, _("Level 3, challenge"))] %}
+<section class="section">
+  <div class="section-head"><h2>{{ heading }}</h2></div>
+  <div class="stack">
+    {% for e in view.exercises if e.level == level_number %}{{ exercise(e, loop.index, solved) }}{% endfor %}
+  </div>
+</section>
+{% endfor %}
+{% endblock %}

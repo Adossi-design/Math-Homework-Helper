@@ -21,9 +21,14 @@ def fake_result(topic="Algebra"):
 
 @pytest.fixture
 def app(tmp_path, monkeypatch):
-    monkeypatch.setattr(ai, "solve_text", lambda text: fake_result())
-    monkeypatch.setattr(ai, "solve_image", lambda data: fake_result("Fractions"))
-    monkeypatch.setattr(ai, "ask_tutor", lambda problems, history, question: f"Here is help with **{question}** and $x^2$.")
+    monkeypatch.setattr(ai, "solve_text", lambda text, profile="": fake_result())
+    monkeypatch.setattr(ai, "solve_image", lambda data, profile="": fake_result("Fractions"))
+    monkeypatch.setattr(ai, "ask_tutor", lambda problems, history, question, profile="": f"Here is help with **{question}** and $x^2$.")
+    def offline(texts, source, target):
+        raise ai.AIError("offline")
+
+    monkeypatch.setattr(ai, "translate_batch", offline)
+    monkeypatch.setattr(ai, "ask_lesson_tutor", lambda lesson, profile, history, question: f"Tutor reply to **{question}**.")
     app = create_app({
         "TESTING": True,
         "SQLALCHEMY_DATABASE_URI": f"sqlite:///{tmp_path / 'test.db'}",

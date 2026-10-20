@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% from "curriculum/_macros.html" import field with context %}
+{% block title %}{{ _("Chapter assessment") }} | {{ app_name }}{% endblock %}
+{% block page_class %}narrow{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{{ url_for('curriculum.chapter', chapter_id=chapter.id) }}">{{ icon("arrow-left", "sm") }} {{ view.title }}</a>
+<div class="page-head">
+  <div>
+    <h1>{{ _("Chapter assessment") }}</h1>
+    <p>{{ _("Answer without hints, then you get a detailed correction. You can retake it as often as you like, with new numbers each time.") }}</p>
+  </div>
+</div>
+{% if fallback %}<div class="notice">{{ icon("info") }}<span>{{ _("Part of this lesson is shown in its original language because the automatic translation was not available. Try again in a moment.") }}</span></div>{% endif %}
+
+<form method="post" action="{{ url_for('curriculum.submit', chapter_id=chapter.id) }}" class="stack" data-assessment>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="seed" value="{{ seed }}">
+  {% for q in view.questions %}
+  <article class="exercise">
+    <div class="exercise-head">
+      <span class="lesson-num">{{ loop.index }}</span>
+      <div class="tex exercise-prompt">{{ q.prompt | rich_inline }}</div>
+    </div>
+    {{ field(q, "q" ~ loop.index0) }}
+  </article>
+  {% endfor %}
+  <div class="row wrap" style="justify-content:space-between">
+    <p class="small muted">{{ _("Questions left empty count as wrong.") }}</p>
+    <button class="btn btn-primary btn-lg" type="submit">{{ icon("check") }} {{ _("Submit my answers") }}</button>
+  </div>
+</form>
+{% endblock %}

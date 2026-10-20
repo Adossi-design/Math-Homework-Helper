@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block title %}{{ _("My curriculum") }} | {{ app_name }}{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{{ url_for('learn.index') }}">{{ icon("arrow-left", "sm") }} {{ _("All courses") }}</a>
+<div class="page-head">
+  <div>
+    <h1>{{ _("My curriculum") }}</h1>
+    {% if place and stage %}
+    <p>{{ label(place, lang) }}, {{ label(stage, lang) }}</p>
+    {% else %}
+    <p>{{ _("Choose your country and level to see the chapters written for it.") }}</p>
+    {% endif %}
+  </div>
+  <a class="btn btn-outline btn-sm" href="{{ url_for('settings.index') }}#curriculum">{{ icon("sliders", "sm") }} {{ _("Change in Settings") }}</a>
+</div>
+
+{% if place and stage and not own %}
+<div class="notice" style="margin-bottom:16px">{{ icon("info") }}<span>{{ _("You are browsing another level. Your own curriculum in Settings has not changed.") }}</span></div>
+{% endif %}
+
+{% if cards %}
+<div class="stack">
+  {% for card in cards %}
+  {% set progress = card.progress %}
+  {% set total = card.chapter.sections | length %}
+  {% set finished = progress.sections_done | length %}
+  <a class="card card-link card-body course-card tone-blue" href="{{ url_for('curriculum.chapter', chapter_id=card.chapter.id) }}">
+    <div class="top">
+      <span class="glyph">0,5</span>
+      <div><div class="small faint">{{ _("Chapter {n}", n=card.chapter.number) }}</div><h3>{{ card.view.title }}</h3><p>{{ card.view.intro | rich_inline }}</p></div>
+    </div>
+    <div class="foot">
+      <div class="row"><span>{{ _("{n} sections", n=total) }}</span><span>{% if finished == total %}{{ _("Completed") }}{% else %}{{ _("{done} of {total} done", done=finished, total=total) }}{% endif %}</span></div>
+      <div class="progress {{ 'success' if finished == total }}"><span style="width:{{ (100 * finished / total) | round | int }}%"></span></div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% elif place and stage %}
+<div class="card card-body">
+  <h2 style="font-size:17px">{{ _("No chapters here yet") }}</h2>
+  <p class="muted" style="margin-top:6px">{{ _("Complete chapters for this country and level have not been written and checked yet, so they are not offered. The general courses in Learn and the problem solver still work for you.") }}</p>
+  <div class="row wrap" style="margin-top:14px">
+    <a class="btn btn-soft" href="{{ url_for('learn.index') }}">{{ icon("book") }} {{ _("Open Learn") }}</a>
+    <a class="btn btn-outline" href="{{ url_for('solve.new') }}">{{ icon("camera") }} {{ _("Solve a problem") }}</a>
+  </div>
+</div>
+{% endif %}
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("Levels with chapters available") }}</h2></div>
+  <div class="card">
+    {% for offer_place, offer_stage in offered %}
+    <a class="lesson-row" href="{{ url_for('curriculum.index', country=offer_place.id, grade=offer_stage.id) }}">
+      <span class="lesson-num">{{ icon("book", "sm") }}</span>
+      <div class="body"><strong>{{ label(offer_place, lang) }}, {{ label(offer_stage, lang) }}</strong><span>{{ _("Reference chapter") }}</span></div>
+      {{ icon("chevron-right") }}
+    </a>
+    {% endfor %}
+  </div>
+  <p class="small muted" style="margin-top:10px">{{ _("Other countries and levels will be added one chapter at a time, after the content has been checked.") }}</p>
+</section>
+{% endblock %}

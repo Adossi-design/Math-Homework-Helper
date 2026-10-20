@@ -18,6 +18,11 @@ NEW_COLUMNS = {
     "user": {
         "is_admin": ("BOOLEAN NOT NULL DEFAULT FALSE", "BOOLEAN NOT NULL DEFAULT 0"),
         "suspended_at": ("TIMESTAMP", "DATETIME"),
+        "country": ("VARCHAR(20)", "VARCHAR(20)"),
+        "grade": ("VARCHAR(10)", "VARCHAR(10)"),
+    },
+    "chapter_attempt": {
+        "version": ("INTEGER NOT NULL DEFAULT 1", "INTEGER NOT NULL DEFAULT 1"),
     },
 }
 

@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% block title %}{{ view.title }} | {{ app_name }}{% endblock %}
+
+{% block content %}
+{% set total = chapter.sections | length %}
+{% set finished = progress.sections_done | length %}
+<a class="back-link" href="{{ url_for('curriculum.index', country=chapter.country, grade=chapter.level) }}">{{ icon("arrow-left", "sm") }} {{ label(place, lang) }}, {{ label(stage, lang) }}</a>
+
+<div class="card card-body course-hero tone-blue">
+  <span class="glyph lg">0,5</span>
+  <div class="grow">
+    <div class="small faint">{{ label(place, lang) }}, {{ label(stage, lang) }}, {{ _("Chapter {n}", n=chapter.number) }}</div>
+    <h1>{{ view.title }}</h1>
+    <p class="muted" style="margin-top:6px">{{ view.intro | rich_inline }}</p>
+    <div class="row" style="margin-top:14px">
+      <div class="progress {{ 'success' if finished == total }}" style="flex:1;max-width:280px"><span style="width:{{ (100 * finished / total) | round | int }}%"></span></div>
+      <span class="small muted">{{ _("{done} of {total} sections done", done=finished, total=total) }}</span>
+    </div>
+  </div>
+  <a class="btn btn-primary btn-lg" href="{{ url_for('curriculum.section', chapter_id=chapter.id, section_id=(resume or chapter.sections[0]).id) }}">
+    {% if finished == 0 %}{{ _("Start chapter") }}{% elif resume %}{{ _("Continue") }}{% else %}{{ _("Review chapter") }}{% endif %} {{ icon("arrow-right") }}
+  </a>
+</div>
+
+{% if fallback %}<div class="notice" style="margin-top:16px">{{ icon("info") }}<span>{{ _("Part of this lesson is shown in its original language because the automatic translation was not available. Try again in a moment.") }}</span></div>{% endif %}
+{% if foreign %}<div class="notice" style="margin-top:16px">{{ icon("info") }}<span>{{ _("This chapter belongs to another curriculum than the one in your settings. You can still study it.") }}</span></div>{% endif %}
+{% if chapter.status_note %}<div class="notice" style="margin-top:16px">{{ icon("info") }}<span>{{ view.status_note }}</span></div>{% endif %}
+
+{% if progress.revise %}
+<section class="section card card-body revise">
+  <h2 style="font-size:17px">{{ _("Worth revising") }}</h2>
+  <p class="small muted" style="margin:4px 0 12px">{{ _("These parts need another look before you move on.") }}</p>
+  <div class="stack">
+    {% for item in progress.revise %}
+    <a class="lesson-row" style="padding:12px 0" href="{{ url_for('curriculum.section', chapter_id=chapter.id, section_id=item.section) }}">
+      <div class="body"><strong>{{ view.concepts[item.concept] }}</strong>{% if item.score %}<span>{{ _("Last assessment: {score}", score=item.score) }}</span>{% endif %}</div>
+      {{ icon("chevron-right") }}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("What you will learn") }}</h2></div>
+  <div class="card card-body">
+    <ul class="key-points tex">
+      {% for objective in view.objectives %}<li><span class="dot">{{ icon("check") }}</span><span>{{ objective | rich_inline }}</span></li>{% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("Before you start") }}</h2></div>
+  <div class="card">
+    {% for item in progress.prerequisites %}
+    <a class="lesson-row" href="{{ url_for('learn.lesson', course_id=item.course, lesson_id=item.lesson) }}">
+      <span class="lesson-num {{ 'done' if item.done }}">{% if item.done %}{{ icon("check", "sm") }}{% else %}{{ loop.index }}{% endif %}</span>
+      <div class="body"><strong>{{ view.prerequisites[loop.index0].text }}</strong><span>{{ _("Open the review lesson") }}{% if item.done %}, {{ _("completed") }}{% endif %}</span></div>
+      {{ icon("chevron-right") }}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("Sections") }}</h2></div>
+  <div class="card">
+    {% for s in view.sections %}
+    {% set is_done = s.id in progress.sections_done %}
+    <a class="lesson-row" href="{{ url_for('curriculum.section', chapter_id=chapter.id, section_id=s.id) }}">
+      <span class="lesson-num {{ 'done' if is_done }}">{% if is_done %}{{ icon("check", "sm") }}{% else %}{{ loop.index }}{% endif %}</span>
+      <div class="body"><strong>{{ s.title }}</strong><span>{{ _("{n} min read", n=s.minutes) }}{% if is_done %}, {{ _("completed") }}{% endif %}</span></div>
+      {{ icon("chevron-right") }}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("Practice and assessment") }}</h2></div>
+  <div class="card">
+    <a class="lesson-row" href="{{ url_for('curriculum.practice', chapter_id=chapter.id) }}">
+      <span class="lesson-num">{{ icon("target", "sm") }}</span>
+      <div class="body"><strong>{{ _("Independent practice") }}</strong><span>{{ _("{done} of {total} exercises solved", done=progress.practice_solved, total=progress.practice_total) }}</span></div>
+      {{ icon("chevron-right") }}
+    </a>
+    <a class="lesson-row" href="{{ url_for('curriculum.summary', chapter_id=chapter.id) }}">
+      <span class="lesson-num">{{ icon("book", "sm") }}</span>
+      <div class="body"><strong>{{ _("Chapter summary") }}</strong><span>{{ _("Definitions, properties and methods in one page") }}</span></div>
+      {{ icon("chevron-right") }}
+    </a>
+    <a class="lesson-row" href="{{ url_for('curriculum.assessment', chapter_id=chapter.id) }}">
+      <span class="lesson-num {{ 'done' if progress.best is not none and progress.best >= passmark }}">{% if progress.best is not none and progress.best >= passmark %}{{ icon("check", "sm") }}{% else %}{{ icon("pencil", "sm") }}{% endif %}</span>
+      <div class="body"><strong>{{ _("Chapter assessment") }}</strong><span>{% if progress.best is none %}{{ _("New questions each time, with detailed corrections") }}{% else %}{{ _("Best score: {score}%", score=progress.best) }}, {{ ngettext("{n} try", "{n} tries", progress.attempts | length) }}{% endif %}</span></div>
+      {{ icon("chevron-right") }}
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <details class="card card-body sources">
+    <summary>{{ _("Sources and licences") }}</summary>
+    <p class="small muted" style="margin:10px 0">{{ _("All explanations, examples and exercises in this chapter are original. These documents were consulted, and none of their text is copied.") }}</p>
+    <ul class="stack small">
+      {% for source in sources %}
+      <li><strong>{{ source.title }}</strong>, {{ source.publisher }}.<br>{{ _("Licence") }}: {{ _(source.licence) }}<br>{{ _("Used for") }}: {{ _(source.use) }}<br><a href="{{ source.url }}" rel="noopener noreferrer" target="_blank">{{ source.url }}</a></li>
+      {% endfor %}
+    </ul>
+  </details>
+</section>
+{% endblock %}

@@ -19,6 +19,7 @@ TOPICS = [
     "Inequalities", "Functions", "Exponents", "Geometry", "Trigonometry", "Statistics",
     "Probability", "Calculus", "Linear Algebra", "Word Problem", "Other",
 ]
+LANGUAGE_NAMES = {"fr": "French", "en": "English"}
 RETRYABLE = {408, 429, 500, 502, 503, 504}
 
 
@@ -71,6 +72,50 @@ The solved work:
 
 Reply to the student's latest message. Keep it under 150 words unless they ask for more detail. Use Markdown for structure and LaTeX between single dollar signs for math. If they ask for a similar problem, give one without the answer and offer to check their work. If they share their own attempt, check it and point to the exact step that went wrong. When you show working, put each line of math on its own line so every calculation is easy to follow. Stay focused on math and learning.
 """
+
+LESSON_TUTOR_INSTRUCTIONS = r"""You are a patient math teacher helping a student who is studying one lesson of a school curriculum. You are not a general chatbot.
+
+The student's level:
+{profile}
+
+The lesson the student is reading (this is your only source for what the course says):
+{lesson}
+
+Rules:
+- Teach with the methods of this lesson and this level. Never use a technique the lesson has not introduced unless you first explain it simply, and say that it goes beyond the lesson.
+- Stay consistent with the lesson's definitions, notation and vocabulary. Do not invent curriculum requirements, textbook references, page numbers or facts. If the lesson does not cover something, say so plainly.
+- Be mathematically exact. Check every calculation twice. Write each line of a calculation on its own line.
+- By default guide the student: ask one short question or give one hint at a time and let them try, instead of giving the whole solution. Give the full step by step solution only when they ask for it.
+- Keep answers under 150 words unless asked for more. Use Markdown, and LaTeX between single dollar signs for math.
+- If asked for another example or exercise, make a new one with different numbers, with a solution only if asked, and say that it is a practice idea that is not scored.
+- Stay on math and on this lesson.
+"""
+
+TRANSLATE_INSTRUCTIONS = r"""You translate school mathematics lessons from {source} to {target}. The input is a JSON list of strings, each one piece of a lesson. Return the translated strings as a JSON object with an "items" list.
+
+Rules:
+- Return exactly the same number of items, in the same order.
+- Markers like ⟦1⟧ stand for formulas. Keep every marker exactly as written, once, in a natural place. Never translate, reorder, add or remove one.
+- Keep all digits, symbols and signs unchanged. Do not do any calculation.
+- Use the standard school mathematics vocabulary of the target language, not word for word translation. {glossary}
+- Keep the meaning, the tone for a student of about 11 to 12 years, and the structure of each item, including line breaks and punctuation.
+- A decimal comma in plain text becomes a decimal point when translating to English, and the reverse for French.
+"""
+
+GLOSSARIES = {
+    ("fr", "en"): "Examples: fraction décimale = a fraction whose denominator is 10, 100, 1000... (say it that way the first time, not just 'decimal fraction'); "
+                  "nombre décimal arithmétique = non-negative decimal number; ensemble des décimaux = the set of decimal numbers; entier naturel = whole number (natural number); "
+                  "partie entière = whole-number part; partie décimale = decimal part (the digits after the decimal point); rang = place; valeur d'un chiffre = value of a digit; "
+                  "unités = ones; dizaine = ten (the tens place, left of the decimal point, not to be mixed up with dixième = tenth); dixième, centième, millième = tenth, hundredth, thousandth; virgule = decimal point; "
+                  "ordre de grandeur = estimate; arrondir à la dizaine la plus proche = round to the nearest ten; calculer efficacement = calculate efficiently using the properties;"
+                  "retenue = carrying; emprunt = borrowing; ranger dans l'ordre croissant = put in increasing order; intercaler = find a number between; "
+                  "encadrer = write the number between two others (bracket it); à l'unité près = with whole-number bounds; propriété = property; "
+                  "commutativité, associativité = commutativity, associativity; élément neutre = identity element; terme manquant = missing term. "
+                  "Keep local everyday words (clothes, foods, currencies) as they are.",
+    ("en", "fr"): "Examples: decimal fraction = fraction décimale; tenth, hundredth, thousandth = dixième, centième, millième; decimal point = virgule; "
+                  "place value = rang; estimate = ordre de grandeur; carrying, borrowing = retenue, emprunt; to put in order = ranger; "
+                  'commutativity, associativity = commutativité, associativité. Address the student as "tu".',
+}
 
 LANGUAGE_RULES = {
     "fr": "\nWrite every title, explanation, answer, tip and note in French, using the informal \"tu\". Use a decimal comma, written as 3{,}5 inside math. Keep the \"topic\" value exactly as listed above, in English.\n",
@@ -179,9 +224,10 @@ def _parse_solution(response):
     return result
 
 
-def _solve(contents):
-    """Ask Gemini for a structured solution to the given contents."""
+def _solve(contents, profile=""):
+    """Ask Gemini for a structured solution to the given contents, shaped to the student's curriculum when it is known."""
     instructions = SOLVE_INSTRUCTIONS.replace("{topics}", ", ".join(TOPICS))
+    instructions += profile
     instructions += LANGUAGE_RULES.get(language(), "")
     config = types.GenerateContentConfig(
         system_instruction=instructions,
@@ -193,15 +239,15 @@ def _solve(contents):
     return _run(contents, config, _parse_solution)
 
 
-def solve_image(image_bytes):
+def solve_image(image_bytes, profile=""):
     """Solve every problem found in a JPEG photo."""
     photo = types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg")
-    return _solve([photo, "Solve every math problem in this photo."])
+    return _solve([photo, "Solve every math problem in this photo."], profile)
 
 
-def solve_text(problem):
+def solve_text(problem, profile=""):
     """Solve a problem the student typed."""
-    return _solve([f"Solve this:\n{problem}"])
+    return _solve([f"Solve this:\n{problem}"], profile)
 
 
 def _describe(problems):
@@ -226,9 +272,10 @@ def _parse_text(response):
     return text
 
 
-def ask_tutor(problems, history, question):
+def ask_tutor(problems, history, question, profile=""):
     """Answer a follow up question about an existing solution."""
     instructions = TUTOR_INSTRUCTIONS.replace("{context}", _describe(problems))
+    instructions += profile
     instructions += TUTOR_LANGUAGE_RULES.get(language(), "")
     turns = [(role, text) for role, text in history[-12:]] + [("user", question)]
     contents = [
@@ -238,6 +285,55 @@ def ask_tutor(problems, history, question):
     config = types.GenerateContentConfig(
         system_instruction=instructions,
         temperature=0.4,
+        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+    )
+    return _run(contents, config, _parse_text)
+
+
+class Translations(BaseModel):
+    items: list[str]
+
+
+MAX_BATCH = 40
+
+
+def translate_batch(texts, source, target):
+    """Translate lesson texts, keeping formula markers, and return a list of the same length."""
+    instructions = TRANSLATE_INSTRUCTIONS.replace("{source}", LANGUAGE_NAMES[source]).replace("{target}", LANGUAGE_NAMES[target])
+    instructions = instructions.replace("{glossary}", GLOSSARIES.get((source, target), ""))
+    config = types.GenerateContentConfig(
+        system_instruction=instructions,
+        response_mime_type="application/json",
+        response_schema=Translations,
+        temperature=0.1,
+        automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+    )
+
+    def parse(response):
+        return Translations.model_validate(json.loads(repair_json((response.text or "").strip()))).items
+
+    out = []
+    for start in range(0, len(texts), MAX_BATCH):
+        part = texts[start:start + MAX_BATCH]
+        items = _run([json.dumps(part, ensure_ascii=False)], config, parse)
+        if len(items) != len(part):
+            raise AIError(_("The AI could not work this one out. Try a clearer photo or type the problem instead."))
+        out += items
+    return out
+
+
+def ask_lesson_tutor(lesson, profile, history, question):
+    """Answer a student's question about the lesson they are reading."""
+    instructions = LESSON_TUTOR_INSTRUCTIONS.replace("{profile}", profile or "Not specified.").replace("{lesson}", lesson)
+    instructions += TUTOR_LANGUAGE_RULES.get(language(), "")
+    turns = [(role, text) for role, text in history[-8:]] + [("user", question)]
+    contents = [
+        types.Content(role="user" if role == "user" else "model", parts=[types.Part.from_text(text=text)])
+        for role, text in turns
+    ]
+    config = types.GenerateContentConfig(
+        system_instruction=instructions,
+        temperature=0.3,
         automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
     )
     return _run(contents, config, _parse_text)

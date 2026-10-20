@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block title %}{{ _("Assessment result") }} | {{ app_name }}{% endblock %}
+{% block page_class %}narrow{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{{ url_for('curriculum.chapter', chapter_id=chapter.id) }}">{{ icon("arrow-left", "sm") }} {{ view.title }}</a>
+<div class="card card-body result-hero {{ 'is-pass' if attempt.percent >= passmark }}">
+  <div class="score">{{ attempt.correct }}<span>/{{ attempt.total }}</span></div>
+  <div>
+    <h1>{{ _("Assessment result") }}</h1>
+    <p class="muted">{% if attempt.percent >= passmark %}{{ _("Well done. You understand this chapter.") }}{% else %}{{ _("Good effort. The corrections below show exactly what to look at again.") }}{% endif %}</p>
+  </div>
+</div>
+{% if fallback %}<div class="notice" style="margin-top:16px">{{ icon("info") }}<span>{{ _("Part of this lesson is shown in its original language because the automatic translation was not available. Try again in a moment.") }}</span></div>{% endif %}
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("By topic") }}</h2></div>
+  <div class="card card-body stack">
+    {% for key in order if key in by_concept %}
+    {% set right, count = by_concept[key] %}
+    <div>
+      <div class="row" style="justify-content:space-between"><strong>{{ view.concepts[key] }}</strong><span class="small muted">{{ right }}/{{ count }}</span></div>
+      <div class="progress {{ 'success' if right == count }}" style="margin-top:6px"><span style="width:{{ (100 * right / count) | round | int }}%"></span></div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% if revise %}
+<section class="section card card-body revise">
+  <h2 style="font-size:17px">{{ _("Review these first") }}</h2>
+  <div class="stack" style="margin-top:10px">
+    {% for item in revise %}
+    <a class="lesson-row" style="padding:12px 0" href="{{ url_for('curriculum.section', chapter_id=chapter.id, section_id=item.section) }}">
+      <div class="body"><strong>{{ view.concepts[item.concept] }}</strong><span>{{ view.sections[item.section] }}</span></div>
+      {{ icon("chevron-right") }}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("Corrections") }}</h2></div>
+  {% if outdated %}<div class="notice">{{ icon("info") }}<span>{{ _("The questions of this assessment were improved after you took it, so the detailed corrections are no longer available. Your score is kept. Retake it to see corrections.") }}</span></div>{% endif %}
+  <div class="stack">
+    {% for item in view["items"] %}
+    {% set status = verdicts[loop.index0] %}
+    <article class="exercise {{ 'is-solved' if status == 'correct' else 'is-wrong' }}">
+      <div class="exercise-head">
+        <span class="lesson-num {{ 'done' if status == 'correct' else 'wrong' }}">{% if status == "correct" %}{{ icon("check", "sm") }}{% else %}{{ icon("x", "sm") }}{% endif %}</span>
+        <div class="tex exercise-prompt">{{ item.prompt | rich_inline }}</div>
+      </div>
+      <div class="tex correction">
+        {% if status == "blank" %}<p class="small muted">{{ _("You did not answer this question.") }}</p>
+        {% elif item.kind == "choice" %}<p class="small muted">{{ _("Your answer") }}: {{ item.given_label | rich_inline }}</p>
+        {% else %}<p class="small muted">{{ _("Your answer") }}: <span class="given">{{ givens[loop.index0] }}</span></p>{% endif %}
+        {% if status == "wrong_form" %}<p class="small">{{ _("The number is right but not written the way the question asks.") }}</p>{% endif %}
+        {% if status != "correct" %}<p><strong>{{ _("Correct answer") }}:</strong> {{ item.correct_text | rich_inline }}</p>{% endif %}
+        {% if item.wrong_note %}<p class="small">{{ item.wrong_note | rich_inline }}</p>{% endif %}
+        <details {{ 'open' if status != 'correct' }}>
+          <summary>{{ _("How to solve it") }}</summary>
+          <ol class="solution" style="margin-top:8px">{% for line in item.solution %}<li>{{ line | rich_inline }}</li>{% endfor %}</ol>
+        </details>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="row wrap section">
+  <a class="btn btn-primary" href="{{ url_for('curriculum.assessment', chapter_id=chapter.id) }}">{{ icon("refresh") }} {{ _("Retake with new questions") }}</a>
+  <a class="btn btn-soft" href="{{ url_for('curriculum.practice', chapter_id=chapter.id) }}">{{ icon("target") }} {{ _("Independent practice") }}</a>
+  <a class="btn btn-outline" href="{{ url_for('curriculum.chapter', chapter_id=chapter.id) }}">{{ _("Back to the chapter") }}</a>
+</div>
+{% endblock %}

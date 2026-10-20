@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% from "curriculum/_macros.html" import blocks with context %}
+{% block title %}{{ _("Chapter summary") }} | {{ app_name }}{% endblock %}
+{% block page_class %}narrow{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{{ url_for('curriculum.chapter', chapter_id=chapter.id) }}">{{ icon("arrow-left", "sm") }} {{ view.title }}</a>
+<div class="page-head"><div><h1>{{ _("Chapter summary") }}</h1><p>{{ view.title }}</p></div></div>
+{% if fallback %}<div class="notice">{{ icon("info") }}<span>{{ _("Part of this lesson is shown in its original language because the automatic translation was not available. Try again in a moment.") }}</span></div>{% endif %}
+<div class="stack tex lesson-flow">{{ blocks(view.blocks) }}</div>
+<div class="row wrap section">
+  <a class="btn btn-soft" href="{{ url_for('curriculum.practice', chapter_id=chapter.id) }}">{{ icon("target") }} {{ _("Independent practice") }}</a>
+  <a class="btn btn-primary" href="{{ url_for('curriculum.assessment', chapter_id=chapter.id) }}">{{ icon("pencil") }} {{ _("Take the assessment") }}</a>
+</div>
+{% endblock %}

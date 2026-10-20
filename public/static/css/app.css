@@ -1067,3 +1067,84 @@ html[lang="fr"] .how .feature::before { content: "\00C9tape " counter(how); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* Curriculum chapters: lessons, worked examples, exercises and assessments. */
+.lesson-flow { gap: 0; }
+.lesson-flow > * + * { margin-top: 18px; }
+.lesson-p { font-size: 16.5px; line-height: 1.7; }
+.goal { display: flex; gap: 12px; padding: 14px 18px; border-radius: 14px; background: var(--primary-soft); color: var(--text); }
+.goal .icon { color: var(--accent); margin-top: 3px; flex: none; }
+.goal strong { display: block; color: var(--accent); margin-bottom: 2px; }
+.notice { display: flex; gap: 10px; align-items: flex-start; padding: 12px 16px; border-radius: 12px; background: var(--warning-soft); color: var(--text); font-size: 14px; margin-bottom: 16px; }
+.notice .icon { color: var(--warning); flex: none; margin-top: 2px; }
+.section-dots { display: flex; gap: 8px; flex-wrap: wrap; margin: -10px 0 22px; }
+.section-dots a { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; color: var(--muted); border: 2px solid var(--border-strong); }
+.section-dots a:hover { text-decoration: none; background: var(--surface-2); }
+.section-dots a.is-current { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+
+.note { border-radius: 14px; padding: 16px 18px; border: 1px solid var(--border); border-left-width: 5px; background: var(--surface); }
+.note-definition { border-left-color: var(--primary); }
+.note-property { border-left-color: var(--success); }
+.note-tag { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; font-size: 12px; font-weight: 750; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.note-definition .note-tag { color: var(--accent); }
+.note-property .note-tag { color: var(--success); }
+.note-tag span { text-transform: none; letter-spacing: 0; font-size: 15px; color: var(--text); }
+.note p { line-height: 1.65; }
+
+.place-table { overflow-x: auto; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
+.place-table table { border-collapse: collapse; margin: 0 auto; min-width: 100%; text-align: center; }
+.place-table th { font-size: 12px; font-weight: 700; color: var(--muted); padding: 10px 8px; background: var(--surface-2); border-bottom: 1px solid var(--border); }
+.place-table td { font-size: 24px; font-weight: 700; padding: 12px 8px; }
+.place-table th.sep, .place-table td.sep { width: 20px; padding: 0; color: var(--primary); }
+
+.worked { border-left: 5px solid var(--primary); }
+.worked-problem { margin-top: 2px; font-size: 18px; line-height: 1.5; }
+.worked-method { margin-top: 10px; line-height: 1.6; }
+.calc { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 14px; }
+.calc li { padding: 12px 14px; border-radius: 12px; background: var(--surface-2); }
+.calc-math { font-size: 18px; overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+.calc-why { margin-top: 6px; font-size: 14.5px; color: var(--muted); line-height: 1.55; }
+
+.exercise { padding: 18px 20px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-sm); }
+.exercise.is-solved { border-color: var(--success); }
+.exercise.is-wrong { border-color: var(--danger); }
+.exercise-head { display: flex; gap: 14px; align-items: flex-start; }
+.exercise-prompt { flex: 1; min-width: 0; font-size: 16px; line-height: 1.6; padding-top: 4px; }
+.exercise-form { margin-top: 14px; }
+.exercise-form .input { max-width: 420px; }
+.exercise-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.options { display: grid; gap: 8px; }
+.option { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border: 1px solid var(--border-strong); border-radius: 12px; cursor: pointer; background: var(--surface); }
+.option:hover { border-color: var(--primary); background: var(--primary-soft); }
+.option:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
+.option input { width: 18px; height: 18px; accent-color: var(--primary); flex: none; }
+.ex-hints { list-style: none; }
+.hint-list { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.hint-list li { padding: 10px 14px; border-radius: 12px; background: var(--warning-soft); font-size: 15px; line-height: 1.55; }
+.hint-list li::before { content: attr(data-label); font-weight: 700; margin-right: 6px; }
+.ex-feedback { margin-top: 12px; padding: 12px 16px; border-radius: 12px; font-weight: 550; line-height: 1.5; }
+.ex-feedback.good { background: var(--success-soft); color: var(--success); }
+.ex-feedback.bad { background: var(--danger-soft); color: var(--danger); }
+.solution { margin: 12px 0 0; padding: 12px 16px 12px 34px; border-radius: 12px; background: var(--surface-2); display: grid; gap: 6px; line-height: 1.6; }
+.lesson-num.wrong { background: var(--danger); border-color: var(--danger); color: #fff; }
+.correction { margin-top: 12px; display: grid; gap: 8px; }
+.correction .given { font-weight: 650; color: var(--text); }
+.correction summary { cursor: pointer; font-weight: 650; color: var(--accent); }
+
+.result-hero { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.result-hero .score { font-size: 48px; font-weight: 800; line-height: 1; color: var(--danger); }
+.result-hero.is-pass .score { color: var(--success); }
+.result-hero .score span { font-size: 24px; color: var(--muted); font-weight: 650; }
+.revise { border-left: 5px solid var(--warning); }
+.sources summary { cursor: pointer; font-weight: 650; }
+.sources li { line-height: 1.55; overflow-wrap: anywhere; }
+
+@media (max-width: 600px) {
+  .exercise { padding: 14px; }
+  .exercise-form .input { max-width: none; }
+  .exercise-actions .btn { flex: 1 1 auto; justify-content: center; }
+  .place-table td { font-size: 20px; }
+  .result-hero .score { font-size: 40px; }
+  .lesson-p { font-size: 16px; }
+}
+.worked-label { font-size: 12px; font-weight: 750; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); }

@@ -1,0 +1,7 @@
+{% for role, text in rows %}
+{% if role == "user" %}
+<div class="bubble-row user"><div class="msg user">{{ text }}</div></div>
+{% else %}
+<div class="bubble-row"><span class="tutor-avatar">{{ icon("sparkles") }}</span><div class="msg assistant rich">{{ text | rich }}</div></div>
+{% endif %}
+{% endfor %}

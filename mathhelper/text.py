@@ -79,7 +79,7 @@ def _protect(text):
 
 def _restore(html, saved):
     """Put the escaped math back in place of the placeholders."""
-    return re.sub(r"MATHSLOT(\d+)END", lambda m: str(escape(saved[int(m.group(1))])), html)
+    return re.sub(r"MATHSLOT(\d+)END", lambda m: str(escape(saved[int(m.group(1))])) if int(m.group(1)) < len(saved) else m.group(0), html)
 
 
 def rich(text):

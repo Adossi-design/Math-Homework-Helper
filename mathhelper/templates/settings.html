@@ -67,6 +67,32 @@
     </form>
   </section>
 
+  {% if not current_user.is_admin %}
+  <section class="settings-section" id="curriculum">
+    <div><h2>{{ _("Curriculum") }}</h2><p>{{ _("Your country and school level. Your language is chosen separately and never changes this.") }}</p></div>
+    <form method="post" action="{{ url_for('settings.curriculum') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="field">
+        <label class="label" for="curriculum-choice">{{ _("Country and level") }}</label>
+        <select class="select" id="curriculum-choice" name="curriculum">
+          <option value="">{{ _("Not chosen") }}</option>
+          {% for place in countries.values() %}
+          <optgroup label="{{ place.fr if lang == 'fr' else place.en }}">
+            {% for stage in place.levels %}
+            <option value="{{ place.id }}:{{ stage.id }}" {{ 'selected' if current_user.country == place.id and current_user.grade == stage.id }}>
+              {{ stage.fr if lang == 'fr' else stage.en }}{% if (place.id, stage.id) in offered %} ({{ _("chapters available") }}){% endif %}
+            </option>
+            {% endfor %}
+          </optgroup>
+          {% endfor %}
+        </select>
+        <span class="hint">{{ _("Lessons and explanations will use the methods of this level. Levels marked as available have complete chapters.") }}</span>
+      </div>
+      <div class="field"><button class="btn btn-primary" type="submit">{{ _("Save curriculum") }}</button></div>
+    </form>
+  </section>
+  {% endif %}
+
   <section class="settings-section" id="security">
     <div><h2>{{ _("Password") }}</h2><p>{% if current_user.password_hash %}{{ _("Change the password you use to log in.") }}{% else %}{{ _("You sign in with Google. Add a password to also log in with your email.") }}{% endif %}</p></div>
     <form method="post" action="{{ url_for('settings.password') }}">

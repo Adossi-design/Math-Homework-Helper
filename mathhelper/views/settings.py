@@ -4,6 +4,7 @@ from flask_login import current_user, login_required, logout_user
 from sqlalchemy import select
 
 from ..accounts import delete_user, remove_solutions
+from ..curriculum import COUNTRIES, available_levels, valid_choice
 from ..extensions import db
 from ..models import THEMES, User
 from ..timeutil import is_valid_zone
@@ -23,7 +24,7 @@ def back(section):
 @bp.get("/")
 @login_required
 def index():
-    return render_template("settings.html", themes=THEMES)
+    return render_template("settings.html", themes=THEMES, countries=COUNTRIES, offered=available_levels())
 
 
 @bp.post("/profile")
@@ -67,6 +68,19 @@ def preferences():
     if chosen in LANGUAGES:
         response.set_cookie(COOKIE, chosen, max_age=365 * 24 * 3600, samesite="Lax", secure=current_app.config["SESSION_COOKIE_SECURE"])
     return response
+
+
+@bp.post("/curriculum")
+@login_required
+def curriculum():
+    place, _sep, stage = request.form.get("curriculum", "").partition(":")
+    if current_user.is_admin or not valid_choice(place, stage) or bool(place) != bool(stage):
+        flash(_("Choose a country and a level from the list."), "error")
+        return back("curriculum")
+    current_user.country, current_user.grade = place or None, stage or None
+    db.session.commit()
+    flash(_("Your curriculum was saved. Your language stays the same."), "success")
+    return back("curriculum")
 
 
 @bp.post("/password")

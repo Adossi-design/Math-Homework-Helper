@@ -1,0 +1,71 @@
+{% macro blocks(items) %}
+{% for b in items %}
+{% if b.type == "p" %}
+<p class="lesson-p">{{ b.text | rich_inline }}</p>
+{% elif b.type == "definition" or b.type == "property" %}
+<div class="note note-{{ b.type }}">
+  <div class="note-tag">{{ _("Definition") if b.type == "definition" else _("Property") }}<span>{{ b.title | rich_inline }}</span></div>
+  <p>{{ b.text | rich_inline }}</p>
+</div>
+{% elif b.type == "warning" %}
+<div class="callout">{{ icon("alert") }}<div><strong>{{ _("Watch out") }}</strong>{{ b.text | rich_inline }}</div></div>
+{% elif b.type == "table" %}
+<div class="place-table" role="region" tabindex="0" aria-label="{{ _("Place value table") }}">
+  <table>
+    <thead><tr>{% for cell in b.head %}<th scope="col" {{ 'class=sep' if cell in (",", ".") }}>{{ cell }}</th>{% endfor %}</tr></thead>
+    <tbody>{% for row in b.rows %}<tr>{% for cell in row %}<td {{ 'class=sep' if cell in (",", ".") }}>{{ cell }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+  </table>
+</div>
+{% elif b.type == "example" %}
+<section class="card card-body worked">
+  <div class="worked-label">{{ b.title }}</div>
+  <h3 class="worked-problem">{{ b.problem | rich_inline }}</h3>
+  <p class="worked-method"><strong>{{ _("Method") }}.</strong> {{ b.method | rich_inline }}</p>
+  {% if b.formula %}<p class="worked-method"><strong>{{ _("Rule used") }}.</strong> {{ b.formula | rich_inline }}</p>{% endif %}
+  <ol class="calc">
+    {% for step in b.steps %}
+    <li><div class="calc-math">{{ step.math | rich_inline }}</div><div class="calc-why">{{ step.why | rich_inline }}</div></li>
+    {% endfor %}
+  </ol>
+  <div class="answer">
+    <span class="check-bubble">{{ icon("check") }}</span>
+    <div style="min-width:0"><div class="label">{{ _("Answer") }}</div><div class="value">{{ b.answer | rich_inline }}</div></div>
+  </div>
+</section>
+{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro field(e, name) %}
+{% if e.kind == "choice" %}
+<div class="options" role="radiogroup" aria-label="{{ _("Choose your answer") }}">
+  {% for option in e.options %}
+  <label class="option"><input type="radio" name="{{ name }}" value="{{ loop.index0 }}"><span class="tex">{{ option | rich_inline }}</span></label>
+  {% endfor %}
+</div>
+{% else %}
+<input class="input" name="{{ name }}" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="200"
+       aria-label="{{ _("Your answer") }}"
+       placeholder="{{ _("Your answer, for example 3,5 ; 1,2 ; 1,5") if e.kind == 'numbers' else _("Your answer, for example 3,5 or 7/2") }}">
+{% endif %}
+{% endmacro %}
+
+{% macro exercise(e, number, solved) %}
+<article class="exercise {{ 'is-solved' if e.id in solved }}" data-exercise="{{ e.id }}" data-kind="{{ e.kind }}" data-url="{{ url_for('curriculum.check_answer') }}">
+  <div class="exercise-head">
+    <span class="lesson-num {{ 'done' if e.id in solved }}">{% if e.id in solved %}{{ icon("check", "sm") }}{% else %}{{ number }}{% endif %}</span>
+    <div class="tex exercise-prompt">{{ e.prompt | rich_inline }}</div>
+  </div>
+  <form class="exercise-form" data-exercise-form novalidate>
+    {{ field(e, "answer") }}
+    <div class="exercise-actions">
+      <button class="btn btn-primary btn-sm" type="submit">{{ icon("check", "sm") }} {{ _("Check") }}</button>
+      {% if e.hints %}<button class="btn btn-ghost btn-sm" type="button" data-hint data-total="{{ e.hints | length }}">{{ icon("bulb", "sm") }} <span>{{ _("Hint") }}</span></button>{% endif %}
+      <button class="btn btn-ghost btn-sm" type="button" data-show-solution>{{ _("Show the solution") }}</button>
+    </div>
+  </form>
+  <ol class="hint-list tex" data-hints>{% for hint in e.hints %}<li hidden>{{ hint | rich_inline }}</li>{% endfor %}</ol>
+  <div class="ex-feedback" data-feedback role="status" aria-live="polite" hidden></div>
+  <ol class="solution tex" data-solution hidden></ol>
+</article>
+{% endmacro %}

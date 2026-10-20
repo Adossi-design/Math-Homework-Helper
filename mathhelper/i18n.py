@@ -31,7 +31,7 @@ JS_KEYS = [
     "Show the first step", "Show the next step ({left} left)", "Saved", "Save", "Saved to your library.",
     "Removed from saved.", "Thinking", "Something went wrong. Please try again.", "Correct!", "Not quite",
     "See results", "Next", "Leave this round? Your answers so far will not be saved.", "Hide password",
-    "Show password", "Dismiss",
+    "Show password", "Dismiss", "Write or choose an answer first.", "Hint {n}",
 ]
 
 

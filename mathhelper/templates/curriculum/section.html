@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% from "curriculum/_macros.html" import blocks, exercise with context %}
+{% block title %}{{ view.title }} | {{ app_name }}{% endblock %}
+{% block page_class %}narrow{% endblock %}
+
+{% block content %}
+<a class="back-link" href="{{ url_for('curriculum.chapter', chapter_id=chapter.id) }}">{{ icon("arrow-left", "sm") }} {{ chapter_title }}</a>
+<div class="page-head">
+  <div>
+    <div class="small faint">{{ _("Section {n} of {total}", n=index + 1, total=total) }}, {{ _("{n} min read", n=view.minutes) }}</div>
+    <h1 style="margin-top:6px">{{ view.title }}</h1>
+  </div>
+  {% if is_done %}<span class="tag success">{{ icon("check", "sm") }} {{ _("Completed") }}</span>{% endif %}
+</div>
+
+<nav class="section-dots" aria-label="{{ _("Sections of this chapter") }}">
+  {% for s in chapter.sections %}
+  <a class="{{ 'is-current' if s.id == section.id }}" href="{{ url_for('curriculum.section', chapter_id=chapter.id, section_id=s.id) }}" aria-label="{{ loop.index }}" {{ 'aria-current=page' if s.id == section.id }}>{{ loop.index }}</a>
+  {% endfor %}
+</nav>
+
+{% if fallback %}<div class="notice">{{ icon("info") }}<span>{{ _("Part of this lesson is shown in its original language because the automatic translation was not available. Try again in a moment.") }}</span></div>{% endif %}
+
+<div class="stack tex lesson-flow">
+  <div class="goal">{{ icon("target") }}<div><strong>{{ _("In this section") }}</strong>{{ view.goal | rich_inline }}</div></div>
+  {{ blocks(view.blocks) }}
+</div>
+
+<section class="section">
+  <div class="section-head"><h2>{{ _("Guided practice") }}</h2></div>
+  <p class="muted small" style="margin-bottom:14px">{{ _("Try each one yourself. Check your answer, open a hint if you are stuck, and ask for the solution when you need it.") }}</p>
+  <div class="stack">
+    {% for e in view.guided %}{{ exercise(e, loop.index, solved) }}{% endfor %}
+  </div>
+</section>
+
+<section class="section card" id="tutor">
+  <div class="card-head">
+    <div class="row">
+      <span class="tutor-avatar">{{ icon("sparkles") }}</span>
+      <div><h2 style="font-size:17px">{{ _("Ask the tutor about this lesson") }}</h2><p class="small muted desk-only">{{ _("The tutor uses this lesson and your level. It guides you step by step unless you ask for the full solution.") }}</p></div>
+    </div>
+  </div>
+  <div class="chat tex" data-chat style="margin-top:14px">
+    {% for row in history %}
+    <div class="bubble-row user"><div class="msg user">{{ row.question }}</div></div>
+    <div class="bubble-row"><span class="tutor-avatar">{{ icon("sparkles") }}</span><div class="msg assistant rich">{{ row.answer | rich }}</div></div>
+    {% endfor %}
+  </div>
+  <div class="suggestions" data-suggestions {{ 'hidden' if history }}>
+    {% for prompt in prompts %}<button type="button" class="chip" data-prompt="{{ prompt }}">{{ prompt }}</button>{% endfor %}
+  </div>
+  <form class="composer" action="{{ url_for('curriculum.ask', chapter_id=chapter.id, section_id=section.id) }}" data-ask-form>
+    <textarea class="textarea" name="question" rows="1" maxlength="1000" placeholder="{{ _("Ask anything about this lesson") }}" aria-label="{{ _("Your question") }}" data-question></textarea>
+    <button class="btn btn-primary" type="submit" aria-label="{{ _("Send question") }}">{{ icon("send") }}</button>
+  </form>
+</section>
+
+<div class="card card-body section row wrap" style="justify-content:space-between">
+  <form method="post" action="{{ url_for('curriculum.complete', chapter_id=chapter.id, section_id=section.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    {% if is_done %}
+    <button class="btn btn-outline" type="submit">{{ icon("refresh", "sm") }} {{ _("Mark as not done") }}</button>
+    {% else %}
+    <button class="btn btn-primary" type="submit">{{ icon("check") }} {{ _("Mark complete and continue") if upcoming else _("Mark complete") }}</button>
+    {% endif %}
+  </form>
+  <a class="btn btn-soft" href="{{ url_for('curriculum.practice', chapter_id=chapter.id) }}">{{ icon("target") }} {{ _("More practice") }}</a>
+</div>
+
+<nav class="lesson-nav" aria-label="{{ _("Sections") }}">
+  {% if previous %}<a class="btn btn-ghost" href="{{ url_for('curriculum.section', chapter_id=chapter.id, section_id=previous.id) }}">{{ icon("chevron-left") }} {{ _("Previous section") }}</a>{% else %}<span></span>{% endif %}
+  {% if upcoming %}<a class="btn btn-ghost" href="{{ url_for('curriculum.section', chapter_id=chapter.id, section_id=upcoming.id) }}">{{ _("Next section") }} {{ icon("chevron-right") }}</a>
+  {% else %}<a class="btn btn-ghost" href="{{ url_for('curriculum.assessment', chapter_id=chapter.id) }}">{{ _("Take the assessment") }} {{ icon("chevron-right") }}</a>{% endif %}
+</nav>
+{% endblock %}

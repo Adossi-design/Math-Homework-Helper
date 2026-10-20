@@ -1,0 +1,147 @@
+"""French text for the curriculum pages, keyed by the English source text."""
+
+CURRICULUM = {
+    # Settings and the curriculum hub.
+    "Curriculum": "Programme scolaire",
+    "My curriculum": "Mon programme",
+    "Country and level": "Pays et niveau",
+    "Not chosen": "Non choisi",
+    "chapters available": "chapitres disponibles",
+    "Save curriculum": "Enregistrer le programme",
+    "Your country and school level. Your language is chosen separately and never changes this.":
+        "Ton pays et ton niveau scolaire. Ta langue se choisit à part et ne change jamais cela.",
+    "Lessons and explanations will use the methods of this level. Levels marked as available have complete chapters.":
+        "Les leçons et les explications utilisent les méthodes de ce niveau. Les niveaux marqués comme disponibles ont des chapitres complets.",
+    "Choose a country and a level from the list.": "Choisis un pays et un niveau dans la liste.",
+    "Your curriculum was saved. Your language stays the same.": "Ton programme est enregistré. Ta langue reste la même.",
+    "Complete chapters by country and level": "Des chapitres complets par pays et par niveau",
+    "Open": "Ouvrir",
+    "Change in Settings": "Modifier dans les paramètres",
+    "Choose your country and level to see the chapters written for it.": "Choisis ton pays et ton niveau pour voir les chapitres écrits pour eux.",
+    "You are browsing another level. Your own curriculum in Settings has not changed.":
+        "Tu regardes un autre niveau. Ton programme dans les paramètres n'a pas changé.",
+    "No chapters here yet": "Pas encore de chapitres ici",
+    "Complete chapters for this country and level have not been written and checked yet, so they are not offered. The general courses in Learn and the problem solver still work for you.":
+        "Les chapitres complets pour ce pays et ce niveau ne sont pas encore écrits ni vérifiés, donc ils ne sont pas proposés. Les cours généraux dans Apprendre et le solveur de problèmes restent disponibles.",
+    "Open Learn": "Ouvrir Apprendre",
+    "Levels with chapters available": "Niveaux avec des chapitres disponibles",
+    "Reference chapter": "Chapitre de référence",
+    "Other countries and levels will be added one chapter at a time, after the content has been checked.":
+        "D'autres pays et niveaux seront ajoutés chapitre par chapitre, une fois le contenu vérifié.",
+    "Chapter {n}": "Chapitre {n}",
+    "{n} sections": "{n} sections",
+    # Chapter page.
+    "Start chapter": "Commencer le chapitre",
+    "Review chapter": "Revoir le chapitre",
+    "{done} of {total} sections done": "{done} sections sur {total} terminées",
+    "{done} of {total} exercises solved": "{done} exercices sur {total} résolus",
+    "This chapter belongs to another curriculum than the one in your settings. You can still study it.":
+        "Ce chapitre appartient à un autre programme que celui de tes paramètres. Tu peux quand même l'étudier.",
+    "Part of this lesson is shown in its original language because the automatic translation was not available. Try again in a moment.":
+        "Une partie de cette leçon est affichée dans sa langue d'origine, car la traduction automatique n'était pas disponible. Réessaie dans un instant.",
+    "Worth revising": "À réviser",
+    "These parts need another look before you move on.": "Ces parties méritent un nouveau coup d'œil avant de continuer.",
+    "Last assessment: {score}": "Dernière évaluation : {score}",
+    "What you will learn": "Ce que tu vas apprendre",
+    "Before you start": "Avant de commencer",
+    "Open the review lesson": "Ouvrir la leçon de rappel",
+    "Sections": "Sections",
+    "Practice and assessment": "Exercices et évaluation",
+    "Independent practice": "Exercices en autonomie",
+    "Chapter summary": "Résumé du chapitre",
+    "Definitions, properties and methods in one page": "Définitions, propriétés et méthodes sur une page",
+    "Chapter assessment": "Évaluation du chapitre",
+    "New questions each time, with detailed corrections": "De nouvelles questions à chaque fois, avec des corrections détaillées",
+    "The questions of this assessment were improved after you took it, so the detailed corrections are no longer available. Your score is kept. Retake it to see corrections.":
+        "Les questions de cette évaluation ont été améliorées après ton passage, donc les corrections détaillées ne sont plus disponibles. Ton score est conservé. Refais l'évaluation pour voir les corrections.",
+    "Best score: {score}%": "Meilleur score : {score} %",
+    "{n} try": "{n} essai",
+    "{n} tries": "{n} essais",
+    "Sources and licences": "Sources et licences",
+    "All explanations, examples and exercises in this chapter are original. These documents were consulted, and none of their text is copied.":
+        "Toutes les explications, tous les exemples et tous les exercices de ce chapitre sont originaux. Ces documents ont été consultés, et aucun de leurs textes n'est copié.",
+    "Licence": "Licence",
+    "Used for": "Utilisé pour",
+    # Sources.
+    "Free booklet marked 'interdit à la vente'. No open licence was found, so no text, exercise or figure is copied.":
+        "Fascicule gratuit marqué « interdit à la vente ». Aucune licence ouverte n'a été trouvée, donc aucun texte, exercice ou figure n'est copié.",
+    "Which topics belong in a first chapter on decimal numbers (decimal numbers, ordering, addition, subtraction) and the kinds of exercises it asks for. The booklet contains exercises only, so every explanation, example and exercise here was written independently, with our own numbers and our own order of sections.":
+        "Les thèmes d'un premier chapitre sur les nombres décimaux (nombres décimaux, rangement, addition, soustraction) et les types d'exercices qu'il propose. Le fascicule ne contient que des exercices : chaque explication, exemple et exercice ici a été écrit de façon indépendante, avec nos propres nombres et notre propre ordre de sections.",
+    "Official programme, no licence statement found. Used only to read objectives, nothing is copied.":
+        "Programme officiel, aucune mention de licence trouvée. Utilisé seulement pour lire les objectifs, rien n'est copié.",
+    "Read to cross-check the Sixième number work. Its number lessons are natural numbers, relative decimal numbers and fractions (the fractions lesson includes decimal fractions), so it does not list this chapter as a separate lesson and no alignment with it is claimed.":
+        "Lu pour recouper le travail sur les nombres en Sixième. Ses leçons sur les nombres portent sur les entiers naturels, les nombres décimaux relatifs et les fractions (la leçon sur les fractions inclut les fractions décimales) : il ne présente pas ce chapitre comme une leçon à part, et aucun alignement avec lui n'est revendiqué.",
+    "Marked 'All rights reserved' with credit to REB required when quoting. No open licence found.":
+        "Marqué « Tous droits réservés », avec mention obligatoire du REB en cas de citation. Aucune licence ouverte trouvée.",
+    "Not used yet.": "Pas encore utilisé.",
+    "Branded editions are CC BY-ND (no adaptation). Unbranded editions are CC BY and may be adapted with credit to Siyavula.":
+        "Les éditions avec la marque sont en CC BY-ND (adaptation interdite). Les éditions sans marque sont en CC BY et peuvent être adaptées en citant Siyavula.",
+    "Not used yet. Only the unbranded CC BY editions may be adapted.": "Pas encore utilisé. Seules les éditions sans marque en CC BY peuvent être adaptées.",
+    # Lesson section.
+    "Section {n} of {total}": "Section {n} sur {total}",
+    "Sections of this chapter": "Sections de ce chapitre",
+    "In this section": "Dans cette section",
+    "Definition": "Définition",
+    "Property": "Propriété",
+    "Method": "Méthode",
+    "Rule used": "Règle utilisée",
+    "Place value table": "Tableau de numération",
+    "Guided practice": "Exercices guidés",
+    "Try each one yourself. Check your answer, open a hint if you are stuck, and ask for the solution when you need it.":
+        "Essaie chacun toi-même. Vérifie ta réponse, ouvre un indice si tu bloques, et demande la solution quand tu en as besoin.",
+    "Check": "Vérifier",
+    "Hint": "Indice",
+    "Hint {n}": "Indice {n}",
+    "Show the solution": "Voir la solution",
+    "Your answer": "Ta réponse",
+    "Your answer, for example 3,5 or 7/2": "Ta réponse, par exemple 3,5 ou 7/2",
+    "Your answer, for example 3,5 ; 1,2 ; 1,5": "Ta réponse, par exemple 1,2 ; 1,5 ; 3,5",
+    "Choose your answer": "Choisis ta réponse",
+    "Write or choose an answer first.": "Écris ou choisis d'abord une réponse.",
+    "Ask the tutor about this lesson": "Pose une question au tuteur sur cette leçon",
+    "The tutor uses this lesson and your level. It guides you step by step unless you ask for the full solution.":
+        "Le tuteur s'appuie sur cette leçon et sur ton niveau. Il te guide pas à pas, sauf si tu demandes la solution complète.",
+    "Ask anything about this lesson": "Pose une question sur cette leçon",
+    "Explain this again": "Explique-moi ça encore une fois",
+    "Explain it in a simpler way": "Explique-moi plus simplement",
+    "Why does this work?": "Pourquoi ça marche ?",
+    "Give me another example": "Donne-moi un autre exemple",
+    "Give me another exercise like this one": "Donne-moi un autre exercice comme celui-ci",
+    "More practice": "Plus d'exercices",
+    "Previous section": "Section précédente",
+    "Next section": "Section suivante",
+    "Take the assessment": "Passer l'évaluation",
+    # Practice, assessment and results.
+    "From easy to challenging. Your answers are checked exactly, so 3,5 and 3,50 and 7/2 all count as the same number.":
+        "Du plus facile au plus difficile. Tes réponses sont vérifiées exactement : 3,5, 3,50 et 7/2 comptent comme le même nombre.",
+    "Level 1, getting started": "Niveau 1, pour démarrer",
+    "Level 2, building up": "Niveau 2, pour progresser",
+    "Level 3, challenge": "Niveau 3, défi",
+    "Answer without hints, then you get a detailed correction. You can retake it as often as you like, with new numbers each time.":
+        "Réponds sans indices, puis tu reçois une correction détaillée. Tu peux la refaire autant de fois que tu veux, avec de nouveaux nombres à chaque fois.",
+    "Questions left empty count as wrong.": "Les questions laissées vides comptent comme fausses.",
+    "Submit my answers": "Envoyer mes réponses",
+    "Assessment result": "Résultat de l'évaluation",
+    "Well done. You understand this chapter.": "Bravo. Tu as bien compris ce chapitre.",
+    "Good effort. The corrections below show exactly what to look at again.": "Beau travail. Les corrections ci-dessous montrent exactement ce qu'il faut revoir.",
+    "By topic": "Par thème",
+    "Review these first": "À revoir d'abord",
+    "Corrections": "Corrections",
+    "You did not answer this question.": "Tu n'as pas répondu à cette question.",
+    "The number is right but not written the way the question asks.": "Le nombre est juste, mais il n'est pas écrit comme la question le demande.",
+    "Correct answer": "Bonne réponse",
+    "How to solve it": "Comment le résoudre",
+    "Retake with new questions": "Refaire avec de nouvelles questions",
+    "Back to the chapter": "Retour au chapitre",
+    # Feedback on answers.
+    "That exercise does not exist.": "Cet exercice n'existe pas.",
+    "I could not read that answer. Write a number such as 3,5 or 7/2.": "Je n'ai pas compris ta réponse. Écris un nombre comme 3,5 ou 7/2.",
+    "I could not read that answer. Write the numbers separated by semicolons, such as 1,2 ; 1,5 ; 2.":
+        "Je n'ai pas compris ta réponse. Écris les nombres séparés par des points-virgules, comme 1,2 ; 1,5 ; 2.",
+    "Choose one of the answers first.": "Choisis d'abord l'une des réponses.",
+    "Write it as a fraction, such as 235/100.": "Écris-le sous forme de fraction, comme 235/100.",
+    "Write it as a fraction whose denominator is 10, 100, 1000 and so on, such as 235/100.":
+        "Écris-le sous forme de fraction dont le dénominateur est 10, 100, 1000, etc., comme 235/100.",
+    "Write it as a decimal number with a comma.": "Écris-le sous forme de nombre décimal avec une virgule.",
+    "Not quite. Try again, or open a hint.": "Pas tout à fait. Réessaie, ou ouvre un indice.",
+}

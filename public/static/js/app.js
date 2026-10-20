@@ -839,6 +839,87 @@
     });
   }
 
+  // Curriculum exercises: check answers on the server, open hints one at a time and show the solution on request.
+  function initCurriculum() {
+    $$("[data-exercise]").forEach((box) => {
+      const form = $("[data-exercise-form]", box);
+      const feedback = $("[data-feedback]", box);
+      const solution = $("[data-solution]", box);
+      const hints = $$("[data-hints] li", box);
+      const hintButton = $("[data-hint]", box);
+      const mark = $(".lesson-num", box);
+      let shown = 0;
+
+      const answer = () => {
+        const picked = $("input[type=radio]:checked", form);
+        if (picked) return picked.value;
+        const field = $("input[type=text]", form);
+        return field ? field.value : "";
+      };
+      const say = (message, good) => {
+        feedback.hidden = false;
+        feedback.className = `ex-feedback tex ${good ? "good" : "bad"}`;
+        feedback.textContent = message;
+        renderMath(feedback);
+      };
+      const showSolution = (lines) => {
+        solution.replaceChildren(...lines.map((line) => Object.assign(document.createElement("li"), { textContent: line })));
+        solution.hidden = false;
+        renderMath(solution);
+      };
+      const send = (data) => postJSON(form.dataset.url || box.dataset.url, { exercise: box.dataset.exercise, ...data });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const given = answer();
+        if (!given.trim()) {
+          say(t("Write or choose an answer first."), false);
+          return;
+        }
+        const button = $("button[type=submit]", form);
+        button.disabled = true;
+        try {
+          const reply = await send({ answer: given });
+          say(reply.message, reply.status === "correct");
+          if (reply.status === "correct") {
+            sound("good");
+            box.classList.add("is-solved");
+            if (mark) {
+              mark.classList.add("done");
+              mark.innerHTML = svg("check");
+            }
+            if (reply.solution) showSolution(reply.solution);
+          } else if (reply.status === "wrong") {
+            sound("bad");
+          }
+        } catch (error) {
+          toast(error.message, "error");
+        } finally {
+          button.disabled = false;
+        }
+      });
+
+      if (hintButton) {
+        hintButton.addEventListener("click", () => {
+          if (shown >= hints.length) return;
+          hints[shown].hidden = false;
+          hints[shown].dataset.label = `${t("Hint {n}", { n: shown + 1 })}.`;
+          shown += 1;
+          if (shown >= hints.length) hintButton.disabled = true;
+        });
+      }
+
+      $("[data-show-solution]", box).addEventListener("click", async () => {
+        try {
+          const reply = await send({ reveal: true });
+          showSolution(reply.solution || []);
+        } catch (error) {
+          toast(error.message, "error");
+        }
+      });
+    });
+  }
+
   const mascot = createMascot();
   initCommon();
   renderMath();
@@ -846,4 +927,5 @@
   initSolution();
   initQuiz();
   initQuestionEditor();
+  initCurriculum();
 })();
