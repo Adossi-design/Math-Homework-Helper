@@ -9,8 +9,7 @@
   </div>
 </div>
 
-<div class="grid grid-3">
-  {% for skill in skills.values() %}
+{% macro skill_card(skill) %}
   {% set score = best.get(skill.id) %}
   <div class="card card-body skill-card">
     <span class="tag neutral" style="align-self:flex-start">{{ _(skill.topic) }}</span>
@@ -21,8 +20,25 @@
       <a class="btn btn-primary btn-sm" href="{{ url_for('practice.play', skill_id=skill.id) }}">{{ icon("play", "sm") }} {{ _("Again") if score else _("Start") }}</a>
     </div>
   </div>
-  {% endfor %}
-</div>
+{% endmacro %}
+
+{% if mine %}
+<section>
+  <div class="section-head"><h2>{{ _("For your class") }}</h2></div>
+  <div class="grid grid-3">
+    {% for skill in mine %}{{ skill_card(skill) }}{% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if others %}
+<section class="{{ 'section' if mine }}">
+  {% if mine %}<div class="section-head"><h2>{{ _("More practice") }}</h2></div>{% endif %}
+  <div class="grid grid-3">
+    {% for skill in others %}{{ skill_card(skill) }}{% endfor %}
+  </div>
+</section>
+{% endif %}
 
 {% if recent %}
 <section class="section">

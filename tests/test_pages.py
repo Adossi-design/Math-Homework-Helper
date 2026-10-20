@@ -19,9 +19,9 @@ def test_every_course_and_lesson_page_renders(logged_in):
 def test_completing_a_lesson_moves_to_the_next(logged_in):
     response = logged_in.post("/learn/algebra-1/solving-equations/complete")
     assert response.location.endswith("/learn/algebra-1/slope-lines")
-    assert "1 of 3 done" in logged_in.get("/learn/").get_data(as_text=True)
+    assert "1 of 3 lessons done" in logged_in.get("/learn/algebra-1").get_data(as_text=True)
     logged_in.post("/learn/algebra-1/solving-equations/complete")
-    assert "0 of 3 done" in logged_in.get("/learn/").get_data(as_text=True)
+    assert "0 of 3 lessons done" in logged_in.get("/learn/algebra-1").get_data(as_text=True)
 
 
 def test_dashboard_shows_progress(logged_in):
@@ -115,15 +115,3 @@ def test_about_page_is_public_and_linked_from_the_landing_page(client):
     assert "Snap and solve" in about and "How it works" in about
     assert 'href="/about"' in client.get("/").get_data(as_text=True)
 
-
-def test_there_is_no_level_anywhere_for_students(client, logged_in):
-    for path in ["/learn/", "/practice/", "/settings/", "/solve", "/home", "/learn/algebra-1"]:
-        page = logged_in.get(path).get_data(as_text=True)
-        assert 'name="level"' not in page and "?level=" not in page and "High School" not in page and "College<" not in page, path
-    learn = logged_in.get("/learn/").get_data(as_text=True)
-    assert learn.index("Whole Numbers") < learn.index("Algebra I") < learn.index("Linear Algebra")
-    practice = logged_in.get("/practice/").get_data(as_text=True)
-    assert practice.index("Adding and subtracting") < practice.index("Derivatives")
-    logged_in.post("/logout")
-    signup = client.get("/signup").get_data(as_text=True)
-    assert 'name="level"' not in signup and "Your level" not in signup

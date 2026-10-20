@@ -32,6 +32,26 @@
     </form>
   </section>
 
+  {% if not current_user.is_admin %}
+  <section class="settings-section" id="class">
+    <div><h2>{{ _("Your class") }}</h2><p>{{ _("Solutions and lessons follow the methods taught in your class.") }}</p></div>
+    <form method="post" action="{{ url_for('settings.choose_class', next=url_for('settings.index') ~ '#class') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="field">
+        <label class="label" for="grade">{{ _("Class") }}</label>
+        <select class="select" id="grade" name="grade">
+          {% for stage, grades in grade_stages %}
+          <optgroup label="{{ _(stage) }}">
+            {% for grade in grades %}<option value="{{ grade.id }}" {{ 'selected' if current_user.grade == grade.id }}>{{ _(grade.name) }}</option>{% endfor %}
+          </optgroup>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="field"><button class="btn btn-primary" type="submit">{{ _("Save class") }}</button></div>
+    </form>
+  </section>
+  {% endif %}
+
   <section class="settings-section" id="preferences">
     <div><h2>{{ _("Preferences") }}</h2><p>{{ _("How the app looks and behaves.") }}</p></div>
     <form method="post" action="{{ url_for('settings.preferences') }}">

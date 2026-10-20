@@ -26,6 +26,8 @@ class User(UserMixin, db.Model):
     password_hash: Mapped[str | None] = mapped_column(String(255))
     google_id: Mapped[str | None] = mapped_column(String(64), unique=True)
     level: Mapped[str] = mapped_column(String(20), default="High School")
+    # The student's class in the French system (see grades.py). Empty until the student picks one.
+    grade: Mapped[str | None] = mapped_column(String(10))
     theme: Mapped[str] = mapped_column(String(10), default="system")
     expand_steps: Mapped[bool] = mapped_column(default=True)
     sounds: Mapped[bool] = mapped_column(default=True)
@@ -177,6 +179,7 @@ class SavedLesson(db.Model):
     slug: Mapped[str] = mapped_column(String(60))
     minutes: Mapped[int] = mapped_column(default=5)
     skill: Mapped[str] = mapped_column(String(40))
+    grade: Mapped[str | None] = mapped_column(String(10))
     content: Mapped[dict] = mapped_column(JSON, default=dict)
     published: Mapped[bool] = mapped_column(default=True)
     deleted: Mapped[bool] = mapped_column(default=False)

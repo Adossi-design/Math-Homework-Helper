@@ -9,6 +9,7 @@ from google import genai
 from google.genai import errors, types
 from pydantic import BaseModel
 
+from .grades import ai_guidance
 from .i18n import gettext as _
 from .i18n import language
 
@@ -46,7 +47,7 @@ class SolveResult(BaseModel):
     note: str = ""
 
 
-SOLVE_INSTRUCTIONS = r"""You are a patient, encouraging math tutor. Learners of every age and teachers use this app, so explain clearly enough for anyone to follow.
+SOLVE_INSTRUCTIONS = r"""You are a patient, encouraging math tutor. {audience}
 
 Find every math problem in the message, solve each one correctly, and show exactly how you got there.
 
@@ -64,7 +65,7 @@ Rules:
 - If there is no math problem, return an empty "problems" list and use "note" to explain kindly what went wrong, such as a blurry photo or a question that is not about math.
 """
 
-TUTOR_INSTRUCTIONS = r"""You are a friendly math tutor chatting about work you already solved together. Learners of every age and teachers use this app.
+TUTOR_INSTRUCTIONS = r"""You are a friendly math tutor chatting about work you already solved together. {audience}
 
 The solved work:
 {context}
@@ -76,6 +77,8 @@ LANGUAGE_RULES = {
     "fr": "\nWrite every title, explanation, answer, tip and note in French, using the informal \"tu\". Use a decimal comma, written as 3{,}5 inside math. Keep the \"topic\" value exactly as listed above, in English.\n",
 }
 TUTOR_LANGUAGE_RULES = {"fr": "\nReply in French, using the informal \"tu\".\n"}
+ANYONE = "Learners of every age and teachers use this app, so explain clearly enough for anyone to follow."
+IN_CLASS = "Explain at the level of the student's class, described below."
 
 _ESCAPE = re.compile(r"\\(u[0-9a-fA-F]{4}|.)", re.S)
 _LATEX_AFTER_N = re.compile(r"(?:eq|abla|eg|ot|otin|mid|leq|geq|ewline|subseteq|parallel)(?![a-zA-Z])")
@@ -179,9 +182,16 @@ def _parse_solution(response):
     return result
 
 
-def _solve(contents):
-    """Ask Gemini for a structured solution to the given contents."""
-    instructions = SOLVE_INSTRUCTIONS.replace("{topics}", ", ".join(TOPICS))
+def _audience(template, grade, beyond):
+    """Fill in who the tutor is talking to and add the methods of the student's class."""
+    guidance = ai_guidance(grade, beyond)
+    return template.replace("{audience}", IN_CLASS if guidance else ANYONE) + guidance
+
+
+def _solve(contents, grade=None):
+    """Ask Gemini for a structured solution to the given contents, at the student's class."""
+    instructions = _audience(SOLVE_INSTRUCTIONS, grade, 'say so kindly in "note".')
+    instructions = instructions.replace("{topics}", ", ".join(TOPICS))
     instructions += LANGUAGE_RULES.get(language(), "")
     config = types.GenerateContentConfig(
         system_instruction=instructions,
@@ -193,15 +203,15 @@ def _solve(contents):
     return _run(contents, config, _parse_solution)
 
 
-def solve_image(image_bytes):
+def solve_image(image_bytes, grade=None):
     """Solve every problem found in a JPEG photo."""
     photo = types.Part.from_bytes(data=image_bytes, mime_type="image/jpeg")
-    return _solve([photo, "Solve every math problem in this photo."])
+    return _solve([photo, "Solve every math problem in this photo."], grade)
 
 
-def solve_text(problem):
+def solve_text(problem, grade=None):
     """Solve a problem the student typed."""
-    return _solve([f"Solve this:\n{problem}"])
+    return _solve([f"Solve this:\n{problem}"], grade)
 
 
 def _describe(problems):
@@ -226,9 +236,10 @@ def _parse_text(response):
     return text
 
 
-def ask_tutor(problems, history, question):
-    """Answer a follow up question about an existing solution."""
-    instructions = TUTOR_INSTRUCTIONS.replace("{context}", _describe(problems))
+def ask_tutor(problems, history, question, grade=None):
+    """Answer a follow up question about an existing solution, at the student's class."""
+    instructions = _audience(TUTOR_INSTRUCTIONS, grade, "say that this idea comes in a later class.")
+    instructions = instructions.replace("{context}", _describe(problems))
     instructions += TUTOR_LANGUAGE_RULES.get(language(), "")
     turns = [(role, text) for role, text in history[-12:]] + [("user", question)]
     contents = [

@@ -5,6 +5,7 @@ from sqlalchemy import func, select
 
 from .content import courses, lesson_key
 from .extensions import db
+from .grades import GRADES, find_grade, lessons_for, rank
 from .i18n import day_label
 from .models import LessonCompletion, PracticeAttempt, Solution
 from .practice.catalog import all_skills
@@ -70,8 +71,18 @@ def summary(user):
     }
 
 
-def next_lesson(done):
-    """Return the first unfinished course and lesson, from the basics up."""
+def next_lesson(done, grade=None):
+    """Return the first unfinished lesson of the student's class, then of the classes after it.
+
+    Without a class, return the first unfinished lesson from the basics up.
+    """
+    if find_grade(grade):
+        for later in [item.id for item in GRADES if rank(item.id) >= rank(grade)]:
+            for course, lessons in lessons_for(courses(), later):
+                for lesson in lessons:
+                    if lesson_key(course, lesson) not in done:
+                        return course, lesson
+        return None, None
     for course in courses():
         for lesson in course.lessons:
             if lesson_key(course, lesson) not in done:
@@ -79,9 +90,26 @@ def next_lesson(done):
     return None, None
 
 
-def suggested_skill(best, preferred=None):
-    """Pick a practice set: a weak one already tried, else the one for the next lesson, else a new one."""
+def class_skills(grade, earlier=False):
+    """Return the ids of practice skills taught by the lessons of a class, and of earlier classes when asked."""
+    if not find_grade(grade):
+        return []
+    grades = [item.id for item in GRADES if rank(item.id) < rank(grade)] if earlier else []
+    ids = []
+    for item in [grade, *reversed(grades)]:
+        for _course, lessons in lessons_for(courses(), item):
+            ids += [lesson.skill for lesson in lessons]
+    return list(dict.fromkeys(ids))
+
+
+def suggested_skill(best, preferred=None, allowed=None):
+    """Pick a practice set: a weak one already tried, else the one for the next lesson, else a new one.
+
+    When allowed is given, only those skills are picked from.
+    """
     skills = list(all_skills().values())
+    if allowed:
+        skills = [s for s in skills if s.id in allowed] or skills
     if not skills:
         return None
     score = lambda s: best[s.id]["best"] / best[s.id]["total"]

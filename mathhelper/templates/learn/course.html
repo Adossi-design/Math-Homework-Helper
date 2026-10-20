@@ -25,9 +25,11 @@
   <div class="card">
     {% for lesson in course.lessons %}
     {% set is_done = key(course, lesson) in done %}
+    {% set lesson_class = grade_of(lesson) %}
     <a class="lesson-row" href="{{ url_for('learn.lesson', course_id=course.id, lesson_id=lesson.id) }}">
       <span class="lesson-num {{ 'done' if is_done }}">{% if is_done %}{{ icon("check", "sm") }}{% else %}{{ loop.index }}{% endif %}</span>
       <div class="body"><strong>{{ lesson.title }}</strong><span>{{ _("{n} min read", n=lesson.minutes) }}{% if is_done %}, {{ _("completed") }}{% endif %}</span></div>
+      {% if lesson_class %}<span class="tag {{ '' if lesson_class.id == mine else 'neutral' }}">{{ _(lesson_class.short) }}</span>{% endif %}
       {{ icon("chevron-right") }}
     </a>
     {% endfor %}

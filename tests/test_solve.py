@@ -52,7 +52,7 @@ def test_non_image_upload_gets_a_friendly_error(logged_in):
 
 
 def test_ai_failure_keeps_the_typed_text(logged_in, monkeypatch):
-    def broken(text):
+    def broken(text, grade=None):
         raise ai.AIError("The AI service is very busy right now.")
     monkeypatch.setattr(ai, "solve_text", broken)
     response = solve_typed(logged_in, "Solve 9x = 18")
@@ -61,7 +61,7 @@ def test_ai_failure_keeps_the_typed_text(logged_in, monkeypatch):
 
 
 def test_no_problem_found_is_not_saved(app, logged_in, monkeypatch):
-    monkeypatch.setattr(ai, "solve_text", lambda text: ai.SolveResult(problems=[], note="That is not a math question."))
+    monkeypatch.setattr(ai, "solve_text", lambda text, grade=None: ai.SolveResult(problems=[], note="That is not a math question."))
     response = solve_typed(logged_in, "What is the capital of Ghana?")
     assert response.status_code == 422 and "not a math question" in response.get_data(as_text=True)
     with app.app_context():

@@ -5,14 +5,29 @@ from sqlalchemy import select
 
 from ..accounts import delete_user, remove_solutions
 from ..extensions import db
+from ..grades import GRADE_IDS, by_stage, find_grade
 from ..models import THEMES, User
 from ..timeutil import is_valid_zone
-from .helpers import valid_email
+from .helpers import safe_next, valid_email
 
 from ..i18n import COOKIE, LANGUAGES
 from ..i18n import gettext as _
 
 bp = Blueprint("settings", __name__, url_prefix="/settings")
+
+
+# Pages a student can open before choosing a class.
+BEFORE_CLASS = {"static", "settings.choose_class", "settings.timezone", "settings.delete_account", "auth.logout",
+                "main.set_language", "main.about", "main.privacy", "main.terms"}
+
+
+@bp.before_app_request
+def ask_for_class():
+    """Send a student who has not chosen a class yet to the class picker first."""
+    if (current_user.is_authenticated and not current_user.is_admin and not find_grade(current_user.grade)
+            and request.endpoint and request.endpoint not in BEFORE_CLASS):
+        target = request.full_path.rstrip("?") if request.method == "GET" else None
+        return redirect(url_for("settings.choose_class", next=target))
 
 
 def back(section):
@@ -23,7 +38,26 @@ def back(section):
 @bp.get("/")
 @login_required
 def index():
-    return render_template("settings.html", themes=THEMES)
+    return render_template("settings.html", themes=THEMES, grade_stages=by_stage())
+
+
+@bp.route("/class", methods=["GET", "POST"])
+@login_required
+def choose_class():
+    if current_user.is_admin:
+        return redirect(url_for("settings.index"))
+    welcome = not find_grade(current_user.grade)
+    if request.method == "POST":
+        grade = request.form.get("grade", "")
+        if grade not in GRADE_IDS:
+            flash(_("Choose your class."), "error")
+            return redirect(url_for("settings.choose_class", next=request.args.get("next")))
+        current_user.grade = grade
+        db.session.commit()
+        flash(_("Your class is now {name}. Solutions and lessons follow it.", name=_(find_grade(grade).name)), "success")
+        fallback = url_for("main.home") if welcome else url_for("settings.index") + "#class"
+        return redirect(safe_next(request.args.get("next"), fallback))
+    return render_template("choose_class.html", stages=by_stage(), welcome=welcome, next=request.args.get("next"))
 
 
 @bp.post("/profile")

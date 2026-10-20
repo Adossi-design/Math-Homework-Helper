@@ -21,7 +21,9 @@ def test_signup_validates_input(client):
 def test_signup_logs_in_and_blocks_duplicates(client):
     data = {"name": "Kofi", "email": "Kofi@Example.com", "password": "longpassword", "timezone": "Africa/Kigali"}
     response = client.post("/signup", data=data)
-    assert response.status_code == 302 and response.location.endswith("/home")
+    assert response.status_code == 302 and response.location.endswith("/settings/class")
+    assert client.get("/home").location.endswith("/settings/class?next=/home")
+    client.post("/settings/class", data={"grade": "6e"})
     assert "Kofi" in client.get("/home").get_data(as_text=True)
     client.post("/logout")
     again = client.post("/signup", data=data).get_data(as_text=True)

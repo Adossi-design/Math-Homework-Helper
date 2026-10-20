@@ -1,0 +1,18 @@
+{# A list of lessons grouped by course. Needs groups, done and key. #}
+{% for course, lessons in groups %}
+<div class="card class-course tone-{{ course.tone }}">
+  <a class="class-course-head" href="{{ url_for('learn.course', course_id=course.id) }}">
+    <span class="glyph sm">{{ course.glyph }}</span>
+    <strong>{{ course.title }}</strong>
+    {{ icon("chevron-right", "sm") }}
+  </a>
+  {% for lesson in lessons %}
+  {% set is_done = key(course, lesson) in done %}
+  <a class="lesson-row" href="{{ url_for('learn.lesson', course_id=course.id, lesson_id=lesson.id) }}">
+    <span class="lesson-num {{ 'done' if is_done }}">{% if is_done %}{{ icon("check", "sm") }}{% else %}{{ loop.index }}{% endif %}</span>
+    <div class="body"><strong>{{ lesson.title }}</strong><span>{{ _("{n} min read", n=lesson.minutes) }}{% if is_done %}, {{ _("completed") }}{% endif %}</span></div>
+    {{ icon("chevron-right") }}
+  </a>
+  {% endfor %}
+</div>
+{% endfor %}

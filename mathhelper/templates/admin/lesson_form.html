@@ -19,6 +19,18 @@
       </select>
     </div>
     <div class="field">
+      <label class="label" for="grade">{{ _("Class") }}</label>
+      <select class="select" id="grade" name="grade">
+        <option value="">{{ _("The first class of the course") }}</option>
+        {% for stage, grades in grade_stages %}
+        <optgroup label="{{ _(stage) }}">
+          {% for grade in grades %}<option value="{{ grade.id }}" {{ 'selected' if grade.id == form.grade }}>{{ _(grade.name) }}</option>{% endfor %}
+        </optgroup>
+        {% endfor %}
+      </select>
+      <span class="hint">{{ _("Students in this class find the lesson on their Learn page.") }}</span>
+    </div>
+    <div class="field">
       <label class="label" for="skill">{{ _("Practice skill") }}</label>
       <select class="select" id="skill" name="skill">
         <option value="">{{ _("Choose a skill") }}</option>

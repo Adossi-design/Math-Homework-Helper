@@ -50,11 +50,11 @@ def create():
             if not upload or not upload.filename:
                 return solve_form(mode, text, _("Choose or take a photo of your problem first."), 400)
             image_bytes = prepare_image(upload.stream)
-            result = ai.solve_image(image_bytes)
+            result = ai.solve_image(image_bytes, current_user.grade)
         else:
             if len(text) < 2:
                 return solve_form(mode, text, _("Type the problem you want solved."), 400)
-            result = ai.solve_text(text)
+            result = ai.solve_text(text, current_user.grade)
     except ImageError as exc:
         return solve_form(mode, text, str(exc), 400)
     except ai.AIError as exc:
@@ -127,7 +127,7 @@ def ask(solution_id):
 
     history = [(m.role, m.content) for m in solution.messages]
     try:
-        reply = ai.ask_tutor(solution.problems, history, question)
+        reply = ai.ask_tutor(solution.problems, history, question, current_user.grade)
     except ai.AIError as exc:
         return {"error": str(exc)}, 503
 
