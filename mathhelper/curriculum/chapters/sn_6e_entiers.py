@@ -52,6 +52,15 @@ S1 = Section(
                  ("On en compte 7. Avec la règle : " + N("20 - 12 - 1") + " = " + N("7"), "20 − 12 = 8 et on retire 1."),
                  ("Avec 12 et 20 compris : " + N("20 - 12 + 1") + " = " + N("9"), "On ajoute les deux extrémités : 7 + 2 = 9.")],
                 "7 entiers, ou 9 en comptant 12 et 20", "20-12-1==7 and 20-12+1==9 and len(range(13, 20))==7"),
+        definition("Nombres pairs et impairs",
+                   "Un nombre pair est un multiple de 2 : son chiffre des unités est 0, 2, 4, 6 ou 8 (0 est pair). Un nombre impair n'est pas un multiple de 2 : son chiffre des unités est 1, 3, 5, 7 ou 9. "
+                   "Deux entiers consécutifs sont toujours un pair et un impair."),
+        example("Exemple 3", "Parmi 48, 1 305 et 270, lesquels sont pairs ? Quel est l'entier pair qui suit 1 305 ?",
+                "On regarde le chiffre des unités de chaque nombre.",
+                [("48 se termine par 8 et 270 par 0", "Ces deux nombres sont pairs."),
+                 ("1 305 se termine par 5", "Il est impair."),
+                 ("Le suivant de 1 305 est 1 306, qui se termine par 6", "C'est le nombre pair qui suit 1 305.")],
+                "48 et 270 ; 1 306", "48%2==0 and 270%2==0 and 1305%2==1 and 1306%2==0"),
         warning("Entre 12 et 20, il y a 7 entiers (et non 8) si on ne compte pas les extrémités. Ne confonds pas la différence 20 − 12 = 8 avec le nombre d'entiers qui les séparent."),
     ],
     [
@@ -116,12 +125,19 @@ S3 = Section(
              "Il est divisible par 100 si ses deux derniers chiffres sont 00, et par 1 000 si ses trois derniers chiffres sont 000."),
         rule("Divisibilité par 3 et par 9",
              "Un nombre est divisible par 3 si la somme de ses chiffres est divisible par 3. Il est divisible par 9 si la somme de ses chiffres est divisible par 9."),
-        example("Exemple 1", "Pourquoi 10, 100 et 1 000 sont-ils des multiples de 10 ? Et pourquoi 4 785 est-il divisible par 5 ?",
+        example("Exemple 1", "Pourquoi 4 785 est-il divisible par 5, et 4 780 par 10 ?",
                 "Les critères par 2, 5 et 10 viennent du fait que 10, 100 et 1 000 sont des multiples de 2, de 5 et de 10.",
                 [("4 785 = 4 × 1 000 + 7 × 100 + 8 × 10 + 5", "On décompose le nombre selon la valeur de ses chiffres."),
                  ("4 × 1 000, 7 × 100 et 8 × 10 sont des multiples de 5", "Car 1 000, 100 et 10 sont des multiples de 5."),
-                 ("Il reste le chiffre des unités, 5, qui est un multiple de 5", "Donc 4 785 est un multiple de 5.")],
+                 ("Il reste le chiffre des unités, 5, qui est un multiple de 5", "Donc 4 785 est un multiple de 5."),
+                 ("De même 4 785 = 4 780 + 5 : 4 780 est un multiple de 10, donc de 2 et de 5", "Pour 2, c'est donc le chiffre des unités qui décide : 4 785 est impair.")],
                 N("4785") + " est divisible par 5", "4785%5==0 and 4*1000+7*100+8*10+5==4785"),
+        example("Exemple 1 bis", "Un nombre est-il divisible par 100 ? par 1 000 ? Étudier 12 000 et 7 450.",
+                "Un nombre est divisible par 100 s'il se termine par deux zéros, et par 1 000 s'il se termine par trois zéros.",
+                [("12 000 = 12 × 1 000", "C'est un multiple de 1 000, donc aussi de 100."),
+                 ("7 450 = 74 × 100 + 50", "50 n'est pas un multiple de 100 : 7 450 n'est pas divisible par 100."),
+                 ("7 450 ne se termine pas par trois zéros", "Il n'est pas divisible par 1 000 non plus.")],
+                N("12000") + " est divisible par 100 et par 1 000, pas " + N("7450"), "12000%1000==0 and 7450%100!=0 and 7450%1000!=0"),
         example("Exemple 2", "Pourquoi le critère de divisibilité par 3 et 9 marche-t-il ? Étudier 5 439.",
                 "On écrit chaque puissance de 10 sous la forme (multiple de 9) + 1.",
                 [("10 = 9 + 1 ; 100 = 99 + 1 ; 1 000 = 999 + 1", "99 et 999 sont des multiples de 9 (et de 3)."),
@@ -183,6 +199,9 @@ PRACTICE = [
            wrong={1: "Le critère par 9 demande une somme de chiffres divisible par 9, pas par 3.", 2: "123 se termine par 3 : il n'est pas divisible par 2."}),
     number("p22", "criteres", "Quel est le plus petit nombre de trois chiffres divisible par 5 et par 9 ?", Fraction(135), 3, ["Il se termine par 0 ou 5 et la somme de ses chiffres est un multiple de 9."], ["Candidats : 100, 105, 110, ... La somme des chiffres doit être 9 ou 18.", "135 : 1 + 3 + 5 = 9 et il se termine par 5 : 135 = 9 × 15."]),
     number("p23", "criteres", "Combien de nombres entre 1 et 50 sont divisibles par 5 ?", Fraction(10), 1, ["5, 10, 15, ..."], ["5 × 10 = 50 : il y en a 10."]),
+    number("p25", "consecutifs", "Combien de nombres pairs y a-t-il entre 1 et 20, ces deux nombres compris ?", Fraction(10), 1, ["Un nombre sur deux est pair."], ["2, 4, 6, ..., 20 : 20 ÷ 2 = 10 nombres pairs."]),
+    choice("p26", "consecutifs", "Quel nombre est impair ?", ["1 408", "3 615", "250"], 1, 1, ["Regarde le chiffre des unités."], ["3 615 se termine par 5 : il est impair."], wrong={0: "1 408 se termine par 8 : il est pair.", 2: "250 se termine par 0 : il est pair."}),
+    number("p27", "criteres", "Parmi 3 000 ; 4 500 ; 6 200 ; 8 000, combien sont divisibles par 1 000 ?", Fraction(2), 2, ["Il faut trois zéros à la fin."], ["3 000 et 8 000 se terminent par trois zéros : 2 nombres."]),
     number("p24", "criteres", "Quel chiffre c faut-il pour que 6c5 soit divisible par 3, le plus grand possible ?", Fraction(7), 3, ["La somme 6 + c + 5 doit être un multiple de 3."], ["6 + 5 = 11. Les multiples de 3 possibles : 12, 15, 18, ...", "c = 1, 4 ou 7. Le plus grand est 7 : 675 = 3 × 225."]),
 ]
 
@@ -254,8 +273,8 @@ def assessment(rng):
     first, last = rng.randint(1, 9), rng.randint(1, 9)
     total = first + last
     digit = min(c for c in range(10) if (total + c) % 9 == 0)
-    questions.append(number("a9", "criteres", f"Quel chiffre c faut-il pour que le nombre {first}c{last} soit divisible par 9 ?", Fraction(digit), 3, ["La somme des chiffres doit être un multiple de 9."],
-                            [f"{first} + {last} = {total}.", f"{total} + c doit être un multiple de 9 : c = {digit}."]))
+    questions.append(number("a9", "criteres", f"Quel chiffre c faut-il pour que le nombre {first}c{last} soit divisible par 9, le plus petit possible ?", Fraction(digit), 3, ["La somme des chiffres doit être un multiple de 9."],
+                            [f"{first} + {last} = {total}.", f"{total} + c doit être un multiple de 9 : le plus petit chiffre est c = {digit}."]))
     # 10. count with two criteria
     pool = rng.sample([n for n in range(100, 700) if n % 5 == 0] + [n for n in range(100, 700) if n % 3 == 0 and n % 5 != 0], 6)
     count = sum(1 for n in pool if n % 15 == 0)

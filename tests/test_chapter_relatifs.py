@@ -68,10 +68,12 @@ def test_assessment_keys_match_a_recalculation_from_each_prompt():
         start = int(re.search(r"est de (-?\d+) °C", q["a10"].prompt).group(1)) if "monte" in q["a10"].prompt else int(re.search(r"est de (\d+) °C", q["a10"].prompt).group(1))
         amount = int(re.search(r"de (\d+) °C\. Quelle", q["a10"].prompt).group(1))
         assert q["a10"].answer.value == (start + amount if "monte" in q["a10"].prompt else start - amount)
-        matches = [(int(a), int(b)) for a, b in re.findall(r"(\d+) marqués et (\d+) encaissés", q["a11"].prompt)]
-        assert len(matches) == 3 and q["a11"].answer.value == sum(a - b for a, b in matches)
+        diffs = [int(x) for x in re.findall(r"[+-]\d+", q["a11"].prompt)]
+        assert len(diffs) == 3 and q["a11"].answer.value == sum(diffs)
         low, high = [int(x) for x in re.search(r"« (-\d+) est plus grand que (-\d+)", q["a12"].prompt).groups()]
         assert low < high and q["a12"].options[q["a12"].answer.value].startswith("Il a tort")
+        assert not any("-a" in o or "-b" in o for o in q["a12"].options)
+        assert unit != 1 and count >= 8
 
 
 @pytest.fixture

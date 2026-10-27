@@ -10,7 +10,7 @@
 {% elif b.type == "warning" %}
 <div class="callout">{{ icon("alert") }}<div><strong>{{ _("Watch out") }}</strong>{{ b.text | rich_inline }}</div></div>
 {% elif b.type == "table" %}
-<div class="place-table" role="region" tabindex="0" aria-label="{{ _("Place value table") }}">
+<div class="place-table" role="region" tabindex="0" aria-label="{{ b.label or _("Place value table") }}">
   <table>
     <thead><tr>{% for cell in b.head %}<th scope="col" {{ 'class=sep' if cell in (",", ".") }}>{{ cell }}</th>{% endfor %}</tr></thead>
     <tbody>{% for row in b.rows %}<tr>{% for cell in row %}<td {{ 'class=sep' if cell in (",", ".") }}>{{ cell }}</td>{% endfor %}</tr>{% endfor %}</tbody>

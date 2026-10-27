@@ -31,6 +31,7 @@ INDEPENDENT = {
     "p19": len([n for n in (63, 81, 104, 222, 459) if n % 9 == 0]), "p20": len([n for n in (135, 250, 90, 165) if n % 15 == 0]), "p21": 0,
     "p22": min(n for n in range(100, 1000) if n % 5 == 0 and n % 9 == 0), "p23": len([n for n in range(1, 51) if n % 5 == 0]),
     "p24": max(c for c in range(10) if int(f"6{c}5") % 3 == 0),
+    "p25": len([n for n in range(1, 21) if n % 2 == 0]), "p26": 1, "p27": len([n for n in (3000, 4500, 6200, 8000) if n % 1000 == 0]),
 }
 
 
@@ -69,6 +70,7 @@ def test_assessment_keys_match_a_recalculation_from_each_prompt():
         options = [int(o) for o in q["a7"].options]
         assert [i for i, v in enumerate(options) if v % k == 0] == [q["a7"].answer.value]
         for key, modulus in (("a8", 3), ("a9", 9)):
+            assert "le plus petit possible" in q[key].prompt
             first, last = [int(x) for x in re.search(r"le nombre (\d)c(\d) soit", q[key].prompt).groups()]
             good = [c for c in range(10) if int(f"{first}{c}{last}") % modulus == 0]
             assert q[key].answer.value == min(good), (key, first, last)

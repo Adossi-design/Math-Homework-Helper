@@ -38,15 +38,18 @@ S1 = Section(
                    "Les entiers relatifs forment l'ensemble " + "$\\mathbb{Z}$" + " : " + N("... -3, -2, -1, 0, 1, 2, 3 ...") + ". Un nombre relatif peut aussi être décimal, comme " + N("-2,5") + "."),
         definition("L'opposé d'un nombre",
                    "Deux nombres relatifs qui ont la même partie sans signe et des signes contraires sont opposés. L'opposé de " + N("5") + " est " + N("-5") + ", l'opposé de " + N("-3,5") + " est " + N("3,5") + ". "
-                   "L'opposé de 0 est 0. La somme de deux nombres opposés est 0 : " + N("5 + (-5) = 0") + "."),
+                   "L'opposé de 0 est 0. La partie sans signe d'un nombre est le nombre écrit sans son signe : 7 pour -7 et pour +7. La somme de deux nombres opposés est 0 : " + N("5 + (-5) = 0") + "."),
         definition("Droite graduée et abscisse",
                    "Sur une droite graduée, on choisit un point origine O associé au nombre 0 et une unité de longueur. Les nombres positifs sont placés à droite de O, les nombres négatifs à gauche. "
                    "Le nombre associé à un point s'appelle son abscisse. Deux points d'abscisses opposées sont à la même distance de O, de part et d'autre de O."),
+        para("Voici une droite graduée de 1 en 1, écrite sous forme de tableau : la première ligne donne les abscisses, la seconde les points. Le point A a pour abscisse -3, O est l'origine, le point B a pour abscisse 4."),
+        {"type": "table", "label": "Droite graduée de 1 en 1", "head": ["-4", "-3", "-2", "-1", "0", "1", "2", "3", "4"],
+         "rows": [["", "A", "", "", "O", "", "", "", "B"]]},
         example("Exemple 1", "Sur une droite graduée de 1 en 1, le point A est à 3 graduations à gauche de O et le point B à 4 graduations à droite de O. Quelles sont leurs abscisses ?",
                 "À gauche de O, les nombres sont négatifs. À droite, ils sont positifs.",
                 [("A est à gauche de O, à 3 graduations", "Son abscisse est négative et sa distance à O est 3 : " + N("-3") + "."),
                  ("B est à droite de O, à 4 graduations", "Son abscisse est positive : " + N("+4") + ", qu'on écrit " + N("4") + "."),
-                 ("A et B ne sont pas à la même distance de O", "Ce n'est pas le cas de deux points d'abscisses opposées, comme -3 et 3.")],
+                 ("Sur la droite du tableau ci-dessus, A est à gauche de O et B à droite", "On lit les abscisses sous les points : A est sous -3 et B est sous 4.")],
                 "A a pour abscisse " + N("-3") + " et B a pour abscisse " + N("4"), "-3 < 0 < 4"),
         example("Exemple 2", "Placer le point C d'abscisse " + N("-2,5") + " sur une droite graduée de 0,5 en 0,5.",
                 "On part de O, on va vers la gauche, et on compte les graduations de 0,5.",
@@ -77,7 +80,7 @@ S1 = Section(
         choice("s1-g4", "sens", "Quel nombre est un entier relatif négatif ?", [N("5"), N("-5"), N("-2,5"), N("0")], 1,
                hints=["Il faut un signe moins et aucune partie décimale."], solution=["-5 est négatif et entier.", "5 est positif, -2,5 est décimal, 0 n'est ni positif ni négatif."],
                wrong={2: "-2,5 est négatif, mais ce n'est pas un entier : il a une partie décimale.", 3: "0 n'est ni positif ni négatif."}),
-        number("s1-g5", "sens", "La température est de 3 °C en dessous de zéro. Écris-la comme un nombre relatif.", Fraction(-3),
+        number("s1-g5", "sens", "La température est de 3 °C en dessous de zéro. Écris-la comme un nombre relatif.", Fraction(-3), units=["°C"],
                hints=["En dessous de zéro : quel signe ?"], solution=["En dessous de zéro, le nombre est négatif : -3 °C."]),
     ])
 
@@ -165,7 +168,7 @@ S3 = Section(
         example("Exemple 4", "Un tournoi de football : lors du premier match, une équipe marque 3 buts et en encaisse 1. Lors du second, elle marque 1 but et en encaisse 4. Quel est son goal-différentiel total ?",
                 "Le goal-différentiel d'un match est le nombre de buts marqués moins le nombre de buts encaissés. On additionne ensuite les deux résultats.",
                 [("Match 1 : 3 − 1 = +2", "Elle a marqué plus qu'elle n'a encaissé : positif."),
-                 ("Match 2 : 1 − 4 = -3", "Elle a encaissé plus qu'elle n'a marqué : négatif."),
+                 ("Match 2 : 1 − 4 = -3", "Elle a encaissé plus qu'elle n'a marqué : on calcule 4 − 1 = 3 et on met le signe moins, donc -3."),
                  (N("(+2) + (-3)") + " : parties sans signe 2 et 3, la plus grande est 3 (négative)", "Signes contraires."),
                  (N("3 - 2") + " = " + N("1") + " donc le total est " + N("-1"), "Son goal-différentiel total est -1.")],
                 "Le goal-différentiel total est " + N("-1") + ".", "(3-1)+(1-4)==-1"),
@@ -217,8 +220,8 @@ PRACTICE = [
     number("p21", "addition", "Calcule " + N("(-7,5) + (+2,25)") + ".", d("-5,25"), 3, ["7,5 est plus grand que 2,25."], ["7,5 − 2,25 = 5,25, signe de -7,5 : -5,25."]),
     number("p22", "addition", "Calcule " + N("(-12) + 12") + ".", Fraction(0), 1, ["Deux opposés."], ["La somme de deux nombres opposés est 0."]),
     number("p23", "addition", "Calcule " + N("(-5) + 8 + (-6)") + ".", Fraction(-3), 3, ["Va de gauche à droite : (-5) + 8, puis le résultat + (-6)."], ["(-5) + 8 = 3.", "3 + (-6) = -3."]),
-    number("p24", "addition", "Une équipe a marqué 4 buts et encaissé 2 au premier match, puis marqué 0 et encaissé 3 au second. Quel est son goal-différentiel total ?", Fraction(-1), 3,
-           ["Calcule le goal-différentiel de chaque match, puis additionne."], ["Match 1 : 4 − 2 = +2. Match 2 : 0 − 3 = -3.", "(+2) + (-3) = -1."]),
+    number("p24", "addition", "Le goal-différentiel d'une équipe est +2 au premier match, puis -3 au second. Quel est son goal-différentiel total ?", Fraction(-1), 3,
+           ["Additionne les deux nombres relatifs."], ["(+2) + (-3) : signes contraires, 3 − 2 = 1, signe de -3.", "Le total est -1."]),
     number("p25", "addition", "La température est de -6 °C le matin et monte de 9 °C. Quelle est la température, en °C ?", Fraction(3), 2, ["Monter de 9, c'est ajouter +9."], ["(-6) + 9 = 3 °C."], units=["°C"]),
     number("p26", "addition", "Moussa doit 2 000 F à un ami et reçoit 1 200 F de sa mère qu'il donne à l'ami. Quelle est la situation de Moussa avec son ami, en F ? (Une dette est négative.)", Fraction(-800), 3,
            ["Dette -2 000, paiement +1 200."], ["(-2 000) + 1 200 = -800 : il lui doit encore 800 F."], units=["F"]),
@@ -258,7 +261,7 @@ def assessment(rng):
     x = sample(1, 40, rng.choice([0, 1]))
     questions.append(number("a1", "sens", "Quel est l'opposé de " + N(show(x)) + " ?", -x, 1, ["Change le signe."], [f"L'opposé de {show(x)} est {show(-x)}."]))
     # 2. abscissa from graduations
-    unit, count = rng.choice([(Fraction(1), 3), (Fraction(1), 5), (Fraction(1, 2), 7), (Fraction(2), 4), (Fraction(1, 2), 9)])
+    unit, count = rng.choice([Fraction(2), Fraction(5), Fraction(10), Fraction(1, 2), Fraction(1, 5), Fraction(1, 10)]), rng.randint(8, 15)
     left = rng.random() < 0.5
     value = -unit * count if left else unit * count
     side = "gauche" if left else "droite"
@@ -326,18 +329,18 @@ def assessment(rng):
         questions.append(number("a10", "addition", f"La température est de {abs(start)} °C. Elle baisse de {abs(start) + change} °C. Quelle est la nouvelle température, en °C ?", Fraction(-change), 2,
                                 ["Baisser de n degrés, c'est ajouter -n."], [f"{abs(start)} + (-{abs(start) + change}) = {-change} °C."], units=["°C"]))
     # 11. goal difference over several matches
-    matches = [(rng.randint(0, 5), rng.randint(0, 5)) for _ in range(3)]
-    total = sum(for_ - against for for_, against in matches)
-    text = ", ".join(f"{for_} marqués et {against} encaissés" for for_, against in matches)
-    questions.append(number("a11", "addition", f"Une équipe joue trois matchs : {text}. Quel est son goal-différentiel total ? (buts marqués moins buts encaissés)", Fraction(total), 3,
-                            ["Calcule le goal-différentiel de chaque match, puis additionne les trois nombres relatifs."],
-                            ["Goal-différentiels : " + " ; ".join(show(Fraction(for_ - against)) for for_, against in matches) + ".", f"Total : {total}."]))
+    diffs = [rng.choice([-1, 1]) * rng.randint(1, 5) for _ in range(3)]
+    total = sum(diffs)
+    text = ", ".join(f"{v:+d}" for v in diffs[:2]) + f" et {diffs[2]:+d}"
+    questions.append(number("a11", "addition", f"Les goal-différentiels d'une équipe lors de trois matchs sont {text}. Quel est son goal-différentiel total ?", Fraction(total), 3,
+                            ["Additionne les trois nombres relatifs, de gauche à droite."],
+                            [f"{show(diffs[0])} + {show(diffs[1])} = {show(diffs[0] + diffs[1])}.", f"{show(diffs[0] + diffs[1])} + {show(diffs[2])} = {total}."]))
     # 12. the classic mistake with negatives
     a, b = rng.randint(2, 9), rng.randint(2, 9)
     while a == b:
         b = rng.randint(2, 9)
     low, high = sorted((-a, -b))
-    options = [f"Il a tort : {low} est plus petit que {high}, car {abs(low)} est plus grand que {abs(high)}", f"Il a raison : {abs(low)} est plus grand que {abs(high)}", "Il a tort : -a et -b sont égaux"]
+    options = [f"Il a tort : {low} est plus petit que {high}, car {abs(low)} est plus grand que {abs(high)}", f"Il a raison : {abs(low)} est plus grand que {abs(high)}", f"Il a tort : {low} et {high} sont égaux"]
     order = [0, 1, 2]
     rng.shuffle(order)
     questions.append(choice("a12", "comparer", f"Moussa dit : « {low} est plus grand que {high}, parce que {abs(low)} est plus grand que {abs(high)} ». A-t-il raison ?", [options[i] for i in order], order.index(0), 3,

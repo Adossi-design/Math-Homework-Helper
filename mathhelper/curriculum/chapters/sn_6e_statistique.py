@@ -49,6 +49,8 @@ S1 = Section(
                  ("Effectif de A : " + str(VOTES["A"]) + ". Effectif de M : " + str(VOTES["M"]) + ". Effectif de Y : " + str(VOTES["Y"]), "On compte chaque lettre."),
                  (N(f"{VOTES['A']} + {VOTES['M']} + {VOTES['Y']}") + " = " + N("20"), "L'effectif total est la somme des trois effectifs : on retrouve les 20 bulletins, ce qui confirme le comptage.")],
                 "A : " + str(VOTES["A"]) + ", M : " + str(VOTES["M"]) + ", Y : " + str(VOTES["Y"]) + ", total 20", f"{LIST_20.split().count('A')}=={VOTES['A']} and {LIST_20.split().count('M')}=={VOTES['M']} and {len(LIST_20.split())}==20"),
+        para("Voici le tableau d'effectifs de cette élection : une ligne pour les candidats, une ligne pour les effectifs."),
+        {"type": "table", "label": "Tableau d'effectifs", "head": ["Candidat", "A", "M", "Y", "Total"], "rows": [["Effectif", str(VOTES["A"]), str(VOTES["M"]), str(VOTES["Y"]), "20"]]},
         example("Exemple 2", "Présenter les résultats dans un tableau d'effectifs.",
                 "Une ligne pour les candidats, une ligne pour les effectifs, et une colonne pour le total.",
                 [("Candidat : A ; M ; Y ; Total", "Première ligne."),
@@ -100,6 +102,9 @@ S2 = Section(
                  (N("9 \\div 20") + " = " + N("0,45"), "En décimal : 9 ÷ 20 = 0,45."),
                  (N("0,45 \\times 100") + " = " + N("45"), "En pourcentage : 0,45 × 100 = 45, soit 45 %.")],
                 "La fréquence de M est " + N("0,45") + ", soit " + N("45\\ \\%"), "d('9')/20==d('0,45') and d('0,45')*100==45"),
+        para("Le tableau complété donne, pour chaque candidat, l'effectif et la fréquence en pourcentage. On peut passer d'une ligne à l'autre dans les deux sens."),
+        {"type": "table", "label": "Tableau d'effectifs et de fréquences", "head": ["Candidat", "A", "M", "Y", "Total"],
+         "rows": [["Effectif", "7", "9", "4", "20"], ["Fréquence en %", "35 %", "45 %", "20 %", "100 %"]]},
         example("Exemple 2", "Calculer les fréquences en pourcentage de A, M et Y dans le tableau 7 ; 9 ; 4 (total 20), et vérifier leur somme.",
                 "Même calcul pour chaque effectif, puis on additionne les pourcentages.",
                 [(N("7/20") + " = " + N("0,35") + " = " + N("35\\ \\%"), "Pour A."),
@@ -154,6 +159,9 @@ S3 = Section(
                  (N("15 \\div 0,3") + " = " + N("150 \\div 3") + " = " + N("50"), "On multiplie par 10 le dividende et le diviseur pour avoir un diviseur entier."),
                  ("Vérification : 30 % de 50 = 15", "On retrouve l'effectif de départ.")],
                 "50 suffrages", "d('15')/d('0,3')==50 and 50*d('0,3')==15"),
+        para("Pour le trajet vers l'école, le tableau complet de l'exemple suivant sera : 18, 14 et 8 élèves, soit 45 %, 35 % et 20 %."),
+        {"type": "table", "label": "Tableau du trajet vers l'école", "head": ["Trajet", "À pied", "À vélo", "En bus", "Total"],
+         "rows": [["Effectif", "18", "14", "8", "40"], ["Fréquence en %", "45 %", "35 %", "20 %", "100 %"]]},
         example("Exemple 3", "Dans une classe de 40 élèves, on a recensé la façon de venir à l'école : 18 à pied, 14 à vélo et les autres en bus. Compléter le tableau d'effectifs puis de fréquences.",
                 "On calcule d'abord l'effectif manquant, puis chaque fréquence en pourcentage.",
                 [("Effectif des élèves qui viennent en bus : " + N("40 - (18 + 14)") + " = " + N("8"), "L'effectif total moins les deux effectifs connus."),
@@ -209,7 +217,7 @@ PRACTICE = [
            ["Une fréquence se calcule avec l'effectif total."], ["9 ÷ 20 = 0,45.", "0,45 × 100 = 45 % et non 9 %."], wrong={0: "9 % serait 9 voix sur 100."}),
     number("p19", "frequence", "Quelle est la somme de toutes les fréquences d'un tableau, en nombre décimal ?", Fraction(1), 1, ["Pense au total des données."], ["La somme des fréquences est 1, c'est-à-dire 100 %."]),
     number("p20", "frequence", f"Dans la liste des notes ({NOTES_TEXT}), quelle est la fréquence en pourcentage de la note 12 ? (arrondie à l'unité, en %)", Fraction(round(100 * NOTES.count(12) / len(NOTES))), 3,
-           [f"Effectif de 12 divisé par {len(NOTES)}."], [f"{NOTES.count(12)} ÷ {len(NOTES)} = {NOTES.count(12) / len(NOTES):.3f}...", f"En pourcentage arrondi : {round(100 * NOTES.count(12) / len(NOTES))} %."], units=["%"]),
+           [f"Effectif de 12 divisé par {len(NOTES)}."], [f"{NOTES.count(12)} ÷ {len(NOTES)} = {format(NOTES.count(12) / len(NOTES), ".3f").replace(".", ",")}...", f"En pourcentage arrondi : {round(100 * NOTES.count(12) / len(NOTES))} %."], units=["%"]),
     number("p21", "tableaux", "Sur 80 votants, 25 % ont voté pour Y. Combien de voix ?", Fraction(20), 1, ["80 × 0,25."], ["25 % = 0,25 et 80 × 0,25 = 20."]),
     number("p22", "tableaux", "Dans une école de 500 élèves, 18 % ont des lunettes. Combien d'élèves ?", Fraction(90), 2, ["500 × 0,18."], ["500 × 0,18 = 90."]),
     number("p23", "tableaux", "36 voix représentent 45 % des suffrages. Combien y a-t-il de suffrages en tout ?", Fraction(80), 3, ["Divise l'effectif par la fréquence."], ["36 ÷ 0,45 = 3 600 ÷ 45 = 80."]),
@@ -261,7 +269,7 @@ def assessment(rng):
     questions.append(number("a3", "effectif", f"Un tableau d'effectifs a trois effectifs : {known[0]}, {known[1]} et ?. L'effectif total est {sum(known) + missing}. Quel est l'effectif manquant ?", Fraction(missing), 2,
                             ["Retire la somme des deux effectifs connus de l'effectif total."], [f"{known[0]} + {known[1]} = {sum(known)}.", f"{sum(known) + missing} − {sum(known)} = {missing}."]))
     # 4. frequency as a decimal
-    total = rng.choice([20, 25, 40, 50, 80])
+    total = rng.choice([20, 25, 40, 50])
     count = rng.randint(2, total - 2)
     questions.append(number("a4", "frequence", f"Sur {total} données, un résultat apparaît {count} fois. Quelle est sa fréquence sous forme décimale ?", Fraction(count, total), 2, ["Fréquence = effectif ÷ effectif total."],
                             [f"{count} ÷ {total} = {show(Fraction(count, total))}."]))
@@ -310,7 +318,7 @@ def assessment(rng):
     questions.append(number("a11", "tableaux", f"Dans une classe de {total} élèves, {first} viennent à pied et {second} à vélo, les autres en bus. Quelle est la fréquence en pourcentage des élèves qui viennent en bus ? (en %)", Fraction(third * 100, total), 3,
                             ["Calcule d'abord l'effectif des élèves en bus."], [f"{total} − ({first} + {second}) = {third}.", f"{third} ÷ {total} = {show(Fraction(third, total))}, soit {show(Fraction(third * 100, total))} %."], units=["%"]))
     # 12. the classic mistake
-    a, b = rng.choice([(9, 20), (6, 25), (12, 40), (21, 50)])
+    a, b = rng.choice([(7, 20), (6, 25), (12, 40), (21, 50)])
     options = [f"Il a tort : {a} ÷ {b} = {show(Fraction(a, b))}, soit {show(Fraction(a * 100, b))} %", f"Il a raison, car {a} est le nombre de voix", "Il a tort : il faut diviser par 10"]
     order = [0, 1, 2]
     rng.shuffle(order)
