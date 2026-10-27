@@ -1,0 +1,62 @@
+{% extends "admin/_base.html" %}
+{% block admin_title %}{{ _("Translations") }}{% endblock %}
+{% block admin_lead %}{{ _("Check and correct the automatic translations of curriculum lessons. A corrected translation is kept and never overwritten.") }}{% endblock %}
+
+{% block admin %}
+<form class="searchbar" method="get" role="search">
+  {% if status != "unreviewed" %}<input type="hidden" name="status" value="{{ status }}">{% endif %}
+  <div class="input-wrap">{{ icon("search") }}<input class="input" type="search" name="q" value="{{ query }}" placeholder="{{ _("Search the original or the translation") }}" aria-label="{{ _("Search the original or the translation") }}"></div>
+  <div class="segmented">
+    <a class="{{ 'is-active' if status == 'unreviewed' }}" href="{{ url_for('admin.translations', q=query or None) }}">{{ _("To check") }}</a>
+    <a class="{{ 'is-active' if status == 'reviewed' }}" href="{{ url_for('admin.translations', status='reviewed', q=query or None) }}">{{ _("Checked") }}</a>
+    <a class="{{ 'is-active' if status == 'all' }}" href="{{ url_for('admin.translations', status='all', q=query or None) }}">{{ _("All") }}</a>
+  </div>
+</form>
+
+{% if page.items %}
+<p class="small muted" style="margin-bottom:12px">{{ ngettext("{n} translation", "{n} translations", page.total) }}</p>
+<div class="stack">
+  {% for row in page.items %}
+  <article class="card card-body">
+    <div class="row wrap" style="justify-content:space-between">
+      <span class="tag">{{ "FR → EN" if row.lang == "en" else "EN → FR" }}</span>
+      {% if row.reviewed %}<span class="tag success">{{ icon("check", "sm") }} {{ _("Checked") }}</span>{% else %}<span class="tag warning">{{ _("To check") }}</span>{% endif %}
+    </div>
+    <p class="small faint" style="margin-top:12px">{{ _("Original") }}</p>
+    <div class="tex" style="margin-top:4px">{{ row.source | rich_inline }}</div>
+    <form id="f-{{ row.id }}" method="post" action="{{ url_for('admin.save_translation', row_id=row.id) }}" style="margin-top:14px">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="next" value="{{ request.full_path }}">
+      <label class="label" for="t-{{ row.id }}">{{ _("Translation") }}</label>
+      <textarea class="textarea short" id="t-{{ row.id }}" name="text" maxlength="4000">{{ shown[row.id] }}</textarea>
+    </form>
+    <div class="tex small muted" style="margin-top:6px">{{ shown[row.id] | rich_inline }}</div>
+    <div class="row wrap" style="margin-top:12px">
+        <button class="btn btn-primary btn-sm" type="submit" form="f-{{ row.id }}">{{ icon("check", "sm") }} {{ _("Save correction") }}</button>
+        {% if not row.reviewed %}
+        <form method="post" action="{{ url_for('admin.review_translation', row_id=row.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="next" value="{{ request.full_path }}">
+          <button class="btn btn-soft btn-sm" type="submit">{{ _("It is correct") }}</button>
+        </form>
+        {% endif %}
+        <form method="post" action="{{ url_for('admin.delete_translation', row_id=row.id) }}" data-confirm="{{ _("Delete this translation? It will be translated again when a student needs it.") }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="next" value="{{ request.full_path }}">
+          <button class="btn btn-danger btn-sm" type="submit">{{ icon("trash", "sm") }} {{ _("Delete") }}</button>
+        </form>
+      </div>
+  </article>
+  {% endfor %}
+</div>
+{% if page.pages > 1 %}
+<nav class="row wrap" style="margin-top:20px;justify-content:center" aria-label="{{ _("Pages") }}">
+  {% if page.has_prev %}<a class="btn btn-outline btn-sm" href="{{ url_for('admin.translations', page=page.prev_num, q=query or None, status=status) }}">{{ icon("chevron-left", "sm") }} {{ _("Previous") }}</a>{% endif %}
+  <span class="small muted">{{ page.page }} / {{ page.pages }}</span>
+  {% if page.has_next %}<a class="btn btn-outline btn-sm" href="{{ url_for('admin.translations', page=page.next_num, q=query or None, status=status) }}">{{ _("Next") }} {{ icon("chevron-right", "sm") }}</a>{% endif %}
+</nav>
+{% endif %}
+{% else %}
+<div class="card card-body"><p class="muted">{{ _("No translations here yet. They appear after a student opens a lesson in the other language.") }}</p></div>
+{% endif %}
+{% endblock %}

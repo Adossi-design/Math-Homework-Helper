@@ -766,3 +766,112 @@ def test_the_fifth_assessment_question_does_not_always_reward_the_longest_number
         digits = [len(str(o).split("{,}")[1].rstrip("$")) for o in q.options]
         longest_wins += digits.index(max(digits)) == q.answer.value
     assert longest_wins == 0
+
+
+# ----- Translation review screen, shared sentences and the warm-up command -----
+
+def fake_translator(sent):
+    def fake(texts, source, target):
+        sent.append(list(texts))
+        return [f"EN {t}" for t in texts]
+    return fake
+
+
+def test_the_same_sentence_with_other_numbers_reuses_one_stored_translation(app, monkeypatch):
+    sent = []
+    monkeypatch.setattr(ai, "translate_batch", fake_translator(sent))
+    with app.app_context():
+        out, _ = translate.translate_texts(["Calcule $2{,}5 + 1$.", "Calcule $7{,}25 + 9$."], "fr", "en")
+        assert out == ["EN Calcule $2.5 + 1$.", "EN Calcule $7.25 + 9$."]
+        assert sent == [["Calcule ⟦1⟧."]] and db.session.query(TranslationCache).count() == 1
+        out, _ = translate.translate_texts(["Calcule $100 - 0{,}01$."], "fr", "en")
+        assert out == ["EN Calcule $100 - 0.01$."] and len(sent) == 1
+
+
+@pytest.fixture
+def stored_translation(app, monkeypatch):
+    monkeypatch.setattr(ai, "translate_batch", lambda texts, s, t: [f"First, {x}, then" for x in texts])
+    with app.app_context():
+        translate.translate_texts(["Compare $2{,}5$ et $2{,}35$."], "fr", "en")
+        return db.session.query(TranslationCache).one().id
+
+
+def test_admin_sees_stored_translations_and_can_correct_them(app, admin, stored_translation):
+    page = admin.get("/admin/translations").get_data(as_text=True)
+    assert "Compare" in page and "To check" in page and "2.5" in page
+    saved = admin.post(f"/admin/translations/{stored_translation}/save", data={"text": "Compare $2.35$ with $2.5$, please."}, follow_redirects=True)
+    assert "Translation saved" in saved.get_data(as_text=True)
+    with app.app_context():
+        row = db.session.get(TranslationCache, stored_translation)
+        assert row.reviewed and row.text == "Compare ⟦2⟧ with ⟦1⟧, please."
+        assert translate.translate_texts(["Compare $2{,}5$ et $2{,}35$."], "fr", "en")[0] == ["Compare $2.35$ with $2.5$, please."]
+        assert translate.translate_texts(["Compare $9{,}5$ et $9{,}35$."], "fr", "en")[0] == ["Compare $9.35$ with $9.5$, please."]
+
+
+def test_a_correction_that_changes_a_formula_is_refused(app, admin, stored_translation):
+    for bad in ["Compare $2.5$ with $2.36$.", "Compare $2.5$ only.", "Compare 2.5 with 2.35", "Compare $2.5$ with $2.35$ and $1$."]:
+        reply = admin.post(f"/admin/translations/{stored_translation}/save", data={"text": bad}, follow_redirects=True).get_data(as_text=True)
+        assert "must keep every formula" in reply, bad
+    assert admin.post(f"/admin/translations/{stored_translation}/save", data={"text": "  "}, follow_redirects=True).get_data(as_text=True).count("Write the corrected") == 1
+    with app.app_context():
+        assert not db.session.get(TranslationCache, stored_translation).reviewed
+
+
+def test_admin_can_mark_a_translation_as_checked_or_delete_it(app, admin, stored_translation):
+    admin.post(f"/admin/translations/{stored_translation}/review")
+    with app.app_context():
+        assert db.session.get(TranslationCache, stored_translation).reviewed
+    assert "Compare" not in admin.get("/admin/translations").get_data(as_text=True)
+    assert "Compare" in admin.get("/admin/translations?status=reviewed").get_data(as_text=True)
+    admin.post(f"/admin/translations/{stored_translation}/delete")
+    with app.app_context():
+        assert db.session.query(TranslationCache).count() == 0
+    assert admin.post("/admin/translations/9999/save", data={"text": "x"}).status_code == 404
+
+
+def test_only_the_admin_can_use_the_translation_screen(app, student, stored_translation):
+    assert student.get("/admin/translations").status_code == 403
+    assert student.post(f"/admin/translations/{stored_translation}/save", data={"text": "hacked"}).status_code == 403
+    assert student.post(f"/admin/translations/{stored_translation}/delete").status_code == 403
+    with app.app_context():
+        assert db.session.query(TranslationCache).count() == 1
+
+
+def test_the_admin_screen_escapes_html_in_stored_translations(app, admin):
+    with app.app_context():
+        db.session.add(TranslationCache(digest="x" * 64, lang="en", source="Texte", text="<script>alert(1)</script> <img src=x onerror=alert(2)>"))
+        db.session.commit()
+    page = admin.get("/admin/translations").get_data(as_text=True)
+    assert "<script>alert(1)" not in page and "<img src=x" not in page
+
+
+def test_the_warm_up_command_translates_the_whole_chapter_once(app, monkeypatch):
+    sent = []
+    monkeypatch.setattr(ai, "translate_batch", fake_translator(sent))
+    runner = app.test_cli_runner()
+    first = runner.invoke(args=["warm-translations"])
+    assert first.exit_code == 0 and "All text is translated" in first.output
+    with app.app_context():
+        stored = db.session.query(TranslationCache).count()
+    assert stored > 100 and sent
+    calls = len(sent)
+    again = runner.invoke(args=["warm-translations"])
+    assert again.exit_code == 0 and len(sent) - calls <= 2
+
+
+def test_the_warm_up_command_reports_failures(app):
+    result = app.test_cli_runner().invoke(args=["warm-translations"])
+    assert result.exit_code == 1 and "run the command again" in result.output
+
+
+def test_plain_numbers_in_a_sentence_are_set_aside_like_formulas(app):
+    masked, spans = translate.protect("Il a tort : 8,5 = 8,50 et 50 est plus grand que 49, voir $2{,}5$.")
+    assert masked == "Il a tort : ⟦1⟧ = ⟦2⟧ et ⟦3⟧ est plus grand que ⟦4⟧, voir ⟦5⟧." and spans[0] == "8,5"
+    assert translate.restore("He is wrong: ⟦1⟧ = ⟦2⟧ and ⟦3⟧ is bigger than ⟦4⟧, see ⟦5⟧.", spans, "fr", "en") == \
+        "He is wrong: 8.5 = 8.50 and 50 is bigger than 49, see $2.5$."
+    assert translate.restore("Elle: ⟦1⟧ ⟦2⟧ ⟦3⟧ ⟦4⟧ ⟦5⟧", ["2.5", "$2.5$", "3", "4", "1.000"], "en", "fr") == "Elle: 2,5 $2{,}5$ 3 4 1,000"
+
+
+def test_french_spacing_before_punctuation_is_dropped_in_english():
+    assert translate.convert_plain("Decimal parts : 48 et ? Yes !", "fr", "en") == "Decimal parts: 48 et? Yes!"
+    assert translate.convert_plain("Parties : 3.5", "en", "fr") == "Parties : 3,5"

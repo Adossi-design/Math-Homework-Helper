@@ -109,7 +109,8 @@ GLOSSARIES = {
                   "unités = ones; dizaine = ten (the tens place, left of the decimal point, not to be mixed up with dixième = tenth); dixième, centième, millième = tenth, hundredth, thousandth; virgule = decimal point; "
                   "ordre de grandeur = estimate; arrondir à la dizaine la plus proche = round to the nearest ten; calculer efficacement = calculate efficiently using the properties;"
                   "retenue = carrying; emprunt = borrowing; ranger dans l'ordre croissant = put in increasing order; intercaler = find a number between; "
-                  "encadrer = write the number between two others (bracket it); à l'unité près = with whole-number bounds; propriété = property; "
+                  "encadrer un nombre = give a lower and an upper bound for it, i.e. write it between two consecutive numbers (never translate it as 'find a number between'); "
+                  "intercaler = find a number between two given numbers; encadrement à l'unité près = bounds that are consecutive whole numbers; encadrement au dixième près = bounds with one decimal place;propriété = property; "
                   "commutativité, associativité = commutativity, associativity; élément neutre = identity element; terme manquant = missing term. "
                   "Keep local everyday words (clothes, foods, currencies) as they are.",
     ("en", "fr"): "Examples: decimal fraction = fraction décimale; tenth, hundredth, thousandth = dixième, centième, millième; decimal point = virgule; "

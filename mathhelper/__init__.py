@@ -66,6 +66,9 @@ def create_app(overrides=None):
     from .views import register_blueprints
 
     register_blueprints(app)
+    from .cli import register as register_commands
+
+    register_commands(app)
 
     # Template helpers.
     app.jinja_env.globals.update(icon=icon, _=_, ngettext=i18n.ngettext)

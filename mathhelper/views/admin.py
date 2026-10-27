@@ -16,7 +16,8 @@ from ..content.courses_fr import FR_COURSES
 from ..extensions import db
 from ..i18n import gettext as _
 from ..i18n import language
-from ..models import LessonCompletion, PracticeAttempt, SavedLesson, SavedPractice, Solution, User, utcnow
+from ..curriculum.translate import correct_translation, shown_translation
+from ..models import LessonCompletion, PracticeAttempt, SavedLesson, SavedPractice, Solution, TranslationCache, User, utcnow
 from ..practice import SKILLS, build_round
 from ..practice.catalog import all_skills, forget_practice, stored_practice
 from ..translations.fr import FR
@@ -515,3 +516,64 @@ def restore_practice(skill_id):
     forget_practice()
     flash(_("The original practice set is back."), "success")
     return redirect(url_for("admin.practice"))
+
+
+# ----- Translations of curriculum lessons: review, correct and clear -----
+
+def translation_row(row_id):
+    """Load a stored translation or stop with 404."""
+    row = db.session.get(TranslationCache, row_id)
+    if row is None:
+        abort(404)
+    return row
+
+
+@bp.get("/translations")
+def translations():
+    query = request.args.get("q", "").strip()[:100]
+    status = request.args.get("status", "unreviewed")
+    stmt = select(TranslationCache)
+    if query:
+        needle = query.lower()
+        stmt = stmt.where(or_(func.lower(TranslationCache.source).contains(needle, autoescape=True),
+                              func.lower(TranslationCache.text).contains(needle, autoescape=True)))
+    if status == "reviewed":
+        stmt = stmt.where(TranslationCache.reviewed.is_(True))
+    elif status == "all":
+        pass
+    else:
+        status = "unreviewed"
+        stmt = stmt.where(TranslationCache.reviewed.is_(False))
+    page = db.paginate(stmt.order_by(TranslationCache.id.desc()), page=request.args.get("page", 1, type=int), per_page=PER_PAGE, error_out=False)
+    shown = {row.id: shown_translation(row) for row in page.items}
+    return render_template("admin/translations.html", tab="translations", page=page, query=query, status=status, shown=shown)
+
+
+@bp.post("/translations/<int:row_id>/save")
+def save_translation(row_id):
+    row = translation_row(row_id)
+    text = request.form.get("text", "").strip()
+    if not text or len(text) > 4000:
+        flash(_("Write the corrected translation first."), "error")
+    elif not correct_translation(row, text):
+        flash(_("A correction must keep every formula exactly as it is. Only the words can change."), "error")
+    else:
+        db.session.commit()
+        flash(_("Translation saved and marked as checked."), "success")
+    return redirect(safe_next(request.form.get("next"), url_for("admin.translations")))
+
+
+@bp.post("/translations/<int:row_id>/review")
+def review_translation(row_id):
+    translation_row(row_id).reviewed = True
+    db.session.commit()
+    flash(_("Translation marked as checked."), "success")
+    return redirect(safe_next(request.form.get("next"), url_for("admin.translations")))
+
+
+@bp.post("/translations/<int:row_id>/delete")
+def delete_translation(row_id):
+    db.session.delete(translation_row(row_id))
+    db.session.commit()
+    flash(_("Translation deleted. It will be translated again the next time a student needs it."), "info")
+    return redirect(safe_next(request.form.get("next"), url_for("admin.translations")))

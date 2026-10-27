@@ -14,6 +14,7 @@ from ..models import TranslationCache
 log = logging.getLogger(__name__)
 
 MATH = re.compile(r"\$\$.+?\$\$|\$[^$]+?\$", re.S)
+HIDDEN = re.compile(r"\$\$.+?\$\$|\$[^$]+?\$|[0-9]+(?:[.,][0-9]+)*", re.S)
 HOLE = re.compile(r"⟦(\d+)⟧")
 WORDS = re.compile(r"[^\W\d_]{2,}")
 SKIP_KEYS = {"type", "id", "concept", "verify", "kind", "value", "course", "lesson", "given", "status", "level", "form"}
@@ -33,29 +34,30 @@ def digest(text, source):
 
 
 def protect(text):
-    """Replace every math span with a numbered marker, returning the masked text and the spans."""
+    """Replace every formula and every number with a numbered marker, returning the masked text and the spans."""
     spans = []
 
     def hide(match):
         spans.append(match.group(0))
         return f"⟦{len(spans)}⟧"
 
-    return MATH.sub(hide, text), spans
+    return HIDDEN.sub(hide, text), spans
 
 
 def convert_number(span, source, target):
-    """Write the decimal marker of the target language inside a math span: a comma in French, a point in English."""
+    """Write the decimal marker of the target language in a formula or a plain number: a comma in French, a point in English."""
     if (source, target) == ("fr", "en"):
-        return span.replace("{,}", ".")
+        return re.sub(r"(?<=\d),(?=\d)", ".", span.replace("{,}", "."))
     if (source, target) == ("en", "fr"):
-        return re.sub(r"(?<=\d)\.(?=\d)", "{,}", span)
+        return re.sub(r"(?<=\d)\.(?=\d)", "{,}" if span.startswith("$") else ",", span)
     return span
 
 
 def convert_plain(text, source, target):
     """Write decimal numbers in running text with the decimal marker of the target language, whatever the model did."""
     if (source, target) == ("fr", "en"):
-        return re.sub(r"(?<=\d),(?=\d)", ".", text)
+        # English has no space before a colon, semicolon, question mark or exclamation mark.
+        return re.sub(r"[   ]+([:;?!])", r"\1", re.sub(r"(?<=\d),(?=\d)", ".", text))
     if (source, target) == ("en", "fr"):
         return re.sub(r"(?<=\d)\.(?=\d)", ",", text)
     return text
@@ -70,16 +72,22 @@ def restore(masked, spans, source, target):
     return HOLE.sub(lambda m: convert_number(spans[int(m.group(1)) - 1], source, target), masked)
 
 
+def same_math(source, edited, source_lang, target_lang):
+    """Return True when a corrected translation keeps exactly the formulas and numbers of the source text."""
+    wanted = sorted(convert_number(span, source_lang, target_lang) for span in protect(source)[1])
+    return wanted == sorted(protect(edited)[1])
+
+
 def needs_translation(masked):
     """Return True when the text has words, so pure numbers and formulas are left alone."""
     return bool(WORDS.search(HOLE.sub("", masked)))
 
 
 def translate_texts(texts, source, target):
-    """Translate each text from source to target, using stored translations and asking the AI only for the missing ones."""
+    """Translate each text, reusing stored translations. Sentences that differ only in their formulas share one stored translation."""
     if source == target:
         return list(texts), False
-    result, missing, fallback = {}, {}, False
+    result, wanted, fallback = {}, {}, False
     for text in dict.fromkeys(texts):
         masked, spans = protect(text)
         if text.strip() == "," and (source, target) == ("fr", "en"):
@@ -87,41 +95,73 @@ def translate_texts(texts, source, target):
         elif not needs_translation(masked):
             result[text] = convert_number(text, source, target)
         else:
-            missing[text] = (masked, spans)
-    if missing:
-        keys = {digest(text, source): text for text in missing}
+            wanted.setdefault(masked, []).append((text, spans))
+    missing = dict(wanted)
+    if wanted:
+        keys = {digest(masked, source): masked for masked in wanted}
         rows = db.session.scalars(select(TranslationCache).where(TranslationCache.digest.in_(list(keys)), TranslationCache.lang == target)).all()
         for row in rows:
-            result[keys[row.digest]] = row.text
-            missing.pop(keys[row.digest], None)
+            masked = keys[row.digest]
+            missing.pop(masked, None)
+            for text, spans in wanted[masked]:
+                final = restore(row.text, spans, source, target)
+                if final is None:
+                    log.warning("The stored translation of %r does not keep its formulas, so the original is shown.", text[:60])
+                    fallback = True
+                else:
+                    result[text] = final
     if missing:
-        fallback = fill(result, missing, source, target)
+        fallback = fill(result, missing, source, target) or fallback
     return [result.get(text, text) for text in texts], fallback
 
 
 def fill(result, missing, source, target):
-    """Translate the texts that are not stored yet and store the good ones. Returns True if any text stayed in the original language."""
+    """Translate the sentences that are not stored yet and store the good ones. Returns True if any text stayed in the original language."""
     pending = list(missing.items())
     try:
-        translated = ai.translate_batch([masked for _, (masked, _) in pending], source, target)
+        translated = ai.translate_batch([masked for masked, _ in pending], source, target)
     except ai.AIError as exc:
         log.warning("Translation to %s failed: %s", target, exc)
         return True
     fallback = False
-    for (text, (masked, spans)), new in zip(pending, translated):
-        final = restore(new, spans, source, target)
-        if final is None:
-            log.warning("Translation to %s changed the math in %r, so the original was kept.", target, text[:60])
+    for (masked, entries), new in zip(pending, translated):
+        finals = [(text, restore(new, spans, source, target)) for text, spans in entries]
+        if any(final is None for _, final in finals):
+            log.warning("Translation to %s changed the math in %r, so the original was kept.", target, entries[0][0][:60])
             fallback = True
             continue
-        result[text] = final
-        db.session.add(TranslationCache(digest=digest(text, source), lang=target, source=text, text=final))
+        result.update(finals)
+        db.session.add(TranslationCache(digest=digest(masked, source), lang=target, source=entries[0][0], text=new))
     try:
         db.session.commit()
     except IntegrityError:
-        # Another request stored the same text at the same moment.
+        # Another request stored the same sentence at the same moment.
         db.session.rollback()
     return fallback
+
+
+def shown_translation(row):
+    """Return a stored translation written with the formulas of the text it was first made from, so an admin can read it."""
+    source_lang = "fr" if row.lang == "en" else "en"
+    spans = protect(row.source)[1]
+    return restore(row.text, spans, source_lang, row.lang) or row.text
+
+
+def correct_translation(row, edited):
+    """Store a corrected translation if it keeps exactly the formulas of the source. Returns False when it does not."""
+    source_lang = "fr" if row.lang == "en" else "en"
+    if not same_math(row.source, edited, source_lang, row.lang):
+        return False
+    masked, spans = protect(edited)
+    wanted = [convert_number(span, source_lang, row.lang) for span in protect(row.source)[1]]
+    place, taken = {}, set()
+    for position, span in enumerate(wanted, 1):
+        index = next(i for i, found in enumerate(spans, 1) if found == span and i not in taken)
+        taken.add(index)
+        place[index] = position
+    row.text = HOLE.sub(lambda m: f"⟦{place[int(m.group(1))]}⟧", masked)
+    row.reviewed = True
+    return True
 
 
 def walk(node, action, key=None):

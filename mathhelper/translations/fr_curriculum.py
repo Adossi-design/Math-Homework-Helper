@@ -144,4 +144,30 @@ CURRICULUM = {
         "Écris-le sous forme de fraction dont le dénominateur est 10, 100, 1000, etc., comme 235/100.",
     "Write it as a decimal number with a comma.": "Écris-le sous forme de nombre décimal avec une virgule.",
     "Not quite. Try again, or open a hint.": "Pas tout à fait. Réessaie, ou ouvre un indice.",
+    # Admin: translation review.
+    "Translations": "Traductions",
+    "Check and correct the automatic translations of curriculum lessons. A corrected translation is kept and never overwritten.":
+        "Vérifie et corrige les traductions automatiques des leçons du programme. Une traduction corrigée est conservée et jamais écrasée.",
+    "Search the original or the translation": "Chercher dans l'original ou la traduction",
+    "To check": "À vérifier",
+    "Checked": "Vérifiée",
+    "{n} translation": "{n} traduction",
+    "{n} translations": "{n} traductions",
+    "Original": "Original",
+    "Translation": "Traduction",
+    "Save correction": "Enregistrer la correction",
+    "It is correct": "Elle est correcte",
+    "Pages": "Pages",
+    "Previous": "Précédent",
+    "Delete this translation? It will be translated again when a student needs it.":
+        "Supprimer cette traduction ? Elle sera retraduite quand un élève en aura besoin.",
+    "No translations here yet. They appear after a student opens a lesson in the other language.":
+        "Pas encore de traductions ici. Elles apparaissent quand un élève ouvre une leçon dans l'autre langue.",
+    "Write the corrected translation first.": "Écris d'abord la traduction corrigée.",
+    "A correction must keep every formula exactly as it is. Only the words can change.":
+        "Une correction doit garder chaque formule exactement telle quelle. Seuls les mots peuvent changer.",
+    "Translation saved and marked as checked.": "Traduction enregistrée et marquée comme vérifiée.",
+    "Translation marked as checked.": "Traduction marquée comme vérifiée.",
+    "Translation deleted. It will be translated again the next time a student needs it.":
+        "Traduction supprimée. Elle sera retraduite la prochaine fois qu'un élève en aura besoin.",
 }
