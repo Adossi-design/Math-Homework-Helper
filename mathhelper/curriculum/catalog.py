@@ -13,6 +13,7 @@ from .chapters.sn_6e_fractions import CHAPTER as SN_6E_FRACTIONS
 from .chapters.sn_6e_multiplication import CHAPTER as SN_6E_MULTIPLICATION
 from .chapters.sn_6e_proportionnalite import CHAPTER as SN_6E_PROPORTIONNALITE
 from .chapters.sn_6e_relatifs import CHAPTER as SN_6E_RELATIFS
+from .chapters.sn_6e_solides import CHAPTER as SN_6E_SOLIDES
 from .chapters.sn_6e_statistique import CHAPTER as SN_6E_STATISTIQUE
 
 FRANCOPHONE_LEVELS = [
@@ -52,7 +53,7 @@ COUNTRIES = {
     "za": Country("za", "South Africa", "Afrique du Sud", "en", _levels([(f"g{n}", f"Grade {n}", f"Grade {n}", n) for n in range(6, 13)])),
 }
 
-CHAPTERS = [SN_6E_DECIMAUX, SN_6E_MULTIPLICATION, SN_6E_DIVISION, SN_6E_CALCUL, SN_6E_PROPORTIONNALITE, SN_6E_FRACTIONS, SN_6E_RELATIFS, SN_6E_ENTIERS, SN_6E_STATISTIQUE]
+CHAPTERS = [SN_6E_DECIMAUX, SN_6E_MULTIPLICATION, SN_6E_DIVISION, SN_6E_CALCUL, SN_6E_PROPORTIONNALITE, SN_6E_FRACTIONS, SN_6E_RELATIFS, SN_6E_ENTIERS, SN_6E_STATISTIQUE, SN_6E_SOLIDES]
 CHAPTER_BY_ID = {chapter.id: chapter for chapter in CHAPTERS}
 
 
