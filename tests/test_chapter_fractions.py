@@ -10,9 +10,9 @@ from mathhelper.curriculum import checker
 from mathhelper.curriculum.chapters.sn_6e_fractions import CHAPTER as FRAC, assessment
 
 INDEPENDENT = {
-    "s1-g1": F(5, 12), "s1-g2": 2, "s1-g3": F(175, 100), "s1-g4": F(35, 100), "s1-g5": F(10, 6),
+    "s1-g1": F(5, 12), "s1-g2": 2, "s1-g3": F(1375, 1000), "s1-g4": F(35, 100), "s1-g5": F(10, 6),
     "s2-g1": F(6, 8) / 2 * 2 / 2 * 2 / 2 if False else F(3, 4), "s2-g2": 2 * 3, "s2-g3": F(18 // 9, 45 // 9), "s2-g4": 0, "s2-g5": 3 * 2,
-    "s3-g1": 0, "s3-g2": F(3 + 2, 7), "s3-g3": F(5, 6) - F(2, 6), "s3-g4": F(2, 4) + F(1, 4), "s3-g5": 1 - (F(2, 8) + F(3, 8)),
+    "s3-g1": 0, "s3-g2": F(5 + 3, 11), "s3-g3": F(5, 6) - F(2, 6), "s3-g4": F(2, 4) + F(1, 4), "s3-g5": 1 - (F(2, 6) + F(1, 6)),
     "s4-g1": 80 // 4, "s4-g2": 150 // 5 * 3, "s4-g3": 45 // 3 * 2, "s4-g4": F(18 // 6, 24 // 6), "s4-g5": 400 // 8 * 3,
     "p1": F(8 - 3, 8), "p2": F(9, 4), "p3": F(7, 10), "p4": 1, "p5": F(8, 5), "p6": F(3, 8), "p7": 1, "p8": F(10 // 5, 15 // 5), "p9": F(24 // 12, 36 // 12),
     "p10": 4 * 5, "p11": F(35 // 5, 60 // 5), "p12": 6 * 4, "p13": 1, "p14": 5 * 5, "p15": F(84 // 42, 126 // 42),
@@ -100,7 +100,7 @@ def ci_student(app, make_user):
 
 def test_the_chapter_is_offered_in_both_countries_and_all_pages_render(ci_student):
     hub = ci_student.get("/curriculum/").get_data(as_text=True)
-    assert hub.count("course-card") == 3
+    assert hub.count("course-card") == 4
     for path in ["", "/practice", "/summary", "/assessment?seed=abcd1234", "/s/sens", "/s/egales", "/s/operations", "/s/quantite"]:
         for headers in ({}, {"Accept-Language": "fr-FR,fr;q=0.9"}):
             assert ci_student.get(f"/curriculum/{FRAC.id}{path}", headers=headers).status_code == 200, path

@@ -39,7 +39,8 @@ def clean(text):
     text = text.replace("$", "").replace("\\,", "").replace("\\ ", " ").replace("{,}", ",")
     for _round in range(3):
         text = _FRAC.sub(lambda m: f"({m.group(1)})/({m.group(2)})", text)
-    return text.strip()
+    text = text.strip()
+    return text[:-1].rstrip() if text.endswith(".") and len(text) > 1 and not text[-2].isdigit() else text
 
 
 def strip_units(text, units):

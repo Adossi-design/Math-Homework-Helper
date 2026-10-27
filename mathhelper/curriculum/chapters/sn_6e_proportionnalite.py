@@ -115,8 +115,8 @@ S2 = Section(
         warning("Avant de calculer, vérifie que la situation est bien proportionnelle. Si 1 maçon construit un mur en 12 jours, 2 maçons ne le construisent pas en 24 jours : plus de maçons, moins de jours. Ce n'est pas de la proportionnalité."),
     ],
     [
-        number("s2-g1", "calculer", "Dans un tableau de proportionnalité, 4 correspond à 14. Quel nombre correspond à 10 ?", Fraction(35),
-               hints=["Trouve d'abord le coefficient."], solution=["Le coefficient est 14 ÷ 4 = 3,5.", "10 × 3,5 = 35."]),
+        number("s2-g1", "calculer", "Dans un tableau de proportionnalité, 6 correspond à 15. Quel nombre correspond à 10 ?", Fraction(25),
+               hints=["Trouve d'abord le coefficient."], solution=["Le coefficient est 15 ÷ 6 = 2,5.", "10 × 2,5 = 25."]),
         number("s2-g2", "calculer", "6 kg de riz coûtent 3 600 F. Combien coûtent 10 kg ? (passage à l'unité)", Fraction(6000), units=["F"],
                hints=["Quel est le prix de 1 kg ?"], solution=["1 kg coûte 3 600 ÷ 6 = 600 F.", "10 kg coûtent 10 × 600 = 6 000 F."]),
         number("s2-g3", "calculer", "Dans un tableau de proportionnalité, 4 correspond à 10. Quel nombre correspond à 12 ? (linéarité)", Fraction(30),
@@ -155,7 +155,7 @@ S3 = Section(
                 "75 % des élèves sont des filles.", "d('18')/24==d('0,75') and d('0,75')==d('75')/100"),
         definition("Échelle",
                    "Sur une carte à l'échelle " + "$\\dfrac{1}{50000}$" + ", une longueur de 1 cm sur la carte représente 50 000 cm sur le terrain. Les longueurs sur la carte et sur le terrain sont proportionnelles, "
-                   "et l'échelle est le coefficient pour passer de la carte au terrain."),
+                   "et le coefficient pour passer de la carte au terrain est 50 000, l'inverse de l'échelle."),
         example("Exemple 4", "Sur une carte à l'échelle 1/50 000, deux villages sont séparés de 6 cm. Quelle est la distance réelle ?",
                 "Chaque centimètre de la carte représente 50 000 cm. On multiplie, puis on convertit.",
                 [(N("6 \\times 50000") + " = " + N("300000"), "6 cm sur la carte représentent 300 000 cm sur le terrain."),
@@ -174,7 +174,7 @@ S3 = Section(
         number("s3-g2", "pourcentage", "Calcule 15 % de 200 F.", Fraction(30), units=["F"],
                hints=["Écris 15 % sous forme décimale."], solution=["15 % = 0,15.", "200 × 0,15 = 30 F."]),
         number("s3-g3", "pourcentage", "Dans une classe de 40 élèves, 12 ont plus de 12 ans. Quel pourcentage cela représente-t-il ? (en %)", Fraction(30),
-               hints=["Écris la fraction 12/40 sous forme décimale, puis en centièmes."], solution=["12 ÷ 40 = 0,3.", "0,3 = 30/100 = 30 %."]),
+               hints=["Écris la fraction 12/40 sous forme décimale, puis en centièmes."], solution=["12 ÷ 40 = 0,3.", "0,3 = 30/100 = 30 %."], units=["%"]),
         number("s3-g4", "echelle", "Sur un plan à l'échelle 1/1 000, une longueur mesure 4 cm. Quelle est la longueur réelle, en mètres ?", Fraction(40), units=["m"],
                hints=["1 cm sur le plan représente 1 000 cm dans la réalité."], solution=["4 × 1 000 = 4 000 cm.", "4 000 cm = 40 m."]),
         number("s3-g5", "pourcentage", "Un sac coûte 5 000 F. Il est soldé avec 10 % de réduction. Combien paie-t-on, en F ?", Fraction(4500), units=["F"],
@@ -197,11 +197,11 @@ PRACTICE = [
            ["Pense à un adulte de 80 ans : pèserait-il 250 kg ?"], ["Avec ce raisonnement, à 80 ans elle pèserait 250 kg, ce qui est absurde.", "Le poids et l'âge ne sont pas des grandeurs proportionnelles."],
            wrong={0: "Les nombres sont bien doublés, mais cela ne suffit pas : il faut que la situation soit réellement proportionnelle, ce qui n'est pas le cas du poids et de l'âge.", 2: "Doubler le poids parce que l'âge double suppose la proportionnalité, qui est ici fausse."}),
     number("p8", "reconnaitre", "Dans un tableau de proportionnalité, 3 correspond à 12 et 7 correspond à 28. Quel nombre correspond à 10 ?", Fraction(40), 2, ["10 = 3 + 7 : utilise la linéarité de la somme."], ["12 + 28 = 40."]),
-    number("p9", "calculer", "12 m de tissu coûtent 18 000 F. Combien coûtent 5 m ?", Fraction(7500), 2, ["Prix d'un mètre ?"], ["18 000 ÷ 12 = 1 500 F le mètre.", "5 × 1 500 = 7 500 F."], units=["F"]),
+    number("p9", "calculer", "9 m de tissu coûtent 13 500 F. Combien coûtent 4 m ?", Fraction(6000), 2, ["Prix d'un mètre ?"], ["13 500 ÷ 9 = 1 500 F le mètre.", "4 × 1 500 = 6 000 F."], units=["F"]),
     number("p10", "calculer", "8 cahiers coûtent 2 000 F. Combien coûtent 5 cahiers ?", Fraction(1250), 1, ["Prix d'un cahier ?"], ["2 000 ÷ 8 = 250.", "5 × 250 = 1 250 F."], units=["F"]),
     number("p11", "calculer", "3 kg de mangues coûtent 2 100 F. Combien coûtent 5 kg ?", Fraction(3500), 2, ["Passage à l'unité."], ["2 100 ÷ 3 = 700 F le kilogramme.", "5 × 700 = 3 500 F."], units=["F"]),
     number("p12", "calculer", "Une voiture roule à vitesse constante et parcourt 240 km en 3 h. Quelle distance parcourt-elle en 5 h ?", Fraction(400), 2, ["Distance parcourue en 1 heure ?"], ["240 ÷ 3 = 80 km en 1 h.", "5 × 80 = 400 km."], units=["km"]),
-    number("p13", "calculer", "Pour 4 personnes, une recette demande 600 g de riz. Combien faut-il de riz pour 10 personnes, en g ?", Fraction(1500), 2, ["Riz par personne ?"], ["600 ÷ 4 = 150 g par personne.", "10 × 150 = 1 500 g."], units=["g"]),
+    number("p13", "calculer", "Pour 5 personnes, une recette demande 750 g de riz. Combien faut-il de riz pour 8 personnes, en g ?", Fraction(1200), 2, ["Riz par personne ?"], ["750 ÷ 5 = 150 g par personne.", "8 × 150 = 1 200 g."], units=["g"]),
     number("p14", "calculer", "Une voiture consomme 20 L pour 300 km. Quelle quantité de carburant faut-il pour 450 km, en L ?", Fraction(30), 3, ["300 km → 20 L : combien de litres pour 150 km ?"], ["450 = 300 + 150. Pour 150 km (la moitié de 300) il faut 10 L.", "20 + 10 = 30 L."], units=["L"]),
     number("p15", "calculer", "12 kg de farine coûtent 9 000 F. Combien coûtent 5 kg ?", Fraction(3750), 3, ["Prix d'un kilogramme ?"], ["9 000 ÷ 12 = 750 F le kilogramme.", "5 × 750 = 3 750 F."], units=["F"]),
     number("p16", "calculer", "7 stylos coûtent 1 050 F. Combien coûtent 12 stylos ?", Fraction(1800), 2, ["Prix d'un stylo ?"], ["1 050 ÷ 7 = 150 F.", "12 × 150 = 1 800 F."], units=["F"]),
@@ -210,8 +210,8 @@ PRACTICE = [
     number("p19", "pourcentage", "Calcule 50 % de 360.", Fraction(180), 1, ["50 % = la moitié."], ["50 % de 360 = 360 × 0,5 = 180."]),
     number("p20", "pourcentage", "Calcule 10 % de 4 500 F.", Fraction(450), 1, ["10 % = 0,1."], ["4 500 × 0,1 = 450 F."], units=["F"]),
     number("p21", "pourcentage", "Calcule 25 % de 120.", Fraction(30), 1, ["25 % = le quart."], ["120 × 0,25 = 30."]),
-    number("p22", "pourcentage", "Sur 120 élèves, 30 sont absents. Quel pourcentage cela représente-t-il ? (en %)", Fraction(25), 2, ["30/120 = ?"], ["30 ÷ 120 = 0,25.", "0,25 = 25/100 = 25 %."]),
-    number("p23", "pourcentage", "45 élèves sur 60 ont réussi un test. Quel pourcentage ? (en %)", Fraction(75), 2, ["Écris 45/60 sous forme décimale."], ["45 ÷ 60 = 0,75 = 75 %."]),
+    number("p22", "pourcentage", "Sur 120 élèves, 30 sont absents. Quel pourcentage cela représente-t-il ? (en %)", Fraction(25), 2, ["30/120 = ?"], ["30 ÷ 120 = 0,25.", "0,25 = 25/100 = 25 %."], units=["%"]),
+    number("p23", "pourcentage", "45 élèves sur 60 ont réussi un test. Quel pourcentage ? (en %)", Fraction(75), 2, ["Écris 45/60 sous forme décimale."], ["45 ÷ 60 = 0,75 = 75 %."], units=["%"]),
     number("p24", "pourcentage", "Un article coûte 3 500 F. Il est soldé avec 20 % de réduction. Quel est le prix à payer, en F ?", Fraction(2800), 2, ["Réduction d'abord."], ["20 % de 3 500 = 700 F.", "3 500 − 700 = 2 800 F."], units=["F"]),
     number("p25", "pourcentage", "Dans une école de 400 élèves, 35 % sont des filles du cycle de base. Combien d'élèves cela fait-il ?", Fraction(140), 2, ["35 % = 0,35."], ["400 × 0,35 = 140 élèves."]),
     number("p26", "pourcentage", "Calcule 12 % de 250.", Fraction(30), 3, ["12 % = 0,12."], ["250 × 0,12 = 30."]),
@@ -258,6 +258,8 @@ def assessment(rng):
                             ["Trouve d'abord le coefficient."], [f"Coefficient : {show(base * k)} ÷ {base} = {show(k)}.", f"{other} × {show(k)} = {show(other * k)}."]))
     # 3. unit method
     n, unit_price, m = rng.randint(3, 9), rng.choice([150, 200, 250, 300, 350, 400, 450, 600]), rng.randint(2, 12)
+    while m == n:
+        m = rng.randint(2, 12)
     questions.append(number("a3", "calculer", f"{n} cahiers coûtent {n * unit_price} F. Combien coûtent {m} cahiers, en F ?", Fraction(m * unit_price), 2, ["Calcule le prix d'un cahier."],
                             [f"{n * unit_price} ÷ {n} = {unit_price} F le cahier.", f"{m} × {unit_price} = {m * unit_price} F."], units=["F"]))
     # 4. linearity, multiple
@@ -268,6 +270,8 @@ def assessment(rng):
     # 5. linearity, sum
     a, c = rng.randint(2, 6), rng.randint(2, 6)
     k = rng.choice([Fraction(3), Fraction(5), Fraction(25, 10), Fraction(15, 10)])
+    if (a, c, k) == (2, 3, Fraction(25, 10)):
+        k = Fraction(3)
     questions.append(number("a5", "calculer", f"Dans un tableau de proportionnalité, {a} correspond à {show(a * k)} et {c} correspond à {show(c * k)}. Quel nombre correspond à {a + c} ?", (a + c) * k, 3,
                             [f"{a + c} est la somme de {a} et de {c}."], [f"{a + c} = {a} + {c}, donc le nombre correspondant est {show(a * k)} + {show(c * k)} = {show((a + c) * k)}."]))
     # 6. which table is proportional
@@ -288,19 +292,23 @@ def assessment(rng):
     # 7. percentage of a quantity
     p = rng.choice([10, 20, 25, 30, 40, 50, 60, 75])
     quantity = rng.choice([40, 60, 80, 120, 200, 240, 360, 400, 500])
+    if (p, quantity) in {(50, 360), (25, 120), (25, 80), (10, 4500), (12, 250)}:
+        p = 30
     questions.append(number("a7", "pourcentage", f"Calcule {p} % de {quantity}.", Fraction(p * quantity, 100), 1, [f"{p} % = {show(Fraction(p, 100))}."],
                             [f"{p} % = {show(Fraction(p, 100))}.", f"{quantity} × {show(Fraction(p, 100))} = {show(Fraction(p * quantity, 100))}."]))
     # 8. discount
-    price, p = rng.choice([1000, 2000, 2500, 3000, 4000, 5000, 8000]), rng.choice([10, 15, 20, 25, 30])
+    price, p = rng.choice([1000, 1500, 2500, 3000, 4000, 6000, 8000]), rng.choice([10, 20, 25, 30, 40])
     questions.append(number("a8", "pourcentage", f"Un article coûte {price} F. Il est soldé avec {p} % de réduction. Combien paie-t-on, en F ?", Fraction(price * (100 - p), 100), 3, ["Calcule la réduction, puis retire-la."],
                             [f"Réduction : {p} % de {price} = {show(Fraction(price * p, 100))} F.", f"{price} − {show(Fraction(price * p, 100))} = {show(Fraction(price * (100 - p), 100))} F."], units=["F"]))
     # 9. fraction to percentage
     total = rng.choice([20, 25, 40, 50, 80])
     part = rng.randint(1, total - 1)
     questions.append(number("a9", "pourcentage", f"Dans un groupe de {total} élèves, {part} portent des lunettes. Quel pourcentage cela représente-t-il ? (en %)", Fraction(part * 100, total), 2,
-                            ["Écris la fraction, puis ramène-la à 100."], [f"{part} ÷ {total} = {show(Fraction(part, total))}.", f"{show(Fraction(part, total))} = {show(Fraction(part * 100, total))} %."]))
+                            ["Écris la fraction, puis ramène-la à 100."], [f"{part} ÷ {total} = {show(Fraction(part, total))}.", f"{show(Fraction(part, total))} = {show(Fraction(part * 100, total))} %."], units=["%"]))
     # 10. scale: map to ground
     scale, cm = rng.choice([10000, 25000, 50000, 100000]), rng.randint(2, 12)
+    if (scale, cm) in {(50000, 6), (25000, 8), (10000, 3), (50000, 5)}:
+        cm += 1
     real_km = Fraction(cm * scale, 100000)
     questions.append(number("a10", "echelle", f"Sur une carte à l'échelle 1/{scale}, deux villages sont séparés de {cm} cm. Quelle est la distance réelle, en km ?", real_km, 2,
                             ["Multiplie par l'échelle, puis convertis les centimètres en kilomètres."],

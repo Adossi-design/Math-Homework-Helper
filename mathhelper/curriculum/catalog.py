@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from .chapters.sn_6e_decimaux import CHAPTER as SN_6E_DECIMAUX
 from .chapters.sn_6e_calcul import CHAPTER as SN_6E_CALCUL
 from .chapters.sn_6e_division import CHAPTER as SN_6E_DIVISION
+from .chapters.sn_6e_entiers import CHAPTER as SN_6E_ENTIERS
 from .chapters.sn_6e_fractions import CHAPTER as SN_6E_FRACTIONS
 from .chapters.sn_6e_multiplication import CHAPTER as SN_6E_MULTIPLICATION
 from .chapters.sn_6e_proportionnalite import CHAPTER as SN_6E_PROPORTIONNALITE
@@ -50,7 +51,7 @@ COUNTRIES = {
     "za": Country("za", "South Africa", "Afrique du Sud", "en", _levels([(f"g{n}", f"Grade {n}", f"Grade {n}", n) for n in range(6, 13)])),
 }
 
-CHAPTERS = [SN_6E_DECIMAUX, SN_6E_MULTIPLICATION, SN_6E_DIVISION, SN_6E_CALCUL, SN_6E_PROPORTIONNALITE, SN_6E_FRACTIONS, SN_6E_RELATIFS]
+CHAPTERS = [SN_6E_DECIMAUX, SN_6E_MULTIPLICATION, SN_6E_DIVISION, SN_6E_CALCUL, SN_6E_PROPORTIONNALITE, SN_6E_FRACTIONS, SN_6E_RELATIFS, SN_6E_ENTIERS]
 CHAPTER_BY_ID = {chapter.id: chapter for chapter in CHAPTERS}
 
 

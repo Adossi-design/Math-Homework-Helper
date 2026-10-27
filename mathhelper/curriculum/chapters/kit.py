@@ -70,7 +70,11 @@ def spaced(value, places):
     return show(value) if places == 0 else f"{int(value)},{str(int((value - int(value)) * 10**places)).rjust(places, '0')}"
 
 
-UNIT_SYNONYMS = {"F": ("FCFA", "francs", "franc"), "L": ("litres", "litre"), "m": ("mètres", "mètre"), "kg": ("kilogrammes",), "km": ("kilomètres",)}
+UNIT_SYNONYMS = {
+    "F": ("FCFA", "F CFA", "CFA", "francs CFA", "francs", "franc"), "L": ("litres", "litre"), "m": ("mètres", "mètre"), "kg": ("kilogrammes",), "km": ("kilomètres",),
+    "cm": ("centimètres", "centimètre"), "g": ("grammes", "gramme"), "min": ("minutes", "minute", "mn"), "s": ("secondes", "seconde"), "%": ("pour cent",),
+    "m2": ("m²", "m^2", "mètres carrés"), "m²": ("m2", "m^2", "mètres carrés"), "dm3": ("dm³", "dm^3"), "dm³": ("dm3", "dm^3"), "°C": ("degrés", "degré", "°"),
+}
 
 
 def make_kit(chapter_id, default_form=""):

@@ -116,7 +116,7 @@ S2 = Section(
                hints=["Dans la parenthèse, quelle opération est prioritaire ?"], solution=["Dans la parenthèse : 4 × 2 = 8, puis 3 + 8 = 11.", "2 × 11 = 22."]),
         choice("s2-g5", "parentheses", "Quelle est la valeur de " + N("(12 - 4) \\div 2 + 1") + " ?", [N("5"), N("9"), N("3")], 0,
                hints=["Calcule la parenthèse, puis la division, puis l'addition."], solution=["12 − 4 = 8.", "8 ÷ 2 = 4, puis 4 + 1 = 5."],
-               wrong={1: "Tu as fait 4 + 1 avant la division. La division est prioritaire sur l'addition : 8 ÷ 2 d'abord, puis + 1.", 2: "Tu as fait 2 + 1 = 3 d'abord. 2 est le diviseur de 8, pas un terme de l'addition."}),
+               wrong={1: "Tu as oublié la division : 8 ÷ 2 = 4 doit être calculé avant d'ajouter 1, ce qui donne 4 + 1 = 5.", 2: "Tu as calculé 12 − 4 puis 8 ÷ (2 + 1) : le + 1 n'est pas dans la division, qui ne concerne que le 2."}),
     ])
 
 # ----- Section 3: translating words and solving problems -----
@@ -171,9 +171,9 @@ S3 = Section(
                hints=["La différence est calculée avant la division : il faut des parenthèses."], solution=["(20 − 6) ÷ 2.", "20 − 6 = 14, puis 14 ÷ 2 = 7."]),
         number("s3-g4", "problemes", "Un élève achète 4 crayons à 150 F et 3 gommes à 100 F. Combien dépense-t-il, en F ?", Fraction(900), units=["F"],
                hints=["Écris le calcul en une ligne : 4 crayons, plus 3 gommes."], solution=["Dépense = 4 × 150 + 3 × 100.", "4 × 150 = 600 et 3 × 100 = 300, donc 600 + 300 = 900 F."]),
-        choice("s3-g5", "traduire", "Quelle expression traduit « le produit de 3 par la somme de 4 et 5 » ?", [N("3 \\times 4 + 5"), N("3 \\times (4 + 5)"), N("(3 \\times 4) + 5")], 1,
-               hints=["La somme de 4 et 5 doit être calculée avant le produit."], solution=["La somme de 4 et 5 est un nombre qui se multiplie par 3 : 3 × (4 + 5)."],
-               wrong={0: "Dans 3 × 4 + 5, la multiplication se fait avant l'addition : on multiplierait 3 par 4 seulement, pas par la somme.", 2: "Les parenthèses de (3 × 4) + 5 ne changent rien : c'est la même expression que 3 × 4 + 5."}),
+        choice("s3-g5", "traduire", "Quelle expression traduit « le produit de 2 par la somme de 6 et 3 » ?", [N("2 \\times 6 + 3"), N("2 \\times (6 + 3)"), N("(2 \\times 6) + 3")], 1,
+               hints=["La somme de 6 et 3 doit être calculée avant le produit."], solution=["La somme de 6 et 3 est un nombre qui se multiplie par 2 : 2 × (6 + 3)."],
+               wrong={0: "Dans 2 × 6 + 3, la multiplication se fait avant l'addition : on multiplierait 2 par 6 seulement, pas par la somme.", 2: "Les parenthèses de (2 × 6) + 3 ne changent rien : c'est la même expression que 2 × 6 + 3."}),
     ])
 
 # ----- Independent practice -----
@@ -186,8 +186,8 @@ PRACTICE = [
     number("p6", "priorites", "Calcule " + N("2,5 + 1,5 \\times 4") + ".", d("8,5"), 2, ["Multiplication d'abord, puis addition."], ["1,5 × 4 = 6.", "2,5 + 6 = 8,5."], form="decimal"),
     number("p7", "priorites", "Calcule " + N("18 \\div 3 + 4 \\times 2,5") + ".", Fraction(16), 3, ["Il y a deux opérations prioritaires."], ["18 ÷ 3 = 6 et 4 × 2,5 = 10.", "6 + 10 = 16."]),
     number("p8", "priorites", "Calcule " + N("7,2 - 2 \\times 0,6 + 0,5") + ".", d("6,5"), 3, ["Multiplication d'abord, puis de gauche à droite."], ["2 × 0,6 = 1,2.", "7,2 − 1,2 = 6, puis 6 + 0,5 = 6,5."], form="decimal"),
-    choice("p9", "priorites", "Moussa a calculé " + N("3 + 4 \\times 2 = 14") + ". Quelle erreur a-t-il faite ?", ["Il a fait l'addition avant la multiplication", "Il a fait une erreur de table de multiplication", "Il a oublié une parenthèse"], 0, 2,
-           ["Refais le calcul en commençant par l'opération prioritaire."], ["La multiplication est prioritaire : 4 × 2 = 8 puis 3 + 8 = 11.", "Moussa a fait 3 + 4 = 7 puis 7 × 2 = 14 : il a ignoré la priorité."],
+    choice("p9", "priorites", "Moussa a calculé " + N("6 + 2 \\times 9 = 72") + ". Quelle erreur a-t-il faite ?", ["Il a fait l'addition avant la multiplication", "Il a fait une erreur de table de multiplication", "Il a oublié une parenthèse"], 0, 2,
+           ["Refais le calcul en commençant par l'opération prioritaire."], ["La multiplication est prioritaire : 2 × 9 = 18 puis 6 + 18 = 24.", "Moussa a fait 6 + 2 = 8 puis 8 × 9 = 72 : il a ignoré la priorité."],
            wrong={2: "Il n'y a pas de parenthèse dans l'expression de départ : l'erreur vient de l'ordre des opérations."}),
     choice("p10", "priorites", "Quelle est la valeur de " + N("20 - 8 + 3") + " ?", [N("9"), N("15"), N("25")], 1, 1, ["Va de gauche à droite."], ["20 − 8 = 12 puis 12 + 3 = 15."],
            wrong={0: "Tu as calculé 8 + 3 = 11 d'abord. Entre opérations de même priorité, on va de gauche à droite."}),
@@ -217,6 +217,12 @@ PRACTICE = [
     number("p28", "problemes", "Un commerçant a 6 sacs de 25 kg. Il en vend 4. Quelle masse lui reste-t-il, en kg ?", Fraction(50), 2, ["Combien de sacs restent-ils ?"], ["(6 − 4) × 25 = 2 × 25 = 50 kg."], units=["kg"]),
     number("p29", "problemes", "Un livre coûte 1 800 F et un cahier 450 F. On achète un livre et deux cahiers, avec une remise de 300 F sur le total. Combien paie-t-on, en F ?", Fraction(2400), 3,
            ["Calcule le total avant la remise, puis retire la remise."], ["Total = 1 800 + 2 × 450 = 1 800 + 900 = 2 700.", "2 700 − 300 = 2 400 F."], units=["F"]),
+    choice("p31", "traduire", "Quelle phrase traduit l'expression " + N("5 \\times (12 - 7)") + " ?", ["le produit de 5 par la différence de 12 et 7", "la différence du produit de 5 par 12 et de 7", "la somme de 5 et du produit de 12 par 7"], 0, 2,
+           ["Lis l'expression en commençant par la parenthèse."], ["12 − 7 est la différence de 12 et 7.", "5 × (12 − 7) est le produit de 5 par cette différence."],
+           wrong={1: "Cette phrase correspond à 5 × 12 − 7, sans parenthèses.", 2: "Cette phrase correspond à 5 + 12 × 7."}),
+    choice("p32", "traduire", "Quelle phrase traduit l'expression " + N("(9 + 6) \\div 3") + " ?", ["le quotient de la somme de 9 et 6 par 3", "la somme de 9 et du quotient de 6 par 3", "le quotient de 9 par la somme de 6 et 3"], 0, 2,
+           ["Que fait la parenthèse ?"], ["9 + 6 est la somme de 9 et 6.", "On divise cette somme par 3 : c'est le quotient de la somme de 9 et 6 par 3."],
+           wrong={1: "Cette phrase correspond à 9 + 6 ÷ 3, sans parenthèses.", 2: "Cette phrase correspond à 9 ÷ (6 + 3)."}),
     number("p30", "problemes", "Deux sacs contiennent 120 kg et 80 kg de riz, partagés à parts égales entre 4 familles. Quelle masse reçoit chaque famille, en kg ?", Fraction(50), 3,
            ["Le total est partagé : il faut des parenthèses."], ["(120 + 80) ÷ 4 = 200 ÷ 4 = 50 kg."], units=["kg"]),
 ]
@@ -244,7 +250,8 @@ def assessment(rng):
     questions.append(number("a1", "priorites", "Calcule " + N(f"{a} + {b} \\times {c}") + ".", Fraction(a + b * c), 1, ["Quelle opération est prioritaire ?"],
                             [f"La multiplication d'abord : {b} × {c} = {b * c}.", f"{a} + {b * c} = {a + b * c}."]))
     # 2. a x b - c / d + e
-    a, b, divisor, k, e = rng.randint(2, 9), rng.randint(2, 9), rng.randint(2, 6), rng.randint(2, 9), rng.randint(1, 20)
+    a, b, divisor, e = rng.randint(2, 9), rng.randint(2, 9), rng.randint(2, 6), rng.randint(1, 20)
+    k = rng.randint(2, min(9, a * b))
     c = divisor * k
     questions.append(number("a2", "priorites", "Calcule " + N(f"{a} \\times {b} - {c} \\div {divisor} + {e}") + ".", Fraction(a * b - k + e), 2, ["Il y a deux opérations prioritaires."],
                             [f"{a} × {b} = {a * b} et {c} ÷ {divisor} = {k}.", f"{a * b} − {k} = {a * b - k}, puis {a * b - k} + {e} = {a * b - k + e}."]))

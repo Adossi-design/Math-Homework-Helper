@@ -37,7 +37,7 @@ S1 = Section(
                    "Les parts doivent être égales. Une fraction est aussi le quotient de " + N("a") + " par " + N("b") + " : " + "$\\dfrac{a}{b}$" + " = " + N("a \\div b") + "."),
         rule("Comparer une fraction à 1",
              "Si le numérateur est plus petit que le dénominateur, la fraction est plus petite que 1. S'ils sont égaux, la fraction vaut 1. Si le numérateur est plus grand que le dénominateur, la fraction est plus grande que 1."),
-        example("Exemple 1", "Un segment gradué a pour unité la longueur de 0 à 1, partagée en 4 parts égales. Quelle fraction donne la distance du point A, situé à la 7e graduation ?",
+        example("Exemple 1", "Un segment gradué a pour unité la longueur de 0 à 1, partagée en 4 parts égales. Quelle fraction donne la distance du point A, situé à 7 graduations de l'origine ?",
                 "Chaque graduation est un quart de l'unité. On compte combien de graduations séparent A de l'origine.",
                 [("Une graduation vaut " + N("1/4") + " de l'unité", "L'unité est partagée en 4 parts égales."),
                  ("A est à 7 graduations de l'origine : " + N("7 \\times 1/4") + " = " + N("7/4"), "7 quarts de l'unité."),
@@ -50,6 +50,10 @@ S1 = Section(
                  (N("9/9"), "9 est égal à 9 : cette fraction vaut 1 (9 parts sur 9, c'est toute l'unité)."),
                  (N("11/6"), "11 est plus grand que 6 : cette fraction est plus grande que 1.")],
                 N("5/8 < 1") + " ; " + N("9/9 = 1") + " ; " + N("11/6 > 1"), "d('5')/8<1 and d('9')/9==1 and d('11')/6>1"),
+        definition("Fraction décimale",
+                   "Une fraction décimale est une fraction dont le dénominateur est 10, 100, 1 000, et ainsi de suite. Par exemple " + N("7/10") + ", " + N("35/100") + " et " + N("125/1000") + ". "
+                   "Elle s'écrit tout de suite avec une virgule : le nombre de zéros du dénominateur donne le nombre de chiffres après la virgule. " + N("35/100") + " = " + N("0,35") + " et " + N("125/100") + " = " + N("1,25") + ". "
+                   "Inversement, un nombre décimal s'écrit comme une fraction décimale : " + N("0,35") + " = " + N("35/100") + ". Toutes les fractions ne sont pas décimales : " + N("1/3") + " ne l'est pas, et on ne peut pas l'écrire avec une virgule qui s'arrête."),
         example("Exemple 3", "Écrire " + N("3/4") + " en nombre décimal, puis " + N("0,6") + " en fraction décimale.",
                 "Une fraction est un quotient : on divise. Un décimal s'écrit comme une fraction avec le rang de son dernier chiffre.",
                 [(N("3 \\div 4") + " = " + N("0,75"), "3 ÷ 4 : 30 ÷ 4 = 7 reste 2, puis 20 ÷ 4 = 5. Donc 3/4 = 0,75."),
@@ -63,8 +67,8 @@ S1 = Section(
         choice("s1-g2", "sens", "La fraction " + N("7/5") + " est :", ["plus petite que 1", "égale à 1", "plus grande que 1"], 2,
                hints=["Compare le numérateur et le dénominateur."], solution=["7 est plus grand que 5 : la fraction est plus grande que 1."],
                wrong={0: "7/5 est plus petit que 1 seulement si 7 est plus petit que 5, ce qui est faux.", 1: "Une fraction vaut 1 quand le numérateur est égal au dénominateur."}),
-        number("s1-g3", "sens", "Écris " + N("7/4") + " en nombre décimal, sans regarder le cours.", d("1,75"), form="decimal",
-               hints=["Une fraction est un quotient : divise 7 par 4."], solution=["7 ÷ 4 = 1, reste 3 ; 30 ÷ 4 = 7, reste 2 ; 20 ÷ 4 = 5.", "7/4 = 1,75."]),
+        number("s1-g3", "sens", "Écris " + N("11/8") + " en nombre décimal.", d("1,375"), form="decimal",
+               hints=["Une fraction est un quotient : divise 11 par 8."], solution=["11 ÷ 8 = 1, reste 3 ; 30 ÷ 8 = 3, reste 6 ; 60 ÷ 8 = 7, reste 4 ; 40 ÷ 8 = 5.", "11/8 = 1,375."]),
         number("s1-g4", "sens", "Écris " + N("0,35") + " sous la forme d'une fraction décimale.", d("0,35"), form="decimal_fraction",
                hints=["Combien de chiffres après la virgule ?"], solution=["Deux chiffres après la virgule : le dénominateur est 100.", "0,35 = 35/100."]),
         number("s1-g5", "sens", "L'unité est partagée en 6 parts égales. Un point est situé à 10 graduations de l'origine. Quelle fraction de l'unité représente sa distance ?", Fraction(10, 6), form="fraction",
@@ -173,14 +177,14 @@ S3 = Section(
         choice("s3-g1", "operations", "Quel signe faut-il entre " + N("5/8") + " et " + N("3/4") + " ?", [N("5/8 < 3/4"), N("5/8 > 3/4"), N("5/8 = 3/4")], 0,
                hints=["Réduis 3/4 au dénominateur 8."], solution=["3/4 = 6/8.", "5/8 est plus petit que 6/8 : 5/8 < 3/4."],
                wrong={1: "3/4 = 6/8 et 6 est plus grand que 5, donc c'est 3/4 qui est le plus grand."}),
-        number("s3-g2", "operations", "Calcule " + N("3/7 + 2/7") + ", sans regarder le cours.", Fraction(5, 7), form="irreducible",
-               hints=["Même dénominateur : que fait-on des numérateurs ?"], solution=["3 + 2 = 5, on garde le dénominateur 7.", "3/7 + 2/7 = 5/7."]),
+        number("s3-g2", "operations", "Calcule " + N("5/11 + 3/11") + ".", Fraction(8, 11), form="irreducible",
+               hints=["Même dénominateur : que fait-on des numérateurs ?"], solution=["5 + 3 = 8, on garde le dénominateur 11.", "5/11 + 3/11 = 8/11."]),
         number("s3-g3", "operations", "Calcule " + N("5/6 - 1/3") + ".", Fraction(1, 2), form="irreducible",
                hints=["Réduis 1/3 au dénominateur 6.", "Soustrais les numérateurs, puis simplifie."], solution=["1/3 = 2/6.", "5/6 − 2/6 = 3/6, qui se simplifie en 1/2."]),
         number("s3-g4", "operations", "Calcule " + N("1/2 + 1/4") + ".", Fraction(3, 4), form="irreducible",
                hints=["4 est un multiple de 2."], solution=["1/2 = 2/4.", "2/4 + 1/4 = 3/4."]),
-        number("s3-g5", "operations", "Moussa mange 1/4 d'un gâteau et Awa mange 3/8. Quelle fraction du gâteau reste-t-il ?", Fraction(3, 8), form="irreducible",
-               hints=["Additionne les parts mangées, puis retire-les de 8/8."], solution=["1/4 = 2/8. Parts mangées : 2/8 + 3/8 = 5/8.", "Il reste 8/8 − 5/8 = 3/8."]),
+        number("s3-g5", "operations", "Fatou mange 1/3 d'une tarte et Moussa mange 1/6. Quelle fraction de la tarte reste-t-il ?", Fraction(1, 2), form="irreducible",
+               hints=["Additionne les parts mangées, puis retire-les de 6/6."], solution=["1/3 = 2/6. Parts mangées : 2/6 + 1/6 = 3/6.", "Il reste 6/6 − 3/6 = 3/6 = 1/2."]),
     ])
 
 # ----- Section 4: a fraction of a quantity -----
@@ -238,14 +242,14 @@ PRACTICE = [
     choice("p4", "sens", "Quelle fraction est égale à 1 ?", [N("7/8"), N("8/8"), N("8/7")], 1, 1, ["Quand une fraction vaut-elle 1 ?"], ["8/8 = 1 : toutes les parts de l'unité."], wrong={0: "7/8 est plus petit que 1.", 2: "8/7 est plus grand que 1."}),
     number("p5", "sens", "L'unité d'un segment gradué est partagée en 5 parts égales. Un point est à 8 graduations de l'origine. Quelle fraction ?", Fraction(8, 5), 2, ["Chaque graduation vaut un cinquième."], ["8 graduations valent 8/5 de l'unité."], form="fraction"),
     number("p6", "sens", "Écris " + N("3/8") + " en nombre décimal.", d("0,375"), 2, ["Divise 3 par 8."], ["3 ÷ 8 = 0,375."], form="decimal"),
-    choice("p7", "sens", "Moussa partage une galette en 4 parts de tailles différentes et en mange 1. Dit-il qu'il a mangé 1/4 de la galette ?", ["Oui", "Non, car les parts ne sont pas égales"], 1, 2, ["Que faut-il pour une fraction ?"], ["Les parts doivent être égales pour parler de quart."],
-           wrong={0: "Pour qu'une part soit 1/4, il faut que les 4 parts soient égales."}),
+    choice("p7", "sens", "Awa coupe une bande de tissu en 5 morceaux de longueurs différentes et en garde un. Dit-elle qu'elle a gardé 1/5 de la bande ?", ["Oui", "Non, car les morceaux ne sont pas égaux"], 1, 2, ["Que faut-il pour une fraction ?"], ["Les parts doivent être égales pour parler de cinquième."],
+           wrong={0: "Pour qu'un morceau soit 1/5, il faut que les 5 morceaux soient égaux."}),
     number("p8", "egales", "Simplifie " + N("10/15") + " au maximum.", Fraction(2, 3), 1, ["Les deux nombres sont divisibles par 5."], ["10 ÷ 5 = 2 et 15 ÷ 5 = 3 : 2/3."], form="irreducible"),
     number("p9", "egales", "Simplifie " + N("24/36") + " au maximum.", Fraction(2, 3), 2, ["Cherche le plus grand diviseur commun, 12."], ["24 ÷ 12 = 2 et 36 ÷ 12 = 3 : 2/3."], form="irreducible"),
     number("p10", "egales", "Complète : " + "$\\dfrac{4}{7} = \\dfrac{?}{35}$" + ". Numérateur manquant ?", Fraction(20), 2, ["Par quel nombre a-t-on multiplié 7 pour obtenir 35 ?"], ["7 × 5 = 35, donc 4 × 5 = 20."]),
     number("p11", "egales", "Simplifie " + N("35/60") + " au maximum.", Fraction(7, 12), 2, ["Le plus grand diviseur commun est 5."], ["35 ÷ 5 = 7 et 60 ÷ 5 = 12 : 7/12."], form="irreducible"),
     number("p12", "egales", "Complète : " + "$\\dfrac{5}{6} = \\dfrac{20}{?}$" + ". Dénominateur manquant ?", Fraction(24), 2, ["Par quel nombre a-t-on multiplié 5 pour obtenir 20 ?"], ["5 × 4 = 20, donc 6 × 4 = 24."]),
-    choice("p13", "egales", "1/2 et 2/3 sont-elles égales, puisque 2/3 s'obtient en ajoutant 1 en haut et en bas ?", ["Oui", "Non : ajouter le même nombre ne conserve pas la valeur"], 1, 3, ["1/2 = 0,5 et 2/3 = 0,666..."], ["1/2 = 0,5 mais 2/3 est environ 0,67 : elles sont différentes.", "Il faut multiplier ou diviser, pas ajouter."]),
+    choice("p13", "egales", "3/5 et 4/6 sont-elles égales, puisque 4/6 s'obtient en ajoutant 1 en haut et en bas ?", ["Oui", "Non : ajouter le même nombre ne conserve pas la valeur"], 1, 3, ["3/5 = 0,6 et 4/6 = 0,666..."], ["3/5 = 0,6 mais 4/6 est environ 0,67 : elles sont différentes.", "Il faut multiplier ou diviser, pas ajouter."]),
     number("p14", "egales", "Écris " + N("5/8") + " avec le dénominateur 40. Quel est le numérateur ?", Fraction(25), 2, ["40 = 8 × ?"], ["8 × 5 = 40, donc 5 × 5 = 25."]),
     number("p15", "egales", "Simplifie " + N("84/126") + " au maximum.", Fraction(2, 3), 3, ["Le plus grand diviseur commun est 42."], ["84 ÷ 42 = 2 et 126 ÷ 42 = 3 : 2/3."], form="irreducible"),
     choice("p16", "operations", "Quelle est la plus grande fraction ?", [N("2/5"), N("3/10"), N("1/2")], 2, 2, ["Réduis au dénominateur 10."], ["2/5 = 4/10 ; 3/10 ; 1/2 = 5/10.", "5/10 est le plus grand : 1/2."], wrong={0: "2/5 = 4/10 est plus petit que 1/2 = 5/10."}),
@@ -257,8 +261,8 @@ PRACTICE = [
     number("p21", "operations", "Calcule " + N("3/4 - 1/8") + ".", Fraction(5, 8), 2, ["Réduis 3/4 au dénominateur 8."], ["3/4 = 6/8.", "6/8 − 1/8 = 5/8."], form="irreducible"),
     number("p22", "operations", "Calcule " + N("1/3 + 1/4") + ".", Fraction(7, 12), 3, ["Cherche un multiple commun de 3 et de 4."], ["Dénominateur commun 12 : 1/3 = 4/12 et 1/4 = 3/12.", "4/12 + 3/12 = 7/12."], form="irreducible"),
     number("p23", "operations", "Calcule " + N("5/6 - 1/2") + ".", Fraction(1, 3), 3, ["Réduis 1/2 au dénominateur 6."], ["1/2 = 3/6.", "5/6 − 3/6 = 2/6 = 1/3."], form="irreducible"),
-    choice("p24", "operations", "Fatou a calculé " + N("1/2 + 1/3 = 2/5") + ". Quelle est son erreur ?", ["Elle a additionné les numérateurs et les dénominateurs", "Elle a oublié de simplifier", "Elle a soustrait au lieu d'additionner"], 0, 3,
-           ["2/5 est-il plus grand que 1/2 ? Le résultat d'une addition doit dépasser chaque terme."], ["1/2 + 1/3 doit être plus grand que 1/2, mais 2/5 = 0,4 est plus petit.", "Elle a fait (1 + 1)/(2 + 3). Il faut réduire au dénominateur 6 : 3/6 + 2/6 = 5/6."]),
+    choice("p24", "operations", "Fatou a calculé " + N("2/3 + 1/4 = 3/7") + ". Quelle est son erreur ?", ["Elle a additionné les numérateurs et les dénominateurs", "Elle a oublié de simplifier", "Elle a soustrait au lieu d'additionner"], 0, 3,
+           ["3/7 est-il plus grand que 2/3 ? Le résultat d'une addition doit dépasser chaque terme."], ["2/3 + 1/4 doit être plus grand que 2/3 (environ 0,67), mais 3/7 est environ 0,43.", "Elle a fait (2 + 1)/(3 + 4). Il faut réduire au dénominateur 12 : 8/12 + 3/12 = 11/12."]),
     number("p25", "operations", "Un sac de riz : on en utilise 1/4 le lundi et 1/2 le mardi. Quelle fraction du sac a-t-on utilisée ?", Fraction(3, 4), 2, ["Réduis 1/2 au dénominateur 4."], ["1/2 = 2/4.", "1/4 + 2/4 = 3/4."], form="irreducible"),
     number("p26", "quantite", "Calcule " + N("3/4") + " de 120.", Fraction(90), 1, ["Divise par 4, multiplie par 3."], ["120 ÷ 4 = 30 ; 30 × 3 = 90."]),
     number("p27", "quantite", "Calcule " + N("2/5") + " de 350 F.", Fraction(140), 2, ["Divise par 5, multiplie par 2."], ["350 ÷ 5 = 70 ; 70 × 2 = 140 F."], units=["F"]),
@@ -298,16 +302,23 @@ def assessment(rng):
     # 2. fraction to decimal
     b = rng.choice([2, 4, 5, 8, 20, 25])
     a = rng.randint(1, b - 1)
+    while (a, b) in {(3, 4), (3, 8), (5, 8), (1, 2), (7, 8)}:
+        b = rng.choice([2, 4, 5, 8, 20, 25])
+        a = rng.randint(1, b - 1)
     questions.append(number("a2", "sens", "Écris " + N(f"{a}/{b}") + " en nombre décimal.", Fraction(a, b), 2, ["Une fraction est un quotient : divise le numérateur par le dénominateur."],
                             [f"{a} ÷ {b} = {show(Fraction(a, b))}."], form="decimal"))
     # 3. simplify
     p, q = rng.choice([(2, 3), (3, 4), (3, 5), (2, 5), (5, 6), (4, 7), (5, 8), (7, 9), (7, 12), (5, 12)])
     k = rng.choice([2, 3, 4, 5, 6, 7, 9])
+    while (p * k, q * k) in {(6, 8), (18, 45), (10, 15), (35, 60), (4, 6), (18, 24), (24, 36), (84, 126), (12, 16)}:
+        k = rng.choice([2, 3, 4, 5, 6, 7, 9])
     questions.append(number("a3", "egales", "Simplifie " + N(f"{p * k}/{q * k}") + " au maximum.", Fraction(p, q), 2, ["Cherche un nombre qui divise le numérateur et le dénominateur."],
                             [f"{p * k} et {q * k} sont divisibles par {k} : {p * k} ÷ {k} = {p}, {q * k} ÷ {k} = {q}.", f"{p * k}/{q * k} = {p}/{q}, irréductible."], form="irreducible"))
     # 4. complete an equality
     a, b = rng.choice([(2, 3), (3, 5), (1, 4), (5, 6), (3, 7), (4, 9)])
     k = rng.randint(2, 8)
+    while (a, b, k) == (3, 5, 4):
+        k = rng.randint(2, 8)
     questions.append(number("a4", "egales", "Complète : " + f"$\\dfrac{{{a}}}{{{b}}} = \\dfrac{{?}}{{{b * k}}}$" + ". Quel est le numérateur manquant ?", Fraction(a * k), 2, [f"Par quel nombre a-t-on multiplié {b} pour obtenir {b * k} ?"],
                             [f"{b} × {k} = {b * k}, donc {a} × {k} = {a * k}.", f"{a}/{b} = {a * k}/{b * k}."]))
     # 5. compare two fractions
@@ -342,6 +353,10 @@ def assessment(rng):
     d1, k = rng.choice([2, 3, 4, 5]), rng.choice([2, 3])
     d2 = d1 * k
     a1, a2 = rng.randint(1, d1 - 1), rng.randint(1, d2 - 1)
+    while Fraction(a1, d1) + Fraction(a2, d2) >= 1:
+        d1, k = rng.choice([2, 3, 4, 5]), rng.choice([2, 3])
+        d2 = d1 * k
+        a1, a2 = rng.randint(1, d1 - 1), rng.randint(1, d2 - 1)
     value = Fraction(a1, d1) + Fraction(a2, d2)
     questions.append(number("a7", "operations", "Calcule " + N(f"{a1}/{d1} + {a2}/{d2}") + ". Donne le résultat sous forme irréductible.", value, 3, [f"Réduis la première fraction au dénominateur {d2}."],
                             [f"{a1}/{d1} = {a1 * k}/{d2}.", f"{a1 * k}/{d2} + {a2}/{d2} = {a1 * k + a2}/{d2} = {frac(value)}."], form="irreducible"))
@@ -367,9 +382,12 @@ def assessment(rng):
     questions.append(number("a10", "quantite", f"Dans une classe de {total} élèves, {part} sont absents. Quelle fraction de la classe est absente ? Donne une fraction irréductible.", Fraction(part, total), 3,
                             ["Écris la fraction, puis simplifie."], [f"{part}/{total}, divisible par {math.gcd(part, total)} : {frac(Fraction(part, total))}."], form="irreducible"))
     # 11. leftover after two fractions
-    d1, k = rng.choice([2, 3, 4]), 2
-    d2 = d1 * k
-    a1, a2 = 1, rng.randint(1, d2 - d1 * 1 - 1) if d2 - d1 - 1 >= 1 else 1
+    while True:
+        d1, k = rng.choice([3, 4, 5, 6]), rng.choice([2, 3])
+        d2 = d1 * k
+        a1, a2 = rng.randint(1, d1 - 1), rng.randint(1, d2 - 1)
+        if Fraction(a1, d1) + Fraction(a2, d2) < 1 and (Fraction(a1, d1), Fraction(a2, d2)) not in {(Fraction(1, 4), Fraction(3, 8)), (Fraction(1, 3), Fraction(1, 6)), (Fraction(1, 4), Fraction(1, 2))}:
+            break
     eaten = Fraction(a1, d1) + Fraction(a2, d2)
     value = 1 - eaten
     questions.append(number("a11", "operations", f"On utilise {N(f'{a1}/{d1}')} d'un sac de riz le lundi puis {N(f'{a2}/{d2}')} le mardi. Quelle fraction du sac reste-t-il ? Donne une fraction irréductible.", value, 3,
