@@ -24,7 +24,7 @@
 
 {% if fallback %}<div class="notice" style="margin-top:16px">{{ icon("info") }}<span>{{ _("Part of this lesson is shown in its original language because the automatic translation was not available. Try again in a moment.") }}</span></div>{% endif %}
 {% if foreign %}<div class="notice" style="margin-top:16px">{{ icon("info") }}<span>{{ _("This chapter belongs to another curriculum than the one in your settings. You can still study it.") }}</span></div>{% endif %}
-{% if chapter.status_note %}<div class="notice" style="margin-top:16px">{{ icon("info") }}<span>{{ view.status_note }}</span></div>{% endif %}
+{% if chapter.status_note %}<div class="notice" style="margin-top:16px">{{ icon("info") }}<span>{{ _(chapter.status_note) }}</span></div>{% endif %}
 
 {% if progress.revise %}
 <section class="section card card-body revise">
@@ -54,9 +54,9 @@
   <div class="section-head"><h2>{{ _("Before you start") }}</h2></div>
   <div class="card">
     {% for item in progress.prerequisites %}
-    <a class="lesson-row" href="{{ url_for('learn.lesson', course_id=item.course, lesson_id=item.lesson) }}">
+    <a class="lesson-row" href="{{ url_for('curriculum.chapter', chapter_id=item.chapter) if item.chapter else url_for('learn.lesson', course_id=item.course, lesson_id=item.lesson) }}">
       <span class="lesson-num {{ 'done' if item.done }}">{% if item.done %}{{ icon("check", "sm") }}{% else %}{{ loop.index }}{% endif %}</span>
-      <div class="body"><strong>{{ view.prerequisites[loop.index0].text }}</strong><span>{{ _("Open the review lesson") }}{% if item.done %}, {{ _("completed") }}{% endif %}</span></div>
+      <div class="body"><strong>{{ view.prerequisites[loop.index0].text }}</strong><span>{{ _("Open the chapter") if item.chapter else _("Open the review lesson") }}{% if item.done %}, {{ _("completed") }}{% endif %}</span></div>
       {{ icon("chevron-right") }}
     </a>
     {% endfor %}

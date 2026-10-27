@@ -32,6 +32,7 @@ MESSAGES = {
     "fraction": "Write it as a fraction, such as 235/100.",
     "decimal_fraction": "Write it as a fraction whose denominator is 10, 100, 1000 and so on, such as 235/100.",
     "decimal": "Write it as a decimal number with a comma.",
+    "irreducible": "Simplify as far as possible: write a whole number or a fraction that cannot be simplified.",
     "wrong": "Not quite. Try again, or open a hint.",
     "right": "Correct!",
 }
@@ -65,8 +66,8 @@ def section_view(section):
 
 def chapter_view(chapter):
     """Describe a chapter overview for a page."""
-    return {"title": chapter.title, "intro": chapter.intro, "objectives": chapter.objectives, "status_note": chapter.status_note,
-            "prerequisites": [{"text": p["text"], "course": p["course"], "lesson": p["lesson"]} for p in chapter.prerequisites],
+    return {"title": chapter.title, "intro": chapter.intro, "objectives": chapter.objectives,
+            "prerequisites": [{"text": p["text"]} for p in chapter.prerequisites],
             "sections": [{"id": s.id, "title": s.title, "goal": s.goal, "minutes": s.minutes} for s in chapter.sections],
             "concepts": {key: name for key, (name, _section) in chapter.concepts.items()}}
 
@@ -159,7 +160,8 @@ def chapter(chapter_id):
     view, fallback = present(chapter, chapter_view(chapter))
     progress = chapter_progress(current_user, chapter)
     resume = next((s for s in chapter.sections if s.id not in progress["sections_done"]), None)
-    foreign = bool(current_user.country and current_user.grade) and (current_user.country, current_user.grade) != (chapter.country, chapter.level)
+    foreign = bool(current_user.country and current_user.grade) and not (
+        current_user.country in (chapter.country, *chapter.also_for) and current_user.grade == chapter.level)
     return render_template("curriculum/chapter.html", active_nav="learn", chapter=chapter, view=view, fallback=fallback, progress=progress,
                            resume=resume, foreign=foreign, place=country(chapter.country), stage=level(chapter.country, chapter.level),
                            sources=chapter.sources, label=label, lang=language(), passmark=PASS_MARK)

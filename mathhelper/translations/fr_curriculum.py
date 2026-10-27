@@ -45,6 +45,7 @@ CURRICULUM = {
     "What you will learn": "Ce que tu vas apprendre",
     "Before you start": "Avant de commencer",
     "Open the review lesson": "Ouvrir la leçon de rappel",
+    "Open the chapter": "Ouvrir le chapitre",
     "Sections": "Sections",
     "Practice and assessment": "Exercices et évaluation",
     "Independent practice": "Exercices en autonomie",
@@ -143,7 +144,21 @@ CURRICULUM = {
     "Write it as a fraction whose denominator is 10, 100, 1000 and so on, such as 235/100.":
         "Écris-le sous forme de fraction dont le dénominateur est 10, 100, 1000, etc., comme 235/100.",
     "Write it as a decimal number with a comma.": "Écris-le sous forme de nombre décimal avec une virgule.",
+    "Simplify as far as possible: write a whole number or a fraction that cannot be simplified.": "Simplifie autant que possible : écris un nombre entier ou une fraction qu'on ne peut plus simplifier.",
     "Not quite. Try again, or open a hint.": "Pas tout à fait. Réessaie, ou ouvre un indice.",
+    # Notes shown on each chapter about how far it has been checked.
+    "Reference chapter. Its topics follow the first chapters of the ADEM-Dakar Sixième booklet, with our own order, explanations and exercises (some exercise types are common to the booklet). It has not been checked against the official Senegalese programme.":
+        "Chapitre de référence. Ses thèmes suivent les premiers chapitres du fascicule ADEM-Dakar de Sixième, avec notre propre ordre, nos propres explications et exercices (certains types d'exercices sont communs au fascicule). Il n'a pas été vérifié par rapport au programme officiel sénégalais.",
+    "Second chapter of the Senegal Sixième course. Its topics follow the multiplication chapter of the ADEM-Dakar booklet, with our own explanations and exercises. It has not been checked against the official Senegalese programme.":
+        "Deuxième chapitre du cours de Sixième du Sénégal. Ses thèmes suivent le chapitre sur la multiplication du fascicule ADEM-Dakar, avec nos propres explications et exercices. Il n'a pas été vérifié par rapport au programme officiel sénégalais.",
+    "Third chapter of the Senegal Sixième course. Its topics follow the division chapter of the ADEM-Dakar booklet, with our own explanations and exercises. It has not been checked against the official Senegalese programme.":
+        "Troisième chapitre du cours de Sixième du Sénégal. Ses thèmes suivent le chapitre sur la division du fascicule ADEM-Dakar, avec nos propres explications et exercices. Il n'a pas été vérifié par rapport au programme officiel sénégalais.",
+    "Fourth chapter of the Senegal Sixième course. Its topics follow the 'organisation d'un calcul' chapter of the ADEM-Dakar booklet, with our own explanations and exercises. It has not been checked against the official Senegalese programme.":
+        "Quatrième chapitre du cours de Sixième du Sénégal. Ses thèmes suivent le chapitre « organisation d'un calcul » du fascicule ADEM-Dakar, avec nos propres explications et exercices. Il n'a pas été vérifié par rapport au programme officiel sénégalais.",
+    "Fifth chapter of the Senegal Sixième course. Its topics follow the proportionality chapter of the ADEM-Dakar booklet, with our own explanations and exercises. The list of contents was checked against lesson 12 of the Côte d'Ivoire Sixième programme (proportional quantities, coefficient, tables, linearity, percentages, scale), so it is also offered there, but the programme's own situations and activities are not reproduced. It has not been checked against the official Senegalese programme.":
+        "Cinquième chapitre du cours de Sixième du Sénégal. Ses thèmes suivent le chapitre sur la proportionnalité du fascicule ADEM-Dakar, avec nos propres explications et exercices. La liste des contenus a été comparée à la leçon 12 du programme ivoirien de Sixième (grandeurs proportionnelles, coefficient, tableaux, linéarité, pourcentages, échelle), donc il est aussi proposé en Côte d'Ivoire, mais les situations et activités propres au programme ne sont pas reproduites. Il n'a pas été vérifié par rapport au programme officiel sénégalais.",
+    "Sixth chapter of the Senegal Sixième course. Its contents follow lesson 11 of the Côte d'Ivoire Sixième programme (fractions, decimal fractions, equal fractions, simplifying, comparing, adding, a fraction of a quantity), which was read for it, so it is also offered there, but the programme's own situations and activities are not reproduced. It has not been checked against the official Senegalese programme.":
+        "Sixième chapitre du cours de Sixième du Sénégal. Ses contenus suivent la leçon 11 du programme ivoirien de Sixième (fractions, fractions décimales, fractions égales, simplification, comparaison, addition, fraction d'une quantité), qui a été lue pour l'écrire, donc il est aussi proposé en Côte d'Ivoire, mais les situations et activités propres au programme ne sont pas reproduites. Il n'a pas été vérifié par rapport au programme officiel sénégalais.",
     # Admin: translation review.
     "Translations": "Traductions",
     "Check and correct the automatic translations of curriculum lessons. A corrected translation is kept and never overwritten.":

@@ -66,6 +66,7 @@ class Chapter:
     assessment: Callable  # random.Random -> list[Exercise]
     sources: list
     status_note: str = ""
+    also_for: tuple = ()  # other countries whose official programme lists the same contents, checked against its text
     assessment_version: int = 1  # raise it whenever the assessment generator changes, so old attempts are not shown with new questions
 
     def section(self, section_id):

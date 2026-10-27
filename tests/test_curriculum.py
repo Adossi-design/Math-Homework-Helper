@@ -206,7 +206,8 @@ def test_assessment_changes_with_the_seed_and_repeats_with_the_same_seed():
 
 
 def test_only_the_reference_chapter_exists_and_it_claims_no_unchecked_alignment():
-    assert [c.id for c in CHAPTERS] == [CID]
+    assert [c.id for c in CHAPTERS][0] == CID and len({c.id for c in CHAPTERS}) == len(CHAPTERS)
+    assert all("not been checked against the official Senegalese" in c.status_note for c in CHAPTERS)
     assert "not been checked against the official" in CHAPTER.status_note
     assert {s.id for s in CHAPTER.sources} == {"adem-sn-6e", "ci-programme-6e"}
     assert len(CHAPTER.sections) == 5 and len(CHAPTER.practice) == 34 and sum(len(s.guided) for s in CHAPTER.sections) == 21

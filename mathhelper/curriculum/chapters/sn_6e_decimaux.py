@@ -7,87 +7,15 @@ any textbook on this topic and also appear in the ADEM booklet, but their wordin
 Fixed answers are written as exact fractions and re-checked by tests against an independent recalculation, and each worked example carries a
 "verify" expression that the tests evaluate. The step texts and solution lines are not machine-checked, they were reviewed by hand.
 """
-import re
 from fractions import Fraction
 
-from ..checker import Answer, parse_number, show
-from ..model import Chapter, Exercise, Section
+from ..checker import show
+from ..model import Chapter, Section
 from ..sources import ADEM_SN_6E, CI_PROGRAMME_6E
+from .kit import D, NAT, N, column, d, definition, example, make_kit, para, rand_decimal, rule, spaced, warning
 
 CHAPTER_ID = "sn-6e-decimaux"
-D = "$\\mathbb{D}$"
-NAT = "$\\mathbb{N}$"
-
-
-def N(text):
-    """Write numbers as math: a decimal comma that LaTeX does not space out, and a/b drawn as a stacked fraction."""
-    text = re.sub(r"(\d+)/(\d+)", lambda m: "\\dfrac{" + m.group(1) + "}{" + m.group(2) + "}", text)
-    return "$" + text.replace(",", "{,}") + "$"
-
-
-def d(text):
-    """Read a number or fraction written with a decimal comma as an exact fraction."""
-    return parse_number(text)
-
-
-def number(exercise_id, concept, prompt, value, level=1, hints=(), solution=(), units=(), form="", wrong=None):
-    """Build an exercise whose answer is one number, given as an exact fraction."""
-    return Exercise(f"{CHAPTER_ID}/{exercise_id}", concept, prompt, Answer("number", value, tuple(units), form),
-                    list(hints), list(solution), level=level, wrong=wrong or {})
-
-
-def choice(exercise_id, concept, prompt, options, right, level=1, hints=(), solution=(), wrong=None):
-    """Build a multiple choice exercise, the right answer is the index of the option."""
-    return Exercise(f"{CHAPTER_ID}/{exercise_id}", concept, prompt, Answer("choice", right), list(hints), list(solution),
-                    options=list(options), level=level, wrong=wrong or {})
-
-
-def ordered(exercise_id, concept, prompt, values, level=1, hints=(), solution=()):
-    """Build an exercise whose answer is a list of numbers in a given order."""
-    return Exercise(f"{CHAPTER_ID}/{exercise_id}", concept, prompt, Answer("numbers", tuple(values)), list(hints), list(solution), level=level)
-
-
-def between(exercise_id, concept, prompt, low, high, level=1, hints=(), solution=()):
-    """Build an exercise where any number strictly between two values is a correct answer."""
-    return Exercise(f"{CHAPTER_ID}/{exercise_id}", concept, prompt, Answer("between", low, high=high, form="decimal"), list(hints), list(solution), level=level)
-
-
-def join_equal(line):
-    """Merge '$a$ = $b$' into one formula '$a = b$', so a calculation reads as one connected line."""
-    return re.sub(r"\$ (=|<|>) \$", r" \1 ", line)
-
-
-def example(title, problem, method, steps, answer, verify, formula=""):
-    """Build a worked example: a method, then each line of working with the reason for it."""
-    return {"type": "example", "title": title, "problem": problem, "formula": formula, "method": method,
-            "steps": [{"math": join_equal(math), "why": why} for math, why in steps], "answer": answer, "verify": verify}
-
-
-def para(text):
-    """A paragraph of explanation."""
-    return {"type": "p", "text": text}
-
-
-def definition(title, text):
-    """A definition box."""
-    return {"type": "definition", "title": title, "text": text}
-
-
-def rule(title, text):
-    """A property or rule box."""
-    return {"type": "property", "title": title, "text": text}
-
-
-def warning(text):
-    """A box about a typical mistake."""
-    return {"type": "warning", "text": text}
-
-
-def column(sign, top, bottom, result=""):
-    """Draw an addition or a subtraction in columns, with the commas under each other."""
-    bar = " \\\\ \\hline " + result if result else " \\\\ \\hline"
-    gap = "\\ " if sign == "+" else "\\ \\ "
-    return ("$$\\begin{array}{r} " + top.replace(",", "{,}") + " \\\\ " + sign + gap + bottom.replace(",", "{,}") + bar.replace(",", "{,}") + " \\end{array}$$")
+number, choice, ordered, between = make_kit(CHAPTER_ID)
 
 
 # ----- Section 1: from whole numbers to decimal numbers -----
@@ -560,18 +488,6 @@ CONCEPTS = {
     "soustraction": ("Soustraire des décimaux", "soustraction"),
     "problemes": ("Résoudre un problème", "soustraction"),
 }
-
-
-def rand_decimal(rng, low, high, places):
-    """Return a random number with exactly this many decimals whose last decimal is not 0."""
-    last = rng.randint(1, 9)
-    middle = rng.randint(0, 10 ** (places - 1) - 1) if places > 1 else 0
-    return Fraction(rng.randint(low, high) * 10**places + middle * 10 + last, 10**places)
-
-
-def spaced(value, places):
-    """Write a value with exactly this many decimals, padding with zeros."""
-    return show(value) if places == 0 else f"{int(value)},{str(int((value - int(value)) * 10**places)).rjust(places, '0')}"
 
 
 def assessment(rng):

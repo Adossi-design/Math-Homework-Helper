@@ -57,8 +57,18 @@ def revision(chapter, results, last):
 
 
 def prerequisites(chapter, done):
-    """Return each prerequisite lesson of the chapter with whether the student has finished it."""
-    return [{**item, "done": f"{item['course']}/{item['lesson']}" in done} for item in chapter.prerequisites]
+    """Return each prerequisite of the chapter, a lesson or another chapter, with whether the student has finished it."""
+    from .catalog import find_chapter
+
+    out = []
+    for item in chapter.prerequisites:
+        if "chapter" in item:
+            earlier = find_chapter(item["chapter"])
+            finished = bool(earlier) and all(section_key(earlier.id, s.id) in done for s in earlier.sections)
+        else:
+            finished = f"{item['course']}/{item['lesson']}" in done
+        out.append({**item, "done": finished})
+    return out
 
 
 def grade(exercises, answers):

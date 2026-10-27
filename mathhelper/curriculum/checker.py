@@ -1,4 +1,5 @@
 """Exact answer checking for curriculum exercises, so a correct answer is never marked wrong for how it is written."""
+import math
 import re
 from dataclasses import dataclass
 from fractions import Fraction
@@ -7,7 +8,7 @@ MAX_LENGTH = 200
 MAX_DIGITS = 60
 _FRAC = re.compile(r"\\d?frac\s*\{([^{}]{0,60})\}\s*\{([^{}]{0,60})\}")
 _GROUPED = re.compile(r"^\d{1,3}( \d{3})+(,\d+)?$", re.ASCII)
-_DECIMAL = re.compile(r"^\d+([.,]\d+)?$", re.ASCII)
+_DECIMAL = re.compile(r"^(\d+([.,]\d+)?|[.,]\d+)$", re.ASCII)
 _INDEX = re.compile(r"^[0-9]{1,3}$")
 _SIGN = re.compile(r"^[+-]")
 _SEPARATORS = re.compile(r"[;<>]|\s+(?:puis|then|et|and)\s+")
@@ -20,7 +21,7 @@ class Answer:
     kind: str
     value: object = None
     units: tuple = ()
-    form: str = ""  # "fraction", "decimal_fraction" or "decimal" when the exercise asks for that way of writing the number
+    form: str = ""  # "fraction", "decimal_fraction", "decimal" or "irreducible" when the exercise asks for that way of writing the number
     high: object = None
 
 
@@ -101,6 +102,17 @@ def decimal_fraction(text):
     return bool(re.fullmatch(r"10+", bottom)) and bool(re.fullmatch(r"[0-9]{1,30}", top))
 
 
+def irreducible(text, value):
+    """Return True when the text is a whole number or a fraction that cannot be simplified any further."""
+    if "/" not in text:
+        return value.denominator == 1 and bool(re.fullmatch(r"[0-9]{1,30}", text.strip()))
+    top, _, bottom = text.partition("/")
+    top, bottom = top.strip().strip("()").strip(), bottom.strip().strip("()").strip()
+    if not (re.fullmatch(r"[0-9]{1,30}", top) and re.fullmatch(r"[0-9]{1,30}", bottom)):
+        return False
+    return int(bottom) > 1 and math.gcd(int(top), int(bottom)) == 1
+
+
 def check(answer, given):
     """Compare what the student wrote with the correct answer, and say whether it is right."""
     if isinstance(given, int) and not isinstance(given, bool):
@@ -123,6 +135,8 @@ def check(answer, given):
     if answer.form == "fraction" and "/" not in text:
         return Verdict("wrong_form", value)
     if answer.form == "decimal_fraction" and not decimal_fraction(text):
+        return Verdict("wrong_form", value)
+    if answer.form == "irreducible" and not irreducible(text, value):
         return Verdict("wrong_form", value)
     if answer.form == "decimal" and "/" in text:
         return Verdict("wrong_form", value)

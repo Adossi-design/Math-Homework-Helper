@@ -6,6 +6,11 @@ so no curriculum is presented as supported before it is.
 from dataclasses import dataclass
 
 from .chapters.sn_6e_decimaux import CHAPTER as SN_6E_DECIMAUX
+from .chapters.sn_6e_calcul import CHAPTER as SN_6E_CALCUL
+from .chapters.sn_6e_division import CHAPTER as SN_6E_DIVISION
+from .chapters.sn_6e_fractions import CHAPTER as SN_6E_FRACTIONS
+from .chapters.sn_6e_multiplication import CHAPTER as SN_6E_MULTIPLICATION
+from .chapters.sn_6e_proportionnalite import CHAPTER as SN_6E_PROPORTIONNALITE
 
 FRANCOPHONE_LEVELS = [
     ("6e", "Sixième", "Sixième", 6), ("5e", "Cinquième", "Cinquième", 7), ("4e", "Quatrième", "Quatrième", 8),
@@ -44,7 +49,7 @@ COUNTRIES = {
     "za": Country("za", "South Africa", "Afrique du Sud", "en", _levels([(f"g{n}", f"Grade {n}", f"Grade {n}", n) for n in range(6, 13)])),
 }
 
-CHAPTERS = [SN_6E_DECIMAUX]
+CHAPTERS = [SN_6E_DECIMAUX, SN_6E_MULTIPLICATION, SN_6E_DIVISION, SN_6E_CALCUL, SN_6E_PROPORTIONNALITE, SN_6E_FRACTIONS]
 CHAPTER_BY_ID = {chapter.id: chapter for chapter in CHAPTERS}
 
 
@@ -68,7 +73,7 @@ def valid_choice(country_id, level_id):
 
 def chapters_for(country_id, level_id):
     """Return the chapters written for this country and level, in teaching order."""
-    found = [c for c in CHAPTERS if c.country == country_id and c.level == level_id]
+    found = [c for c in CHAPTERS if c.level == level_id and country_id in (c.country, *c.also_for)]
     return sorted(found, key=lambda c: c.number)
 
 
@@ -84,4 +89,4 @@ def label(item, lang):
 
 def available_levels():
     """Return the (country id, level id) pairs that have at least one chapter."""
-    return sorted({(c.country, c.level) for c in CHAPTERS})
+    return sorted({(country_id, c.level) for c in CHAPTERS for country_id in (c.country, *c.also_for)})
