@@ -10,6 +10,7 @@ Built with Python (Flask), SQLite and Google Gemini. The AI key stays on the ser
 - **Ask the tutor**: a chat under each solution for simpler explanations, checking your own work, or a similar problem to try.
 - **Library**: every solution is saved, with search, topic filters and a Saved tab.
 - **Learn**: 13 courses and 39 short lessons from elementary arithmetic to college linear algebra. Each lesson has key ideas, a worked example and a common mistake.
+- **My curriculum**: pick a country and school level in Settings (your language is chosen separately and never changes it). Each chapter is a textbook style course: sections with definitions, worked examples where every step is explained, guided exercises with hints, independent practice, a summary and a 12 question assessment with new numbers every time, detailed corrections and revision advice. Answers are checked exactly (3,5, 3.50 and 7/2 are the same number, and a form such as "fully simplified" can be required). Progress is saved per student. A lesson tutor answers questions about the lesson in front of the student, and the solver uses the student's level. See `docs/curriculum.md`.
 - **Practice**: 23 skills that generate fresh questions every round, with instant feedback, sounds, keyboard shortcuts, scores and a full review.
 - **Progress**: day streak, weekly activity, practice accuracy, lessons completed and personal bests.
 - **Admin dashboard**: one admin account runs the platform at `/admin`: an overview of activity, users (view, suspend, reactivate, delete), lessons (add, edit, preview, delete, restore) and practice sets (write your own questions, edit, preview, delete, restore). The admin account has no student pages, and every admin page and action is checked on the server.
@@ -69,6 +70,12 @@ Log in on the normal login page with `ADMIN_EMAIL` and `ADMIN_PASSWORD` from `.e
 
 Deleting always asks for confirmation first. Only the account in `ADMIN_EMAIL` is an admin, and regular users get a "You cannot open this page" error on every admin address.
 
+## Curriculum content and translations
+
+Only reviewed chapters are offered. Today there are nine chapters for Senegal Sixième (decimal numbers, multiplication, division, order of operations, proportionality, fractions, relative numbers, natural numbers and divisibility, statistics). Chapters 5 to 9 are also offered in Côte d'Ivoire, because their lists of contents were compared with the Côte d'Ivoire Sixième programme. Other countries and levels are shown as not yet available. Every chapter says that it has not been checked against the official Senegalese programme.
+
+Lesson text is written once, in French, and translated into English on demand with the Gemini key. Math is set aside before translating and put back unchanged, and a translation that damages a formula is rejected. Translations are stored; the admin can read, correct and delete them in **Admin → Translations**, and a corrected translation is never overwritten. To translate everything ahead of time, so the first student does not wait, run `flask --app wsgi warm-translations` with the production settings.
+
 ## Tests
 
 ```powershell
@@ -115,6 +122,7 @@ mathhelper/
   i18n.py              Language choice, translation lookups and localized dates
   translations/fr.py   French text for the interface
   content/             Course and lesson content in English and French
+  curriculum/          Country and level catalog, chapters (chapters/), exact answer checker, translation cache, progress, AI context
   practice/            Question generators, and catalog.py for the admin's practice sets
   views/               Routes for each section
   templates/           HTML pages and email templates
