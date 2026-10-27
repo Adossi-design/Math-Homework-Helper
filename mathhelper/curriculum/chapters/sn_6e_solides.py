@@ -25,16 +25,18 @@ S1 = Section(
     "Nommer un pavé droit, un cube et un cylindre droit, compter leurs faces, arêtes et sommets, et décrire leurs patrons.",
     [
         para("Une boîte d'allumettes, un dé, une boîte de conserve : ces objets ont des formes de solides. Pour bien les étudier, il vaut mieux avoir un vrai objet sous les yeux, "
-             "le tourner dans ses mains et le compter. Les nombres de ce chapitre se vérifient tous avec une vraie boîte."),
+             "le tourner dans ses mains et le compter. Les nombres de la première section se vérifient avec une vraie boîte."),
         definition("Pavé droit et cube",
                    "Un pavé droit est un solide qui a 6 faces rectangulaires. Les faces opposées sont égales. Il a 12 arêtes (les segments où deux faces se rencontrent) et 8 sommets (les coins). "
                    "Un cube est un pavé droit dont les 6 faces sont des carrés égaux : toutes ses arêtes ont la même longueur."),
         definition("Cylindre droit",
-                   "Un cylindre droit est un solide qui a deux bases, qui sont des disques égaux dans des plans parallèles, et une surface latérale qui les relie. Il n'a aucun sommet. "
+                   "Un cylindre droit est un solide qui a deux bases, qui sont des disques égaux dans des plans parallèles, et une surface latérale qui les relie ; la droite qui joint les centres des disques est perpendiculaire aux bases. Il n'a aucun sommet. "
                    "La hauteur " + N("h") + " est la distance entre les deux bases ; le rayon " + N("r") + " est le rayon de chaque disque."),
         rule("Les patrons",
              "Un patron est le dessin du solide déplié à plat. Le patron d'un pavé droit est formé de 6 rectangles. Le patron d'un cylindre droit est formé de 2 disques et d'un rectangle : "
              "la hauteur de ce rectangle est la hauteur " + N("h") + " du cylindre, et sa longueur est le périmètre d'une base, " + N("2 \\times 3,14 \\times r") + "."),
+        para("Pour fabriquer un pavé droit en carton, on dessine son patron, on le découpe et on le plie : il y a plusieurs patrons possibles pour un même solide, mais toujours 6 rectangles, qui doivent se replier sans se chevaucher. "
+             "Sur une face, deux arêtes qui se touchent sont perpendiculaires, et deux arêtes opposées sont parallèles. Fabriquer vraiment un patron est un excellent exercice à faire avec ton enseignant."),
         example("Exemple 1", "Compter les faces, les arêtes et les sommets d'un pavé droit.",
                 "On compte par parties : les faces du dessus et du dessous, les faces de côté, et les arêtes de chaque face.",
                 [("Faces : dessus, dessous, devant, derrière, gauche, droite", "Il y a 6 faces rectangulaires."),
@@ -59,7 +61,7 @@ S1 = Section(
                  (N("2 \\times 3,14") + " = " + N("6,28"), "2 × 3,14 = 6,28."),
                  (N("6,28 \\times 3") + " = " + N("18,84"), "628 × 3 = 1 884, avec 2 chiffres après la virgule.")],
                 N("18,84") + " cm", "2*d('3,14')*3==d('18,84')"),
-        warning("Un cylindre n'a pas de sommet et sa surface latérale n'est pas une face plate, mais elle devient un rectangle quand on la déplie. Et ne confonds pas les arêtes d'un cube (12) avec ses faces (6)."),
+        warning("Un cylindre n'a ni sommet ni arête droite (ses bords sont deux cercles). Sa surface latérale est courbe, ce n'est pas une face plate, mais elle devient un rectangle quand on la déplie. Et ne confonds pas les arêtes d'un cube (12) avec ses faces (6)."),
     ],
     [
         number("s1-g1", "elements", "Combien de faces a un pavé droit ?", Fraction(6), hints=["Dessus, dessous et quatre côtés."], solution=["2 + 4 = 6 faces."]),
@@ -130,11 +132,11 @@ S3 = Section(
              "Le volume d'un pavé droit est " + N("V = L \\times \\ell \\times h") + ". Le volume d'un cube d'arête " + N("c") + " est " + N("V = c \\times c \\times c") + ". "
              "Les trois dimensions doivent être dans la même unité."),
         rule("Volumes et litres",
-             "1 dm³ = 1 L. 1 L = 1 000 cm³. 1 m³ = 1 000 dm³ = 1 000 L. Pour passer d'une unité à l'autre, on multiplie ou on divise par 1 000."),
+             "Un cube de 10 cm d'arête contient 10 × 10 × 10 = 1 000 cm³ : c'est 1 dm³, et il contient exactement 1 litre. Donc 1 dm³ = 1 000 cm³ = 1 L, et 1 m³ = 1 000 dm³ = 1 000 L. Pour passer d'une unité de volume à la suivante (m³, dm³, cm³), on multiplie ou on divise par 1 000."),
         example("Exemple 1", "Calculer le volume d'un pavé droit de 6 cm sur 4 cm sur 3 cm.",
                 "On multiplie les trois dimensions.",
                 [(N("6 \\times 4") + " = " + N("24"), "Aire de la base : 24 cm²."),
-                 (N("24 \\times 3") + " = " + N("72"), "Volume : 72 cm³ (la base et la hauteur : 24 cm² sur 3 cm de haut).")],
+                 (N("24 \\times 3") + " = " + N("72"), "Volume = aire de la base × hauteur = 24 × 3 = 72 cm³.")],
                 N("72") + " cm³", "6*4*3==72"),
         example("Exemple 2", "Calculer le volume d'un cube d'arête 2,5 dm, en dm³ puis en litres.",
                 "On multiplie l'arête trois fois par elle-même, et on utilise 1 dm³ = 1 L.",
@@ -170,6 +172,8 @@ S4 = Section(
     "Calculer l'aire latérale, l'aire totale et le volume d'un cylindre droit, et résoudre un problème de contenance.",
     [
         para("Un seau, une boîte de conserve, un tuyau : des cylindres. Pour calculer leur aire et leur volume, on utilise le disque de la base. Dans ce chapitre on prend 3,14 pour le nombre pi, ce qui donne des résultats un peu approchés."),
+        para("Le nombre pi est le rapport entre le périmètre d'un cercle et son diamètre : il vaut environ 3,14 pour tous les cercles. Le périmètre d'un cercle de rayon r est donc 3,14 × 2 × r. "
+             "L'aire d'un disque de rayon r, 3,14 × r × r, est donnée ici comme une formule à connaître. Le volume d'un cylindre se comprend comme celui d'un pavé : on empile des disques identiques, autant que la hauteur le permet, donc volume = aire de la base × hauteur."),
         rule("Aire d'un disque, aire latérale et volume d'un cylindre",
              "Un disque de rayon " + N("r") + " a pour aire " + N("3,14 \\times r \\times r") + ". Pour un cylindre droit de rayon " + N("r") + " et de hauteur " + N("h") + " : l'aire latérale est " + N("2 \\times 3,14 \\times r \\times h")
              + " (le rectangle du patron), l'aire totale ajoute les deux bases, " + N("2 \\times 3,14 \\times r \\times h + 2 \\times 3,14 \\times r \\times r") + ", et le volume est l'aire de la base fois la hauteur, " + N("3,14 \\times r \\times r \\times h") + "."),
@@ -193,7 +197,7 @@ S4 = Section(
                 "On calcule la contenance du seau en litres, puis on divise la contenance de la bassine par celle du seau. Le résultat n'est pas entier : on arrondit à l'entier supérieur.",
                 [(N("3,14 \\times 10 \\times 10 \\times 20") + " = " + N("6280"), "Volume du seau : 6 280 cm³."),
                  (N("6280 \\div 1000") + " = " + N("6,28"), "Le seau contient 6,28 L."),
-                 (N("160 \\div 6,28"), "On cherche combien de fois 6,28 L entre dans 160 L."),
+                 (N("160 \\div 6,28") + " ≈ " + N("25,5"), "On cherche combien de fois 6,28 L entre dans 160 L. On ne peut pas utiliser une partie de seau : on prend l'entier juste au-dessus."),
                  ("25 × 6,28 = 157 est plus petit que 160 ; 26 × 6,28 = 163,28 est plus grand", "25 seaux ne suffisent pas, 26 seaux remplissent la bassine (et débordent un peu).")],
                 "Il faut 26 seaux.", "d('3,14')*10*10*20==6280 and 25*d('6,28')<160<26*d('6,28')"),
         warning("Le rayon est la moitié du diamètre : un cylindre de diamètre 10 cm a un rayon de 5 cm. Et dans la formule de l'aire du disque, on multiplie le rayon par lui-même, on ne le double pas."),
@@ -238,8 +242,8 @@ PRACTICE = [
     number("p23", "volumes", "Quel est le volume d'un cube d'arête 1,2 dm, en dm³ ?", d("1,728"), 3, ["1,2 × 1,2 × 1,2."], ["1,2 × 1,2 = 1,44.", "1,44 × 1,2 = 1,728 dm³."], units=["dm3", "dm³"]),
     number("p24", "volumes", "Un réservoir en forme de pavé droit mesure 2 m sur 1,5 m sur 1 m. Combien de litres contient-il, en L ?", Fraction(3000), 3, ["Volume en m³, puis × 1 000."], ["2 × 1,5 × 1 = 3 m³.", "3 × 1 000 = 3 000 L."], units=["L"]),
     number("p25", "volumes", "Combien de cubes de 1 cm d'arête peut-on ranger dans une boîte de 6 cm sur 5 cm sur 2 cm ?", Fraction(60), 2, ["C'est le volume en cm³."], ["6 × 5 × 2 = 60 cubes."]),
-    choice("p26", "volumes", "Karim dit : « le volume d'un cube d'arête 3 cm est 9 cm³ ». Quelle est son erreur ?", ["Il a calculé 3 × 3 au lieu de 3 × 3 × 3", "Il a oublié l'unité", "Il a multiplié par 4"], 0, 3,
-           ["Combien de dimensions faut-il multiplier pour un volume ?"], ["Le volume d'un cube est arête × arête × arête = 27 cm³.", "3 × 3 = 9 est l'aire d'une face."], wrong={1: "L'unité est correcte : 9 cm² aurait été l'aire.", 2: "Il n'y a pas de multiplication par 4."}),
+    choice("p26", "volumes", "Karim dit : « le volume d'un cube d'arête 3 cm est 9 cm³ ». Quelle est son erreur ?", ["Il a calculé 3 × 3 au lieu de 3 × 3 × 3", "Il a calculé 6 × 3 au lieu de 3 × 3 × 3", "Il a doublé l'arête"], 0, 3,
+           ["Combien de dimensions faut-il multiplier pour un volume ?"], ["Le volume d'un cube est arête × arête × arête = 27 cm³.", "3 × 3 = 9 est l'aire d'une face."], wrong={1: "6 × 3 = 18, pas 9.", 2: "Doubler l'arête donnerait 6, pas 9."}),
     number("p27", "cylindre", "Quelle est l'aire d'un disque de rayon 10 cm, en cm² ? (pi = 3,14)", Fraction(314), 1, ["3,14 × r × r."], ["10 × 10 = 100.", "3,14 × 100 = 314 cm²."], units=["cm2", "cm²"]),
     number("p28", "cylindre", "Quel est le périmètre d'un cercle de rayon 7 cm, en cm ? (pi = 3,14)", d("43,96"), 2, ["2 × 3,14 × r."], ["6,28 × 7 = 43,96 cm."], units=["cm"]),
     number("p29", "cylindre", "Quelle est l'aire latérale d'un cylindre de rayon 2 cm et de hauteur 10 cm, en cm² ? (pi = 3,14)", d("125,6"), 2, ["Périmètre de la base fois hauteur."], ["2 × 3,14 × 2 = 12,56.", "12,56 × 10 = 125,6 cm²."], units=["cm2", "cm²"]),
@@ -272,8 +276,8 @@ def assessment(rng):
     length, width, height = box()
     questions.append(number("a1", "elements", f"Quelle est la longueur totale des arêtes d'un pavé droit de {length} cm sur {width} cm sur {height} cm, en cm ?", Fraction(4 * (length + width + height)), 2,
                             ["4 arêtes pour chaque dimension."], [f"4 × ({length} + {width} + {height}) = 4 × {length + width + height} = {4 * (length + width + height)} cm."], units=["cm"]))
-    # 2. the side of a cube from its edge length
-    edge = rng.randint(2, 15)
+    # 2. total edge length of a cube
+    edge = rng.choice([e for e in range(2, 16) if e not in (5, 7, 9)])
     questions.append(number("a2", "elements", f"Un cube a une arête de {edge} cm. Quelle est la longueur totale de ses arêtes, en cm ?", Fraction(12 * edge), 1, ["Un cube a 12 arêtes égales."], [f"12 × {edge} = {12 * edge} cm."], units=["cm"]))
     # 3. lateral area
     length, width, height = box()
@@ -285,20 +289,22 @@ def assessment(rng):
     questions.append(number("a4", "aires", f"Quelle est l'aire totale d'un pavé droit de {length} cm sur {width} cm sur {height} cm, en cm² ?", Fraction(total), 3, ["Trois sortes de faces, chacune en double."],
                             [f"{length} × {width} = {length * width}, {length} × {height} = {length * height}, {width} × {height} = {width * height}.", f"2 × ({length * width} + {length * height} + {width * height}) = {total} cm²."], units=cm2))
     # 5. total area of a cube
-    edge = rng.randint(2, 15)
+    edge = rng.randint(7, 15)
     questions.append(number("a5", "aires", f"Quelle est l'aire totale d'un cube d'arête {edge} cm, en cm² ?", Fraction(6 * edge * edge), 2, ["6 faces carrées."], [f"Une face : {edge} × {edge} = {edge * edge}.", f"6 × {edge * edge} = {6 * edge * edge} cm²."], units=cm2))
     # 6. volume of a box
     length, width, height = box()
     questions.append(number("a6", "volumes", f"Quel est le volume d'un pavé droit de {length} cm sur {width} cm sur {height} cm, en cm³ ?", Fraction(length * width * height), 1, ["Multiplie les trois dimensions."],
                             [f"{length} × {width} = {length * width}.", f"{length * width} × {height} = {length * width * height} cm³."], units=cm3))
     # 7. volume of a cube
-    edge = rng.randint(2, 12)
+    edge = rng.randint(6, 12)
     questions.append(number("a7", "volumes", f"Quel est le volume d'un cube d'arête {edge} cm, en cm³ ?", Fraction(edge**3), 2, ["Arête × arête × arête."], [f"{edge} × {edge} = {edge * edge}.", f"{edge * edge} × {edge} = {edge**3} cm³."], units=cm3))
     # 8. a conversion
-    cm3_value = rng.choice([1500, 2400, 3750, 4200, 6800, 8250, 12500])
+    cm3_value = rng.randrange(1100, 19000, 50)
     questions.append(number("a8", "volumes", f"Convertis {cm3_value} cm³ en litres.", Fraction(cm3_value, 1000), 2, ["1 L = 1 000 cm³."], [f"{cm3_value} ÷ 1 000 = {show(Fraction(cm3_value, 1000))} L."], units=["L"]))
     # 9. the missing height
     length, width, height = rng.randint(3, 12), rng.randint(2, 9), rng.randint(2, 9)
+    while height in (length, width):
+        height = rng.randint(2, 9)
     questions.append(number("a9", "volumes", f"Un pavé droit a un volume de {length * width * height} cm³, une longueur de {length} cm et une largeur de {width} cm. Quelle est sa hauteur, en cm ?", Fraction(height), 3,
                             ["Aire de la base d'abord, puis divise le volume par cette aire."], [f"Base : {length} × {width} = {length * width} cm².", f"{length * width * height} ÷ {length * width} = {height} cm."], units=["cm"]))
     # 10. volume of a cylinder
@@ -307,18 +313,18 @@ def assessment(rng):
     questions.append(number("a10", "cylindre", f"Quel est le volume d'un cylindre de rayon {radius} cm et de hauteur {height} cm, en cm³ ? (pi = 3,14)", volume, 3, ["Aire de la base fois hauteur."],
                             [f"Base : 3,14 × {radius} × {radius} = {show(PI * radius * radius)}.", f"{show(PI * radius * radius)} × {height} = {show(volume)} cm³."], units=cm3))
     # 11. lateral area of a cylinder
-    radius, height = rng.randint(2, 9), rng.randint(3, 15)
+    radius, height = rng.randint(3, 9), rng.randint(3, 15)
     lateral = 2 * PI * radius * height
     questions.append(number("a11", "cylindre", f"Quelle est l'aire latérale d'un cylindre de rayon {radius} cm et de hauteur {height} cm, en cm² ? (pi = 3,14)", lateral, 3, ["Périmètre de la base fois hauteur."],
                             [f"Périmètre : 2 × 3,14 × {radius} = {show(2 * PI * radius)}.", f"{show(2 * PI * radius)} × {height} = {show(lateral)} cm²."], units=cm2))
     # 12. the classic mistake with a cube
-    edge = rng.randint(3, 9)
-    options = [f"Il a calculé {edge} × {edge} au lieu de {edge} × {edge} × {edge}", "Il a oublié l'unité", f"Il a multiplié par {edge + 1}"]
+    edge = rng.randint(4, 9)
+    options = [f"Il a calculé {edge} × {edge} au lieu de {edge} × {edge} × {edge}", f"Il a calculé {edge} + {edge} + {edge} au lieu de {edge} × {edge} × {edge}", "Il a doublé l'arête"]
     order = [0, 1, 2]
     rng.shuffle(order)
     questions.append(choice("a12", "volumes", f"Karim dit : « le volume d'un cube d'arête {edge} cm est {edge * edge} cm³ ». Quelle est son erreur ?", [options[i] for i in order], order.index(0), 3,
                             ["Combien de dimensions multiplie-t-on pour un volume ?"], [f"{edge} × {edge} = {edge * edge} est l'aire d'une face.", f"Le volume est {edge} × {edge} × {edge} = {edge**3} cm³."],
-                            wrong={order.index(1): "L'unité n'est pas le problème : c'est le calcul.", order.index(2): "Il n'y a aucune multiplication par un autre nombre."}))
+                            wrong={order.index(1): "Une addition ne donne pas le volume, et le résultat annoncé est différent.", order.index(2): "Doubler l'arête ne donne pas ce nombre."}))
     return questions
 
 
@@ -336,5 +342,5 @@ CHAPTER = Chapter(
     sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
     status_note="Tenth chapter of the Senegal Sixième course. Its contents follow lesson 8 of the Côte d'Ivoire Sixième programme (box, cube and cylinder, their parts and nets, areas and volumes), which was read for it, "
-                "so it is also offered there, but the programme's own situations are not reproduced. This chapter has no figures: it is meant to be studied with a real box, and it takes 3,14 for pi. It has not been checked against the official Senegalese programme.",
+                "so it is also offered there, but the programme's own situations are not reproduced. This chapter has no figures: it is meant to be studied with a real box, and it takes 3,14 for pi. Building a net or a solid by hand, which that lesson also asks for, is not covered. It has not been checked against the official Senegalese programme.",
 )

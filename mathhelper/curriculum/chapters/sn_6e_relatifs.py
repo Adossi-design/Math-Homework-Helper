@@ -331,7 +331,7 @@ def assessment(rng):
     # 11. goal difference over several matches
     diffs = [rng.choice([-1, 1]) * rng.randint(1, 5) for _ in range(3)]
     total = sum(diffs)
-    text = ", ".join(f"{v:+d}" for v in diffs[:2]) + f" et {diffs[2]:+d}"
+    text = ", ".join(N(f"{v:+d}") for v in diffs[:2]) + " et " + N(f"{diffs[2]:+d}")
     questions.append(number("a11", "addition", f"Les goal-différentiels d'une équipe lors de trois matchs sont {text}. Quel est son goal-différentiel total ?", Fraction(total), 3,
                             ["Additionne les trois nombres relatifs, de gauche à droite."],
                             [f"{show(diffs[0])} + {show(diffs[1])} = {show(diffs[0] + diffs[1])}.", f"{show(diffs[0] + diffs[1])} + {show(diffs[2])} = {total}."]))

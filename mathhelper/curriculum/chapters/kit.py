@@ -71,7 +71,7 @@ def spaced(value, places):
 
 
 UNIT_SYNONYMS = {
-    "F": ("FCFA", "F CFA", "CFA", "francs CFA", "francs", "franc"), "L": ("litres", "litre"), "m": ("mètres", "mètre"), "kg": ("kilogrammes",), "km": ("kilomètres",),
+    "F": ("FCFA", "F CFA", "CFA", "francs CFA", "francs", "franc"), "L": ("litres", "litre", "dm³", "dm3"), "cm2": ("cm^2", "centimètres carrés"), "cm²": ("cm^2", "centimètres carrés"), "cm3": ("cm^3", "centimètres cubes"), "cm³": ("cm^3", "centimètres cubes"), "m": ("mètres", "mètre"), "kg": ("kilogrammes",), "km": ("kilomètres",),
     "cm": ("centimètres", "centimètre"), "g": ("grammes", "gramme"), "min": ("minutes", "minute", "mn"), "s": ("secondes", "seconde"), "%": ("pour cent",),
     "m2": ("m²", "m^2", "mètres carrés"), "m²": ("m2", "m^2", "mètres carrés"), "dm3": ("dm³", "dm^3"), "dm³": ("dm3", "dm^3"), "°C": ("degrés", "degré", "°"),
 }
