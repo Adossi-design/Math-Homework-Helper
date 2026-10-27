@@ -53,6 +53,8 @@ def strip_units(text, units):
 def parse_plain(text):
     """Read a decimal such as 3,5 or 3.5 or 1 500,25 or 1.353.287 as an exact fraction, or return None."""
     text = text.strip()
+    if text.startswith("(") and text.endswith(")"):
+        text = text[1:-1].strip()
     if _GROUPED.match(text):
         text = text.replace(" ", "")
     if text.count(".") > 1 and "," not in text:
