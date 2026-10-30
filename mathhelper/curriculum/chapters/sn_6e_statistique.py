@@ -189,6 +189,62 @@ S3 = Section(
                hints=["35 % = 0,35."], solution=["400 × 0,35 = 140 élèves."]),
     ])
 
+# ----- Section 4: comparing and interpreting results -----
+S4 = Section(
+    "interpreter", "Comparer et interpréter des résultats", 24, "interpreter",
+    "Comparer des fréquences, retrouver un effectif ou un total à partir d'un pourcentage, et conclure à partir d'un tableau.",
+    [
+        para("Une enquête ne sert à rien si on ne sait pas lire ses résultats. Comparer deux groupes de tailles différentes avec les seuls effectifs est trompeur : 14 sur 40 et 11 sur 25 ne se comparent pas directement. "
+             "Il faut passer aux fréquences, qui se ramènent toutes à 100."),
+        rule("Comparer et conclure",
+             "Pour comparer deux groupes, on calcule la fréquence de chacun avec le même mode d'écriture (nombre décimal ou pourcentage) et on compare les fréquences, pas les effectifs. "
+             "Pour retrouver un effectif, on multiplie la fréquence par l'effectif total. Pour retrouver le total, on divise l'effectif par la fréquence."),
+        example("Exemple 1", "Dans une classe de 40 élèves, 14 aiment le football. Dans une autre classe de 25 élèves, 11 aiment le football. Dans quelle classe la fréquence est-elle la plus grande ?",
+                "On compare les fréquences, pas les effectifs, car les classes n'ont pas le même nombre d'élèves.",
+                [(N("14 \\div 40") + " = " + N("0,35"), "Première classe : 35 %."),
+                 (N("11 \\div 25") + " = " + N("0,44"), "Deuxième classe : 44 %."),
+                 ("0,44 est plus grand que 0,35", "La fréquence est plus grande dans la classe de 25 élèves, alors qu'elle a moins de fans en effectif.")],
+                "La classe de 25 élèves (44 % contre 35 %).", "d('14')/40==d('0,35') and d('11')/25==d('0,44') and d('0,44')>d('0,35')"),
+        example("Exemple 2", "Dans un sondage de 200 élèves, 35 % choisissent le riz, 45 % le mil et les autres le maïs. Combien d'élèves choisissent le maïs ?",
+                "On calcule d'abord la fréquence du maïs, puis l'effectif.",
+                [(N("100 - 35 - 45") + " = " + N("20"), "La somme des fréquences est 100 % : le maïs a 20 %."),
+                 (N("200 \\times 0,2") + " = " + N("40"), "20 % = 0,2 : l'effectif est 0,2 fois l'effectif total.")],
+                N("40") + " élèves.", "100-35-45==20 and 200*d('0,2')==40"),
+        example("Exemple 3", "Pour le trajet vers l'école, on a compté 18 élèves à pied, 14 à vélo et 8 en bus (40 en tout). Quelle est la fréquence en pourcentage de ceux qui ne viennent pas à pied ?",
+                "On additionne les effectifs concernés avant de calculer la fréquence.",
+                [(N("14 + 8") + " = " + N("22"), "22 élèves ne viennent pas à pied."),
+                 (N("22 \\div 40") + " = " + N("0,55"), "La fréquence est 0,55."),
+                 (N("0,55 \\times 100") + " = " + N("55"), "En pourcentage : 55 %.")],
+                N("55\\ \\%") + ".", "(14+8)*100/40==55 and d('22')/40==d('0,55')"),
+        example("Exemple 4", "Dans une élection, Awa a 120 voix, Moussa 150 et Yao 30. Qui est élu, avec quel pourcentage des voix ?",
+                "On calcule l'effectif total, puis la fréquence du candidat qui a le plus de voix.",
+                [(N("120 + 150 + 30") + " = " + N("300"), "Il y a 300 suffrages."),
+                 ("Moussa a le plus grand effectif : 150 voix", "C'est lui qui est élu."),
+                 (N("150 \\div 300") + " = " + N("0,5") + " = " + N("50\\ \\%"), "Il a la moitié des voix.")],
+                "Moussa est élu avec " + N("50\\ \\%") + " des voix.", "120+150+30==300 and 150*100//300==50"),
+        example("Exemple 5", "Dans un groupe, 30 % des personnes aiment le basket, et elles sont 54. Combien y a-t-il de personnes dans le groupe ?",
+                "On cherche l'effectif total : effectif total = effectif ÷ fréquence.",
+                [(N("30\\ \\%") + " = " + N("0,3"), "On écrit le pourcentage en décimal."),
+                 (N("54 \\div 0,3") + " = " + N("180"), "On divise l'effectif par la fréquence."),
+                 ("Vérification : " + N("180 \\times 0,3") + " = " + N("54"), "On retrouve l'effectif de départ.")],
+                N("180") + " personnes.", "54*100//30==180 and 180*d('0,3')==54"),
+        warning("Ne compare jamais des effectifs quand les totaux sont différents : 14 sur 40 n'est pas plus petit que 11 sur 25 parce que 14 > 11, ni parce que 40 > 25. Une fréquence est toujours comprise entre 0 et 1 (entre 0 % et 100 %)."),
+    ],
+    [
+        choice("s4-g1", "interpreter", "Dans la classe A, 9 élèves sur 20 portent des lunettes. Dans la classe B, c'est 12 élèves sur 30. Où la fréquence est-elle la plus grande ?",
+               ["Dans la classe A (45 %)", "Dans la classe B (40 %)", "Elle est la même"], 0,
+               hints=["Calcule chaque fréquence en pourcentage."], solution=["9 ÷ 20 = 0,45 = 45 %.", "12 ÷ 30 = 0,4 = 40 %. 45 est plus grand que 40 : la classe A."],
+               wrong={1: "12 est plus grand que 9, mais la classe B est aussi plus grande : sa fréquence est 40 %, plus petite que 45 %.", 2: "45 % et 40 % ne sont pas égaux."}),
+        number("s4-g2", "interpreter", "Dans un sondage de 300 élèves, 40 % aiment le riz et 35 % le mil. Les autres aiment le maïs. Combien d'élèves aiment le maïs ?", Fraction(75),
+               hints=["Cherche d'abord le pourcentage du maïs."], solution=["100 − 40 − 35 = 25 %.", "300 × 0,25 = 75 élèves."]),
+        number("s4-g3", "interpreter", "Sur 50 votants, Yao a 14 voix. Quelle est sa fréquence en pourcentage, en % ?", Fraction(28), units=["%"],
+               hints=["Effectif divisé par effectif total, puis multiplie par 100."], solution=["14 ÷ 50 = 0,28.", "0,28 × 100 = 28 %."]),
+        number("s4-g4", "interpreter", "45 voix représentent 30 % des suffrages. Combien y a-t-il de suffrages en tout ?", Fraction(150),
+               hints=["Effectif total = effectif ÷ fréquence."], solution=["30 % = 0,3.", "45 ÷ 0,3 = 150."]),
+        number("s4-g5", "interpreter", "Dans un tableau de 80 données, deux effectifs sont 24 et 36. Quelle est la fréquence en pourcentage du troisième effectif, en % ?", Fraction(25), units=["%"],
+               hints=["Trouve d'abord le troisième effectif."], solution=["80 − (24 + 36) = 20.", "20 ÷ 80 = 0,25 = 25 %."]),
+    ])
+
 PRACTICE = [
     number("p1", "effectif", f"Voici 25 bulletins : {LIST_25}. Combien de voix pour F ?", Fraction(VOTES_25["F"]), 1, ["Compte les F en les barrant."], [f"Il y a {VOTES_25['F']} lettres F."]),
     number("p2", "effectif", f"Dans les mêmes bulletins ({LIST_25}), combien de voix pour K ?", Fraction(VOTES_25["K"]), 1, ["Compte les K."], [f"Il y a {VOTES_25['K']} lettres K."]),
@@ -229,6 +285,14 @@ PRACTICE = [
     number("p29", "tableaux", "Un marchand a vendu 360 kg de riz, soit 45 % de son stock. Quel était son stock, en kg ?", Fraction(800), 3, ["Effectif ÷ fréquence."], ["360 ÷ 0,45 = 36 000 ÷ 45 = 800 kg."], units=["kg"]),
     number("p30", "tableaux", "Une enquête sur 250 élèves : 40 % aiment le football, 28 % le basket et les autres aucun des deux. Combien d'élèves n'aiment aucun des deux ?", Fraction(80), 3,
            ["Calcule le pourcentage de ceux qui n'aiment aucun des deux, puis l'effectif."], ["100 − 40 − 28 = 32 %.", "250 × 0,32 = 80 élèves."]),
+    number("p31", "interpreter", "Dans une classe de 25 élèves, 8 sont des filles de plus de 12 ans. Dans une classe de 40 élèves, ils sont 14. Quelle est la plus grande des deux fréquences, en % ?", Fraction(35), 2, ["Calcule les deux fréquences et garde la plus grande."], ["8 ÷ 25 = 0,32 = 32 %.", "14 ÷ 40 = 0,35 = 35 %. La plus grande est 35 %."], units=["%"]),
+    number("p32", "interpreter", "Dans un sondage de 400 personnes, 15 % préfèrent le thé. Combien de personnes cela fait-il ?", Fraction(60), 1, ["400 × 0,15."], ["15 % = 0,15.", "400 × 0,15 = 60 personnes."]),
+    number("p33", "interpreter", "36 voix pour Awa représentent 45 % des suffrages. Combien y a-t-il de suffrages en tout ?", Fraction(80), 2, ["Effectif total = effectif ÷ fréquence."], ["45 % = 0,45.", "36 ÷ 0,45 = 80."]),
+    number("p34", "interpreter", "Sur 250 élèves, 60 viennent à pied, 100 en bus et les autres à vélo. Quelle est la fréquence en pourcentage de ceux qui viennent à vélo, en % ?", Fraction(36), 3, ["Effectif des élèves à vélo d'abord."], ["250 − (60 + 100) = 90 élèves à vélo.", "90 ÷ 250 = 0,36 = 36 %."], units=["%"]),
+    number("p35", "interpreter", "Pour être élu, un candidat doit avoir au moins 40 % des 150 suffrages. Quel est le nombre minimum de voix ?", Fraction(60), 2, ["Effectif = effectif total × fréquence."], ["40 % = 0,4.", "150 × 0,4 = 60 voix."]),
+    choice("p36", "interpreter", "Peut-on trouver une fréquence égale à 1,2 dans un tableau d'effectifs ?", ["Oui, si l'effectif est grand", "Non : une fréquence est toujours comprise entre 0 et 1", "Oui, quand le total est 100"], 1, 2,
+           ["Une fréquence est un effectif divisé par un total qui le contient."], ["L'effectif est toujours plus petit ou égal au total : la fréquence est entre 0 et 1, c'est-à-dire entre 0 % et 100 %."],
+           wrong={0: "Même avec un grand effectif, il ne peut pas dépasser l'effectif total.", 2: "Avec un total de 100, la fréquence reste inférieure ou égale à 1."}),
 ]
 
 SUMMARY = [
@@ -242,6 +306,7 @@ CONCEPTS = {
     "effectif": ("Effectif et effectif total", "effectif"),
     "frequence": ("Fréquence et pourcentage", "frequence"),
     "tableaux": ("Compléter des tableaux, problèmes", "tableaux"),
+    "interpreter": ("Comparer et interpréter des résultats", "interpreter"),
 }
 
 
@@ -332,14 +397,15 @@ CHAPTER = Chapter(
     id=CHAPTER_ID, country="sn", level="6e", number=9, title="Statistique : effectifs et fréquences", language="fr",
     intro="Qui a gagné l'élection du délégué ? Quelle part des élèves vient à pied ? Pour répondre, on compte, on range les données dans un tableau, et on calcule des fréquences et des pourcentages. "
           "Ce chapitre t'apprend à organiser des données, à calculer un effectif et une fréquence, et à passer d'un tableau à l'autre.",
-    objectives=["Compter des données et les organiser dans un tableau d'effectifs, calculer l'effectif total.",
+    objectives=["Comparer des fréquences, retrouver un effectif ou un total à partir d'un pourcentage et conclure à partir d'un tableau.",
+                "Compter des données et les organiser dans un tableau d'effectifs, calculer l'effectif total.",
                 "Calculer la fréquence d'un résultat et l'exprimer en nombre décimal, en fraction et en pourcentage.",
                 "Retrouver un effectif ou l'effectif total à partir d'une fréquence.",
                 "Compléter un tableau d'effectifs et de fréquences, et comparer deux séries par leurs fréquences.",
                 "Résoudre des problèmes de la vie courante avec des pourcentages."],
     prerequisites=[{"text": "Diviser des nombres décimaux et passer d'une fraction à un nombre décimal.", "chapter": "sn-6e-division"},
                    {"text": "Comprendre les pourcentages simples."}],
-    sections=[S1, S2, S3], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
+    sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
     status_note="Ninth chapter of the Senegal Sixième course. Its contents follow lesson 13 of the Côte d'Ivoire Sixième programme (count, total count, frequency, frequency as a percentage, tables), which was read for it, "
                 "and, as that programme asks, the words modality, character and population are not used. It is also offered there, but the programme's own situations and activities are not reproduced. It has not been checked against the official Senegalese programme.",

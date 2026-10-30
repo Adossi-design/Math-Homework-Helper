@@ -189,6 +189,62 @@ S3 = Section(
                hints=["Écris la dette comme un nombre négatif, puis additionne."], solution=["Dette : -1 500. Gain : +4 000.", "(-1 500) + 4 000 = 2 500 : Awa a 2 500 F."]),
     ])
 
+# ----- Section 4: problems with relative numbers -----
+S4 = Section(
+    "problemes", "Résoudre des problèmes avec des nombres relatifs", 24, "problemes",
+    "Traduire une situation (température, profondeur, compte en banque) par une somme de nombres relatifs, la calculer et ranger des résultats.",
+    [
+        para("Les nombres relatifs servent à décrire des situations où l'on monte et où l'on descend : une température, une profondeur sous l'eau, un compte en banque, un étage d'immeuble. "
+             "Chaque événement se traduit par un nombre relatif, et le résultat final est leur somme."),
+        rule("Traduire une situation",
+             "Monter, gagner, déposer de l'argent : on ajoute un nombre positif. Descendre, perdre, retirer de l'argent : on ajoute un nombre négatif. "
+             "Par exemple « la température baisse de 3 °C » se traduit par " + N("+ (-3)") + "."),
+        example("Exemple 1", "La température est de -4 °C le matin. Elle monte de 9 °C, puis baisse de 3 °C. Quelle est la température le soir ?",
+                "On traduit chaque changement par un nombre relatif et on additionne de gauche à droite.",
+                [(N("(-4) + (+9) + (-3)"), "Départ -4, monter de 9 donne +9, baisser de 3 donne -3."),
+                 (N("(-4) + 9") + " = " + N("5"), "Signes contraires : 9 − 4 = 5, avec le signe de 9."),
+                 (N("5 + (-3)") + " = " + N("2"), "Signes contraires : 5 − 3 = 2, avec le signe de 5.")],
+                "La température du soir est " + N("2") + " °C.", "-4+9-3==2"),
+        example("Exemple 2", "Un plongeur est à -12 m. Il remonte de 5 m, puis redescend de 8 m. À quelle altitude est-il ?",
+                "Remonter augmente l'altitude, redescendre la diminue.",
+                [(N("(-12) + (+5) + (-8)"), "Départ -12, remonter de 5 donne +5, redescendre de 8 donne -8."),
+                 (N("(-12) + 5") + " = " + N("-7"), "Signes contraires : 12 − 5 = 7, avec le signe de -12."),
+                 (N("(-7) + (-8)") + " = " + N("-15"), "Même signe : 7 + 8 = 15, on garde le signe moins.")],
+                "Le plongeur est à " + N("-15") + " m.", "-12+5-8==-15"),
+        example("Exemple 3", "Le solde d'un compte est de 2 500 F. Il y a un retrait de 3 000 F, puis un dépôt de 1 200 F. Quel est le nouveau solde ?",
+                "Un retrait est un nombre négatif, un dépôt est un nombre positif.",
+                [(N("2500 + (-3000)") + " = " + N("-500"), "Signes contraires : 3 000 − 2 500 = 500, avec le signe de -3 000 : le compte est à découvert de 500 F."),
+                 (N("(-500) + 1200") + " = " + N("700"), "Signes contraires : 1 200 − 500 = 700, avec le signe de 1 200.")],
+                "Le nouveau solde est " + N("700") + " F.", "2500-3000==-500 and -500+1200==700"),
+        example("Exemple 4", "Ranger du plus froid au plus chaud les températures -7 °C, 3 °C, -2 °C, 0 °C et -10 °C.",
+                "On classe d'abord les négatifs : entre deux négatifs, le plus petit est celui dont la partie sans signe est la plus grande.",
+                [("Négatifs : -10, -7, -2", "Parties sans signe 10, 7 et 2 : -10 est le plus petit."),
+                 ("Puis 0, puis le positif 3", "0 est plus grand que tout négatif et plus petit que tout positif."),
+                 (N("-10 < -7 < -2 < 0 < 3"), "On écrit l'ordre croissant.")],
+                N("-10 < -7 < -2 < 0 < 3"), "sorted([-7, 3, -2, 0, -10])==[-10, -7, -2, 0, 3]"),
+        example("Exemple 5", "Quel nombre faut-il ajouter à -8 pour obtenir 5 ?",
+                "On cherche un nombre x tel que -8 + x = 5. On le lit sur la droite graduée.",
+                [("De -8 à 0, il y a 8 graduations", "Il faut d'abord ajouter +8 pour arriver en 0."),
+                 ("De 0 à 5, il y a encore 5 graduations", "Il faut ajouter +5 de plus."),
+                 (N("8 + 5") + " = " + N("13"), "En tout, on ajoute 13.")],
+                "Il faut ajouter " + N("13") + ".", "-8+13==5"),
+        warning("Attention au vocabulaire : « la température baisse de 3 °C » ne veut pas dire que la température est de -3 °C, elle baisse de 3 par rapport à la température de départ. "
+                "Le nombre -3 est le changement, pas le résultat."),
+    ],
+    [
+        number("s4-g1", "problemes", "La température est de -6 °C le matin. Elle monte de 10 °C. Quelle est la température, en °C ?", Fraction(4), units=["°C"],
+               hints=["Monter de 10, c'est ajouter +10."], solution=["(-6) + 10 : signes contraires, 10 − 6 = 4, signe de 10.", "La température est 4 °C."]),
+        number("s4-g2", "problemes", "Un ascenseur est à l'étage -2 (sous-sol). Il monte de 7 étages, puis descend de 3 étages. À quel étage est-il ?", Fraction(2),
+               hints=["Monter, c'est ajouter un nombre positif, descendre un nombre négatif."], solution=["(-2) + 7 = 5.", "5 + (-3) = 2 : l'ascenseur est à l'étage 2."]),
+        number("s4-g3", "problemes", "Le solde d'un compte est de -1 500 F. On dépose 4 000 F. Quel est le nouveau solde, en F ?", Fraction(2500), units=["F"],
+               hints=["Un dépôt est un nombre positif."], solution=["(-1 500) + 4 000 : signes contraires, 4 000 − 1 500 = 2 500, signe de 4 000.", "Le solde est 2 500 F."]),
+        choice("s4-g4", "problemes", "Quel est le plus petit de ces nombres ?", [N("-9"), N("-2"), N("0"), N("-15")], 3,
+               hints=["Parmi les négatifs, le plus petit a la plus grande partie sans signe."], solution=["Les négatifs -9, -2 et -15 sont plus petits que 0. Entre eux, -15 a la plus grande partie sans signe : c'est le plus petit."],
+               wrong={0: "-9 est plus grand que -15 : il est plus près de 0.", 1: "-2 est le plus grand des trois négatifs.", 2: "0 est plus grand que tout nombre négatif."}),
+        number("s4-g5", "problemes", "Quel nombre faut-il ajouter à -5 pour obtenir 3 ?", Fraction(8),
+               hints=["Va de -5 jusqu'à 0, puis de 0 jusqu'à 3."], solution=["De -5 à 0, il faut +5. De 0 à 3, il faut +3.", "5 + 3 = 8."]),
+    ])
+
 # ----- Independent practice -----
 PRACTICE = [
     number("p1", "sens", "Quel est l'opposé de " + N("-12") + " ?", Fraction(12), 1, ["Change le signe."], ["L'opposé de -12 est 12."]),
@@ -232,6 +288,12 @@ PRACTICE = [
     number("p29", "addition", "Un sous-marin est à 40 m sous l'eau. Il remonte de 15 m puis redescend de 10 m. Quelle est sa position finale, en m ? (Sous l'eau = négatif.)", Fraction(-35), 3,
            ["Position -40, puis +15, puis -10."], ["(-40) + 15 = -25.", "(-25) + (-10) = -35 m."], units=["m"]),
     number("p30", "addition", "Calcule " + N("(-1,75) + (-0,25) + 3") + ".", Fraction(1), 3, ["Additionne d'abord les deux négatifs."], ["(-1,75) + (-0,25) = -2.", "(-2) + 3 = 1."]),
+    number("p31", "problemes", "Un plongeur est à -20 m. Il remonte de 8 m. À quelle altitude est-il, en m ?", Fraction(-12), 1, ["Remonter, c'est ajouter +8."], ["(-20) + 8 = -(20 − 8) = -12 m."], units=["m"]),
+    number("p32", "problemes", "La température est de 5 °C le soir. Elle baisse de 9 °C pendant la nuit. Quelle est la température, en °C ?", Fraction(-4), 2, ["Baisser de 9, c'est ajouter -9."], ["5 + (-9) : signes contraires, 9 − 5 = 4, signe de -9.", "La température est -4 °C."], units=["°C"]),
+    number("p33", "problemes", "Un compte est à 3 000 F. Il y a deux retraits de 2 500 F et de 1 000 F. Quel est le solde, en F ?", Fraction(-500), 2, ["Deux retraits : deux nombres négatifs."], ["3 000 + (-2 500) = 500.", "500 + (-1 000) = -500 F."], units=["F"]),
+    number("p34", "problemes", "Quel nombre faut-il ajouter à -12 pour obtenir -4 ?", Fraction(8), 2, ["De -12 à -4, on avance vers la droite."], ["De -12 à -4, il y a 12 − 4 = 8 graduations vers la droite.", "Il faut ajouter +8."]),
+    number("p35", "problemes", "Un avion est à 9 000 m d'altitude. Il descend de 3 500 m, puis remonte de 1 200 m. À quelle altitude est-il, en m ?", Fraction(6700), 3, ["Descendre : -3 500. Remonter : +1 200."], ["9 000 + (-3 500) = 5 500.", "5 500 + 1 200 = 6 700 m."], units=["m"]),
+    choice("p36", "problemes", "Quelle somme traduit « la température était de -3 °C, elle monte de 7 °C » ?", [N("(-3) + (+7)"), N("(-3) + (-7)"), N("(+3) + (+7)")], 0, 1, ["Monter, c'est ajouter un nombre positif."], ["Le départ est -3 et monter de 7 donne +7 : (-3) + (+7) = 4."], wrong={1: "(-7) correspond à une baisse de 7 °C.", 2: "Le départ est -3, pas +3."}),
 ]
 
 SUMMARY = [
@@ -246,6 +308,7 @@ CONCEPTS = {
     "sens": ("Nombres relatifs, opposé, droite graduée", "sens"),
     "comparer": ("Comparer des nombres relatifs", "comparer"),
     "addition": ("Additionner des nombres relatifs", "addition"),
+    "problemes": ("Problèmes avec des nombres relatifs", "problemes"),
 }
 
 
@@ -353,14 +416,15 @@ CHAPTER = Chapter(
     id=CHAPTER_ID, country="sn", level="6e", number=7, title="Les nombres relatifs", language="fr",
     intro="La température sous zéro, l'altitude sous le niveau de la mer, une dette, le bilan d'une équipe de football : certaines quantités ont besoin d'un signe. "
           "Ce chapitre t'apprend à lire et à placer les nombres relatifs, à les comparer et à les additionner.",
-    objectives=["Reconnaître des nombres entiers et décimaux relatifs, positifs et négatifs, et donner l'opposé d'un nombre.",
+    objectives=["Résoudre des problèmes de température, de profondeur ou de compte en traduisant chaque événement par un nombre relatif.",
+                "Reconnaître des nombres entiers et décimaux relatifs, positifs et négatifs, et donner l'opposé d'un nombre.",
                 "Lire et placer un point d'abscisse donnée sur une droite régulièrement graduée.",
                 "Comparer et ranger des nombres relatifs.",
                 "Additionner deux nombres relatifs, de même signe ou de signes contraires.",
                 "Résoudre des problèmes avec des gains, des pertes et des températures."],
     prerequisites=[{"text": "Comparer et ranger des nombres décimaux positifs.", "chapter": "sn-6e-decimaux"},
                    {"text": "Additionner et soustraire des nombres entiers."}],
-    sections=[S1, S2, S3], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
+    sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
     status_note="Seventh chapter of the Senegal Sixième course. Its contents follow lesson 10 of the Côte d'Ivoire Sixième programme (relative integers and decimals, opposite, comparing, adding, abscissa on a graduated line), which was read for it, "
                 "so it is also offered there, but the programme's own situations and activities are not reproduced. It has not been checked against the official Senegalese programme.",

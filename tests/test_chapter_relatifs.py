@@ -17,6 +17,8 @@ INDEPENDENT = {
     "p1": 12, "p2": F(-38, 10), "p3": 5, "p4": F(-7, 2), "p5": -12, "p6": 2, "p7": F(-42, 10), "p8": 1, "p9": 0, "p10": 0, "p13": -5, "p14": 0,
     "p16": -(4 + 6), "p17": 8 - 3, "p18": -(8 - 3), "p19": -(F(25, 10) + F(15, 10)), "p20": F(13, 10) - F(8, 10), "p21": -(F(75, 10) - F(225, 100)), "p22": 0,
     "p23": -5 + 8 - 6, "p24": (4 - 2) + (0 - 3), "p25": -6 + 9, "p26": -2000 + 1200, "p27": 0, "p28": 1, "p29": -40 + 15 - 10, "p30": F(-175, 100) + F(-25, 100) + 3,
+    "s4-g1": -6 + 10, "s4-g2": -2 + 7 - 3, "s4-g3": -1500 + 4000, "s4-g4": 3, "s4-g5": 8,
+    "p31": -20 + 8, "p32": 5 - 9, "p33": 3000 - 2500 - 1000, "p34": 8, "p35": 9000 - 3500 + 1200, "p36": 0,
 }
 
 
@@ -40,9 +42,9 @@ def test_negative_answers_are_read_in_every_usual_way():
 
 
 def test_chapter_shape_and_alignment_claims():
-    assert REL.number == 7 and len(REL.sections) == 3 and REL.also_for == ("ci",)
+    assert REL.number == 7 and len(REL.sections) == 4 and REL.also_for == ("ci",)
     assert "lesson 10 of the C" in REL.status_note and "not been checked against the official Senegalese" in REL.status_note
-    assert [s.id for s in REL.sections] == ["sens", "comparer", "addition"]
+    assert [s.id for s in REL.sections] == ["sens", "comparer", "addition", "problemes"]
 
 
 def test_assessment_keys_match_a_recalculation_from_each_prompt():

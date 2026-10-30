@@ -182,6 +182,61 @@ S3 = Section(
         number("s3-g5", "criteres", "Parmi 1 200 ; 3 450 ; 7 000 ; 9 100, combien sont divisibles par 100 ?", Fraction(3), hints=["Regarde les deux derniers chiffres."], solution=["1 200, 7 000 et 9 100 se terminent par 00.", "3 450 se termine par 50 : non. Il y en a 3."]),
     ])
 
+# ----- Section 4: problems with multiples and divisors -----
+S4 = Section(
+    "problemes", "Problèmes de multiples, de diviseurs et de partage", 24, "problemes",
+    "Utiliser les multiples communs et les diviseurs communs pour résoudre des problèmes de rencontre, de partage et de calendrier.",
+    [
+        para("Les multiples et les diviseurs ne servent pas seulement à faire des exercices : ils résolvent des problèmes concrets. Deux événements qui reviennent régulièrement vont se retrouver "
+             "à un multiple commun de leurs périodes. Et partager des objets sans reste, c'est chercher un diviseur commun."),
+        rule("Multiple commun et diviseur commun",
+             "Un multiple commun de deux nombres est un nombre qui est multiple de l'un et de l'autre. Le plus petit multiple commun non nul s'obtient en listant les multiples de chacun. "
+             "Un diviseur commun est un nombre qui divise les deux. Le plus grand diviseur commun s'obtient en listant les diviseurs de chacun et en gardant les plus grands qui sont dans les deux listes."),
+        example("Exemple 1", "Un feu clignote toutes les 6 secondes et un autre toutes les 8 secondes. Ils clignotent ensemble à l'instant 0. Quand clignotent-ils ensemble pour la première fois ensuite ?",
+                "On cherche le plus petit multiple commun non nul de 6 et de 8.",
+                [("Multiples de 6 : 6, 12, 18, 24, 30, ...", "On compte de 6 en 6."),
+                 ("Multiples de 8 : 8, 16, 24, 32, ...", "On compte de 8 en 8."),
+                 ("Le premier nombre dans les deux listes est 24", "Les feux clignotent ensemble au bout de " + N("24") + " secondes.")],
+                "Ils clignotent ensemble au bout de " + N("24") + " secondes.", "min(n for n in range(1, 100) if n % 6 == 0 and n % 8 == 0)==24"),
+        example("Exemple 2", "Un marchand a 36 mangues et 48 oranges. Il veut faire le plus grand nombre de sacs identiques, sans fruit en trop. Combien de sacs peut-il faire ?",
+                "Le nombre de sacs doit diviser 36 et 48 : on cherche le plus grand diviseur commun.",
+                [("Diviseurs de 36 : 1, 2, 3, 4, 6, 9, 12, 18, 36", "On les cherche par paires, comme dans la section 2."),
+                 ("Diviseurs de 48 : 1, 2, 3, 4, 6, 8, 12, 16, 24, 48", "Même méthode."),
+                 ("Les diviseurs communs sont 1, 2, 3, 4, 6, 12 : le plus grand est 12", "Il peut faire 12 sacs, chacun avec 3 mangues et 4 oranges : 36 ÷ 12 = 3 et 48 ÷ 12 = 4.")],
+                "Il peut faire " + N("12") + " sacs.", "max(k for k in range(1, 37) if 36 % k == 0 and 48 % k == 0)==12 and 36//12==3 and 48//12==4"),
+        example("Exemple 3", "Trouver le nombre compris entre 50 et 70 qui est multiple de 4 et de 6.",
+                "Un multiple de 4 et de 6 est un multiple commun : on liste les multiples de 6 dans l'intervalle et on teste le critère de 4.",
+                [("Multiples de 6 entre 50 et 70 : 54, 60, 66", "On compte de 6 en 6."),
+                 ("54 ÷ 4 = 13,5 : non. 60 ÷ 4 = 15 : oui. 66 ÷ 4 = 16,5 : non", "Seul 60 est un multiple de 4.")],
+                N("60"), "[n for n in range(51, 70) if n % 4 == 0 and n % 6 == 0]==[60]"),
+        example("Exemple 4", "Aujourd'hui, nous sommes lundi. Quel jour serons-nous dans 100 jours ?",
+                "La semaine a 7 jours : on cherche le reste de la division de 100 par 7.",
+                [(N("100 = 7 \\times 14 + 2"), "14 semaines entières passent, et il reste 2 jours."),
+                 ("Après 14 semaines, on est de nouveau un lundi", "Il reste 2 jours à avancer."),
+                 ("Lundi + 2 jours = mercredi", "Dans 100 jours, ce sera mercredi.")],
+                "Mercredi.", "100==7*14+2 and 100%7==2"),
+        example("Exemple 5", "Peut-on partager 45 billes équitablement entre 6 enfants, sans bille en trop ?",
+                "Il faut que 45 soit un multiple de 6, c'est-à-dire que la division de 45 par 6 tombe juste.",
+                [(N("45 = 6 \\times 7 + 3"), "6 × 7 = 42, et il reste 3."),
+                 ("Le reste n'est pas 0", "45 n'est pas un multiple de 6.")],
+                "Non : chacun aurait 7 billes et il en resterait 3.", "45==6*7+3 and 45%6==3"),
+        warning("Ne confonds pas multiple commun et diviseur commun : les multiples communs sont grands et nombreux (de plus en plus grands), les diviseurs communs sont petits et en nombre limité. "
+                "Le « plus petit multiple commun » ne peut pas être 0, et le « plus grand diviseur commun » ne peut pas dépasser le plus petit des deux nombres."),
+    ],
+    [
+        number("s4-g1", "problemes", "Un bus passe toutes les 10 minutes et un autre toutes les 15 minutes. Ils passent ensemble à 8 h. Dans combien de minutes passent-ils de nouveau ensemble ?", Fraction(30), units=["min"],
+               hints=["Cherche le plus petit multiple commun non nul de 10 et de 15."], solution=["Multiples de 10 : 10, 20, 30. Multiples de 15 : 15, 30.", "Le premier commun est 30 : dans 30 minutes."]),
+        number("s4-g2", "problemes", "On veut mettre 24 oranges et 36 mangues dans des sacs identiques, sans fruit en trop. Combien de sacs au maximum ?", Fraction(12),
+               hints=["Le nombre de sacs divise 24 et 36 : cherche le plus grand diviseur commun."], solution=["Diviseurs de 24 : 1, 2, 3, 4, 6, 8, 12, 24. Diviseurs de 36 : 1, 2, 3, 4, 6, 9, 12, 18, 36.", "Le plus grand diviseur commun est 12 : 12 sacs."]),
+        number("s4-g3", "problemes", "Quel est le seul nombre compris entre 40 et 50 qui est multiple de 3 et de 5 ?", Fraction(45),
+               hints=["Un multiple de 3 et de 5 est un multiple de 15."], solution=["Multiples de 15 : 15, 30, 45, 60.", "Entre 40 et 50, il n'y a que 45."]),
+        number("s4-g4", "problemes", "Quel est le reste de la division de 100 par 7 ?", Fraction(2),
+               hints=["Cherche le plus grand multiple de 7 qui ne dépasse pas 100."], solution=["7 × 14 = 98 et 7 × 15 = 105 dépasse 100.", "100 − 98 = 2."]),
+        choice("s4-g5", "problemes", "Peut-on partager équitablement 52 billes entre 8 enfants, sans bille en trop ?", ["Oui, chacun a 6 billes", "Non, 52 n'est pas un multiple de 8", "Oui, chacun a 7 billes"], 1,
+               hints=["Cherche si 52 est un multiple de 8."], solution=["8 × 6 = 48 et 8 × 7 = 56 : 52 n'est pas dans la liste des multiples de 8.", "52 = 8 × 6 + 4 : il resterait 4 billes."],
+               wrong={0: "8 × 6 = 48, il resterait 4 billes.", 2: "8 × 7 = 56 est plus grand que 52."}),
+    ])
+
 PRACTICE = [
     number("p1", "consecutifs", "Quel est l'entier naturel qui suit 2 999 ?", Fraction(3000), 1, ["Ajoute 1."], ["2 999 + 1 = 3 000."]),
     number("p2", "consecutifs", "Combien d'entiers naturels sont strictement compris entre 105 et 120 ?", Fraction(14), 2, ["Différence moins 1."], ["120 − 105 − 1 = 14."]),
@@ -217,6 +272,12 @@ PRACTICE = [
     number("p29", "multiples", "Quel est le plus grand multiple de 9 inférieur à 100 ?", Fraction(99), 2, ["11 × 9 = 99."], ["9 × 11 = 99 et 9 × 12 = 108 dépasse 100 : c'est 99."]),
     number("p30", "multiples", "Combien de diviseurs a 28 ?", Fraction(6), 3, ["Cherche-les par paires : 1 × 28, 2 × 14, ..."], ["1 × 28, 2 × 14, 4 × 7 : les diviseurs sont 1, 2, 4, 7, 14, 28, soit 6 diviseurs."]),
     number("p24", "criteres", "Quel chiffre c faut-il pour que 6c5 soit divisible par 3, le plus grand possible ?", Fraction(7), 3, ["La somme 6 + c + 5 doit être un multiple de 3."], ["6 + 5 = 11. Les multiples de 3 possibles : 12, 15, 18, ...", "c = 1, 4 ou 7. Le plus grand est 7 : 675 = 3 × 225."]),
+    number("p31", "problemes", "Quel est le plus petit multiple commun non nul de 4 et de 10 ?", Fraction(20), 1, ["Liste les multiples de 10 et teste chacun avec 4."], ["Multiples de 10 : 10, 20, ...", "20 = 4 × 5 : c'est 20."]),
+    number("p32", "problemes", "Quel est le plus grand diviseur commun de 18 et de 27 ?", Fraction(9), 2, ["Liste les diviseurs de chacun."], ["Diviseurs de 18 : 1, 2, 3, 6, 9, 18. Diviseurs de 27 : 1, 3, 9, 27.", "Le plus grand en commun est 9."]),
+    number("p33", "problemes", "Deux enseignes clignotent, l'une toutes les 12 secondes, l'autre toutes les 15 secondes. Elles sont synchronisées à 0. Dans combien de secondes le sont-elles de nouveau ?", Fraction(60), 2, ["Plus petit multiple commun de 12 et de 15."], ["Multiples de 15 : 15, 30, 45, 60.", "60 = 12 × 5 : c'est 60 secondes."], units=["s"]),
+    number("p34", "problemes", "On veut faire le plus grand nombre de sacs identiques avec 30 kg de riz et 45 kg de mil, sans reste. Combien de sacs ?", Fraction(15), 2, ["Plus grand diviseur commun de 30 et de 45."], ["Diviseurs communs : 1, 3, 5, 15.", "Le plus grand est 15 : 15 sacs."]),
+    number("p35", "problemes", "Combien de nombres entre 1 et 100 sont multiples de 7 et de 4 à la fois ?", Fraction(3), 3, ["Un multiple de 7 et de 4 est un multiple de 28."], ["Multiples de 28 : 28, 56, 84, 112 dépasse 100.", "Il y en a 3."]),
+    number("p36", "problemes", "Quel est le plus grand nombre de deux chiffres qui est multiple de 9 et de 5 ?", Fraction(90), 3, ["Un multiple de 9 et de 5 est un multiple de 45."], ["Multiples de 45 : 45, 90, 135.", "Le plus grand à deux chiffres est 90."]),
 ]
 
 SUMMARY = [
@@ -231,6 +292,7 @@ CONCEPTS = {
     "consecutifs": ("Entiers consécutifs et ensemble N", "consecutifs"),
     "multiples": ("Multiples et diviseurs", "multiples"),
     "criteres": ("Critères de divisibilité", "criteres"),
+    "problemes": ("Problèmes de multiples et de diviseurs", "problemes"),
 }
 
 
@@ -314,14 +376,15 @@ CHAPTER = Chapter(
     id=CHAPTER_ID, country="sn", level="6e", number=8, title="Les entiers naturels : multiples, diviseurs et divisibilité", language="fr",
     intro="Ranger 36 mangues en tas égaux, savoir si un nombre peut se partager en 3 sans reste, deviner si un grand nombre est divisible par 5 : tout cela repose sur les multiples, les diviseurs et les critères de divisibilité. "
           "Ce chapitre t'apprend à les utiliser, et à comprendre pourquoi les critères marchent.",
-    objectives=["Utiliser les symboles d'appartenance et d'inclusion avec l'ensemble des entiers naturels.",
+    objectives=["Résoudre des problèmes avec les multiples communs, les diviseurs communs, le partage et le calendrier.",
+                "Utiliser les symboles d'appartenance et d'inclusion avec l'ensemble des entiers naturels.",
                 "Trouver des entiers consécutifs et compter les entiers compris entre deux nombres.",
                 "Reconnaître un multiple et un diviseur, lister des multiples et tous les diviseurs d'un nombre inférieur à 1 000.",
                 "Reconnaître sans diviser si un nombre est divisible par 2, 3, 5, 9, 10, 100 ou 1 000.",
                 "Résoudre des problèmes de partage en tas égaux."],
     prerequisites=[{"text": "Multiplier et diviser des nombres entiers."},
                    {"text": "Lire et écrire les nombres entiers et connaître le rang des chiffres."}],
-    sections=[S1, S2, S3], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
+    sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
     status_note="Eighth chapter of the Senegal Sixième course. Its contents follow lesson 9 of the Côte d'Ivoire Sixième programme (consecutive natural numbers, multiples and divisors, divisibility by 2, 3, 5, 9, 10, 100, 1000), which was read for it, "
                 "so it is also offered there, but the programme's own situations and activities are not reproduced. It has not been checked against the official Senegalese programme.",

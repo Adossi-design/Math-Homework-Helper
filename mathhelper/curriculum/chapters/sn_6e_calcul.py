@@ -176,6 +176,65 @@ S3 = Section(
                wrong={0: "Dans 2 × 6 + 3, la multiplication se fait avant l'addition : on multiplierait 2 par 6 seulement, pas par la somme.", 2: "Les parenthèses de (2 × 6) + 3 ne changent rien : c'est la même expression que 2 × 6 + 3."}),
     ])
 
+# ----- Section 4: calculating cleverly and checking a result -----
+S4 = Section(
+    "astuces", "Calculer astucieusement et vérifier un résultat", 22, "astuces",
+    "Regrouper des facteurs, utiliser la distributivité pour calculer de tête, et vérifier un résultat avec un ordre de grandeur.",
+    [
+        para("Pour calculer vite et sans se tromper, on n'est pas obligé de suivre l'ordre dans lequel les nombres sont écrits. Une multiplication peut se faire dans n'importe quel ordre, "
+             "et certains nombres s'entendent bien : " + N("25 \\times 4 = 100") + " et " + N("8 \\times 125 = 1000") + ". Un bon calculateur cherche ces paires avant de commencer."),
+        rule("Regrouper les facteurs",
+             "Dans un produit de plusieurs nombres, on peut changer l'ordre des facteurs et les regrouper comme on veut : " + N("a \\times b \\times c = a \\times c \\times b") + ". "
+             "On regroupe d'abord les nombres dont le produit est simple, comme 100 ou 1 000."),
+        rule("La distributivité",
+             "Multiplier un nombre par une somme ou une différence revient à le multiplier par chaque terme : " + N("a \\times (b + c) = a \\times b + a \\times c") + " et " + N("a \\times (b - c) = a \\times b - a \\times c") + ". "
+             "Dans l'autre sens, " + N("a \\times b + a \\times c = a \\times (b + c)") + " : on met le facteur commun en évidence."),
+        example("Exemple 1", "Calculer astucieusement " + N("25 \\times 7 \\times 4") + ".",
+                "On cherche deux facteurs dont le produit est 100 : ici 25 et 4.",
+                [(N("25 \\times 7 \\times 4") + " = " + N("25 \\times 4 \\times 7"), "On change l'ordre des facteurs."),
+                 (N("25 \\times 4") + " = " + N("100"), "Le produit de 25 par 4 est facile."),
+                 (N("100 \\times 7") + " = " + N("700"), "Multiplier par 100, c'est décaler de deux rangs.")],
+                N("700"), "25*7*4==25*4*7==700"),
+        example("Exemple 2", "Calculer de tête " + N("7 \\times 102") + ".",
+                "On écrit 102 = 100 + 2 puis on distribue le facteur 7.",
+                [(N("7 \\times 102") + " = " + N("7 \\times (100 + 2)"), "102 = 100 + 2."),
+                 (N("7 \\times 100 + 7 \\times 2") + " = " + N("700 + 14"), "On multiplie 7 par chaque terme de la somme."),
+                 (N("700 + 14") + " = " + N("714"), "On additionne.")],
+                N("714"), "7*102==7*100+7*2==714"),
+        example("Exemple 3", "Calculer de tête " + N("6 \\times 98") + ".",
+                "98 est proche de 100 : on écrit 98 = 100 - 2.",
+                [(N("6 \\times 98") + " = " + N("6 \\times (100 - 2)"), "98 = 100 − 2."),
+                 (N("6 \\times 100 - 6 \\times 2") + " = " + N("600 - 12"), "On distribue le facteur 6 sur la différence."),
+                 (N("600 - 12") + " = " + N("588"), "On soustrait.")],
+                N("588"), "6*98==6*100-6*2==588"),
+        example("Exemple 4", "Calculer " + N("13 \\times 8 + 13 \\times 2") + " en mettant le facteur commun en évidence.",
+                "Le nombre 13 apparaît dans les deux produits : c'est le facteur commun.",
+                [(N("13 \\times 8 + 13 \\times 2") + " = " + N("13 \\times (8 + 2)"), "On met 13 en facteur : la distributivité dans l'autre sens."),
+                 (N("13 \\times 10") + " = " + N("130"), "8 + 2 = 10, puis 13 × 10 = 130.")],
+                N("130"), "13*8+13*2==13*(8+2)==130"),
+        example("Exemple 5", "Un élève trouve " + N("49 \\times 21") + " = 1 029. Vérifier avec un ordre de grandeur.",
+                "On remplace chaque nombre par un nombre rond proche, et on compare.",
+                [("49 est proche de 50 et 21 est proche de 20", "On arrondit chaque facteur à un nombre facile."),
+                 (N("50 \\times 20") + " = " + N("1000"), "Le résultat devrait être proche de 1 000."),
+                 ("1 029 est proche de 1 000", "Le résultat est plausible. Un résultat comme 10 290 ou 102 aurait été une erreur.")],
+                "Le résultat 1 029 est plausible.", "49*21==1029 and abs(1029-50*20)<50"),
+        warning("La distributivité ne marche que si on multiplie chaque terme : " + N("3 \\times (4 + 5)") + " = 27, et non " + N("3 \\times 4 + 5") + " = 17. "
+                "Un ordre de grandeur ne donne pas le résultat exact : il sert à repérer une erreur grossière."),
+    ],
+    [
+        number("s4-g1", "astuces", "Calcule astucieusement " + N("4 \\times 13 \\times 25") + ".", Fraction(1300),
+               hints=["Cherche deux facteurs dont le produit est 100."], solution=["4 × 25 = 100.", "100 × 13 = 1 300."]),
+        number("s4-g2", "astuces", "Calcule de tête " + N("9 \\times 102") + " avec la distributivité.", Fraction(918),
+               hints=["102 = 100 + 2."], solution=["9 × (100 + 2) = 9 × 100 + 9 × 2.", "900 + 18 = 918."]),
+        number("s4-g3", "astuces", "Calcule de tête " + N("5 \\times 99") + ".", Fraction(495),
+               hints=["99 = 100 − 1."], solution=["5 × (100 − 1) = 5 × 100 − 5 × 1.", "500 − 5 = 495."]),
+        number("s4-g4", "astuces", "Calcule " + N("17 \\times 6 + 17 \\times 4") + " en mettant le facteur commun en évidence.", Fraction(170),
+               hints=["17 est le facteur commun : 17 × (6 + 4)."], solution=["17 × (6 + 4) = 17 × 10.", "17 × 10 = 170."]),
+        choice("s4-g5", "astuces", "Quelle égalité est vraie ?", [N("2 \\times (5 + 3) = 2 \\times 5 + 3"), N("2 \\times (5 + 3) = 2 \\times 5 + 2 \\times 3"), N("2 \\times (5 + 3) = 2 \\times 5 \\times 3")], 1,
+               hints=["Calcule les deux membres de chaque égalité."], solution=["2 × (5 + 3) = 2 × 8 = 16 et 2 × 5 + 2 × 3 = 10 + 6 = 16."],
+               wrong={0: "2 × 5 + 3 = 13, alors que 2 × (5 + 3) = 16 : il faut multiplier aussi le 3.", 2: "2 × 5 × 3 = 30, alors que 2 × (5 + 3) = 16."}),
+    ])
+
 # ----- Independent practice -----
 PRACTICE = [
     number("p1", "priorites", "Calcule " + N("8 + 2 \\times 5") + ".", Fraction(18), 1, ["Quelle opération est prioritaire ?"], ["2 × 5 = 10 puis 8 + 10 = 18."]),
@@ -225,6 +284,12 @@ PRACTICE = [
            wrong={1: "Cette phrase correspond à 9 + 6 ÷ 3, sans parenthèses.", 2: "Cette phrase correspond à 9 ÷ (6 + 3)."}),
     number("p30", "problemes", "Deux sacs contiennent 120 kg et 80 kg de riz, partagés à parts égales entre 4 familles. Quelle masse reçoit chaque famille, en kg ?", Fraction(50), 3,
            ["Le total est partagé : il faut des parenthèses."], ["(120 + 80) ÷ 4 = 200 ÷ 4 = 50 kg."], units=["kg"]),
+    number("p33", "astuces", "Calcule astucieusement " + N("8 \\times 17 \\times 125") + ".", Fraction(17000), 2, ["8 × 125 = 1 000."], ["8 × 125 = 1 000.", "1 000 × 17 = 17 000."]),
+    number("p34", "astuces", "Calcule de tête " + N("12 \\times 101") + ".", Fraction(1212), 1, ["101 = 100 + 1."], ["12 × 100 + 12 × 1 = 1 200 + 12 = 1 212."]),
+    number("p35", "astuces", "Calcule de tête " + N("7 \\times 199") + ".", Fraction(1393), 2, ["199 = 200 − 1."], ["7 × 200 − 7 × 1 = 1 400 − 7 = 1 393."]),
+    number("p36", "astuces", "Calcule " + N("25 \\times 36") + " en écrivant 36 = 4 × 9.", Fraction(900), 2, ["25 × 4 = 100."], ["25 × 36 = 25 × 4 × 9 = 100 × 9 = 900."]),
+    number("p37", "astuces", "Calcule " + N("45 \\times 8 + 45 \\times 2") + ".", Fraction(450), 1, ["45 est le facteur commun."], ["45 × (8 + 2) = 45 × 10 = 450."]),
+    number("p38", "astuces", "Calcule " + N("15 \\times 98 + 15 \\times 2") + ".", Fraction(1500), 2, ["15 est le facteur commun."], ["15 × (98 + 2) = 15 × 100 = 1 500."]),
 ]
 
 SUMMARY = [
@@ -239,6 +304,7 @@ CONCEPTS = {
     "parentheses": ("Parenthèses", "parentheses"),
     "traduire": ("Traduire une phrase en calcul", "traduire"),
     "problemes": ("Résoudre un problème en plusieurs étapes", "traduire"),
+    "astuces": ("Calcul astucieux et ordre de grandeur", "astuces"),
 }
 
 
@@ -331,13 +397,14 @@ CHAPTER = Chapter(
     id=CHAPTER_ID, country="sn", level="6e", number=4, title="Organiser un calcul", language="fr",
     intro="Un calcul comme 3 + 4 × 2 doit donner le même résultat pour tout le monde. Ce chapitre t'apprend les règles qui fixent l'ordre des opérations, le rôle des parenthèses, "
           "et comment écrire en une seule ligne un problème en plusieurs étapes.",
-    objectives=["Calculer une suite d'opérations sans parenthèses en respectant les priorités.",
+    objectives=["Calculer astucieusement avec le regroupement des facteurs et la distributivité, et vérifier un résultat avec un ordre de grandeur.",
+                "Calculer une suite d'opérations sans parenthèses en respectant les priorités.",
                 "Calculer une expression avec des parenthèses, même imbriquées.",
                 "Traduire une phrase en une expression, et une expression en phrase, avec le vocabulaire somme, différence, produit, quotient.",
                 "Résoudre un problème en plusieurs étapes en l'écrivant en une seule ligne."],
     prerequisites=[{"text": "Avoir terminé les chapitres sur les quatre opérations avec les nombres décimaux.", "chapter": "sn-6e-division"},
                    {"text": "Connaître l'ordre des opérations sur les nombres entiers."}],
-    sections=[S1, S2, S3], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
+    sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E],
     status_note="Fourth chapter of the Senegal Sixième course. Its topics follow the 'organisation d'un calcul' chapter of the ADEM-Dakar booklet, with our own explanations and exercises. It has not been checked against the official Senegalese programme.",
 )

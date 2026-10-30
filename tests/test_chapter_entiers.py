@@ -32,6 +32,10 @@ INDEPENDENT = {
     "p22": min(n for n in range(100, 1000) if n % 5 == 0 and n % 9 == 0), "p23": len([n for n in range(1, 51) if n % 5 == 0]),
     "p24": max(c for c in range(10) if int(f"6{c}5") % 3 == 0),
     "p28": len([n for n in range(12, 31) if n % 2 == 0]), "p29": max(n for n in range(1, 100) if n % 9 == 0), "p30": len(divisors_of(28)),
+    "s4-g1": min(n for n in range(1, 99) if n % 10 == 0 and n % 15 == 0), "s4-g2": max(k for k in range(1, 25) if 24 % k == 0 and 36 % k == 0), "s4-g3": 45, "s4-g4": 100 % 7, "s4-g5": 1,
+    "p31": min(n for n in range(1, 99) if n % 4 == 0 and n % 10 == 0), "p32": max(k for k in range(1, 19) if 18 % k == 0 and 27 % k == 0),
+    "p33": min(n for n in range(1, 99) if n % 12 == 0 and n % 15 == 0), "p34": max(k for k in range(1, 31) if 30 % k == 0 and 45 % k == 0),
+    "p35": len([n for n in range(1, 101) if n % 7 == 0 and n % 4 == 0]), "p36": max(n for n in range(10, 100) if n % 9 == 0 and n % 5 == 0),
     "p25": len([n for n in range(1, 21) if n % 2 == 0]), "p26": 1, "p27": len([n for n in (3000, 4500, 6200, 8000) if n % 1000 == 0]),
 }
 

@@ -181,6 +181,61 @@ S3 = Section(
                hints=["Calcule d'abord la réduction, puis retire-la."], solution=["10 % de 5 000 = 5 000 × 0,1 = 500 F.", "5 000 − 500 = 4 500 F."]),
     ])
 
+# ----- Section 4: solving problems -----
+S4 = Section(
+    "problemes", "Résoudre des problèmes de proportionnalité", 24, "problemes",
+    "Choisir une méthode (valeur pour une unité, coefficient, partage), la rédiger proprement, et comparer deux offres.",
+    [
+        para("Dans la vie, la proportionnalité se cache dans les recettes, les prix, la vitesse ou le partage d'une somme. Pour résoudre un problème, on suit toujours le même chemin : "
+             "on vérifie que la situation est proportionnelle, on choisit une méthode, on calcule, puis on vérifie que le résultat est raisonnable."),
+        rule("Trois méthodes",
+             "Méthode de l'unité : on cherche la valeur pour 1 (prix d'un objet, quantité pour une personne), puis on multiplie. Méthode du coefficient : on multiplie par le nombre qui fait passer d'une quantité à l'autre. "
+             "Partage proportionnel : on partage la somme en autant de parts égales que la somme des nombres donnés, puis chacun reçoit autant de parts que son nombre."),
+        example("Exemple 1", "5 cahiers coûtent 1 250 F. Combien coûtent 8 cahiers ?",
+                "On cherche d'abord le prix d'un cahier, puis on multiplie.",
+                [(N("1250 \\div 5") + " = " + N("250"), "Un cahier coûte 250 F."),
+                 (N("250 \\times 8") + " = " + N("2000"), "8 cahiers coûtent 8 fois plus.")],
+                "8 cahiers coûtent 2 000 F.", "1250/5*8==2000"),
+        example("Exemple 2", "Une recette pour 4 personnes demande 600 g de riz. Quelle quantité faut-il pour 10 personnes ?",
+                "On cherche la quantité pour une personne.",
+                [(N("600 \\div 4") + " = " + N("150"), "Il faut 150 g de riz par personne."),
+                 (N("150 \\times 10") + " = " + N("1500"), "Pour 10 personnes, on multiplie par 10.")],
+                "Il faut 1 500 g de riz.", "600/4*10==1500"),
+        example("Exemple 3", "12 stylos coûtent 1 800 F. Combien coûtent 30 stylos ?",
+                "On passe de 12 stylos à 30 stylos en multipliant : on cherche le coefficient.",
+                [(N("30 \\div 12") + " = " + N("2,5"), "On passe de 12 à 30 en multipliant par 2,5."),
+                 (N("1800 \\times 2,5") + " = " + N("4500"), "Le prix est multiplié par le même nombre.")],
+                "30 stylos coûtent 4 500 F.", "d('30')/12==d('2,5') and 1800*d('2,5')==4500 and 1800/12*30==4500"),
+        example("Exemple 4", "Awa et Moussa se partagent 900 F en proportion de 2 et de 3. Combien reçoit chacun ?",
+                "On partage la somme en 2 + 3 parts égales.",
+                [(N("2 + 3") + " = " + N("5"), "Il y a 5 parts en tout."),
+                 (N("900 \\div 5") + " = " + N("180"), "Une part vaut 180 F."),
+                 (N("2 \\times 180") + " = " + N("360") + " et " + N("3 \\times 180") + " = " + N("540"), "Awa reçoit 2 parts, Moussa en reçoit 3."),
+                 (N("360 + 540") + " = " + N("900"), "Vérification : on retrouve la somme partagée.")],
+                "Awa reçoit 360 F et Moussa 540 F.", "900/5*2==360 and 900/5*3==540 and 360+540==900"),
+        example("Exemple 5", "Quelle offre est la plus avantageuse : 3 kg à 2 400 F ou 5 kg à 3 750 F ?",
+                "Pour comparer deux offres de quantités différentes, on calcule le prix d'une unité dans chaque cas.",
+                [(N("2400 \\div 3") + " = " + N("800"), "Première offre : 800 F le kilogramme."),
+                 (N("3750 \\div 5") + " = " + N("750"), "Deuxième offre : 750 F le kilogramme."),
+                 ("750 est plus petit que 800", "Le kilogramme est moins cher dans la deuxième offre.")],
+                "La deuxième offre est la plus avantageuse.", "2400/3==800 and 3750/5==750 and 750<800"),
+        warning("Avant de calculer, vérifie que la situation est proportionnelle : un abonnement avec des frais fixes, ou l'âge d'un enfant et sa taille, ne le sont pas. "
+                "Et un résultat doit être raisonnable : 8 cahiers ne peuvent pas coûter moins que 5 cahiers."),
+    ],
+    [
+        number("s4-g1", "problemes", "7 stylos coûtent 1 050 F. Combien coûtent 4 stylos, en F ?", Fraction(600), units=["F"],
+               hints=["Cherche d'abord le prix d'un stylo."], solution=["1 050 ÷ 7 = 150 F le stylo.", "150 × 4 = 600 F."]),
+        number("s4-g2", "problemes", "Pour 6 personnes, une recette demande 900 g de farine. Combien de grammes pour 10 personnes ?", Fraction(1500), units=["g"],
+               hints=["Cherche la quantité pour une personne."], solution=["900 ÷ 6 = 150 g par personne.", "150 × 10 = 1 500 g."]),
+        number("s4-g3", "problemes", "Une voiture consomme 24 L pour 300 km. Combien de litres consomme-t-elle pour 450 km, en supposant la consommation proportionnelle ?", Fraction(36), units=["L"],
+               hints=["450 = 300 × 1,5."], solution=["450 ÷ 300 = 1,5.", "24 × 1,5 = 36 L."]),
+        number("s4-g4", "problemes", "Awa et Moussa se partagent 600 F en proportion de 1 et de 3. Combien reçoit Moussa, en F ?", Fraction(450), units=["F"],
+               hints=["Combien y a-t-il de parts en tout ?"], solution=["1 + 3 = 4 parts. 600 ÷ 4 = 150 F la part.", "Moussa a 3 parts : 3 × 150 = 450 F."]),
+        choice("s4-g5", "problemes", "Quelle offre est la plus avantageuse : 4 kg pour 2 000 F ou 6 kg pour 2 700 F ?", ["4 kg pour 2 000 F", "6 kg pour 2 700 F", "Elles sont équivalentes"], 1,
+               hints=["Calcule le prix d'un kilogramme dans chaque offre."], solution=["2 000 ÷ 4 = 500 F le kilogramme.", "2 700 ÷ 6 = 450 F le kilogramme : la deuxième offre est moins chère."],
+               wrong={0: "500 F le kilogramme est plus cher que 450 F le kilogramme.", 2: "Les deux prix au kilogramme sont différents : 500 F et 450 F."}),
+    ])
+
 # ----- Independent practice -----
 PRACTICE = [
     number("p1", "reconnaitre", "Dans un tableau de proportionnalité, 2 correspond à 9. Quel est le coefficient ?", d("4,5"), 1, ["Divise 9 par 2."], ["9 ÷ 2 = 4,5. Vérification : 2 × 4,5 = 9."], form="decimal"),
@@ -224,6 +279,12 @@ PRACTICE = [
            wrong={1: "Le plan représente la réalité en plus petit : une longueur sur le plan est plus petite que la longueur réelle."}),
     number("p32", "echelle", "Sur une carte, 3 cm représentent 15 km sur le terrain. À quoi correspond 1 cm sur la carte, en cm sur le terrain ?", Fraction(500000), 3,
            ["Convertis 15 km en cm, puis divise par 3."], ["15 km = 1 500 000 cm.", "1 500 000 ÷ 3 = 500 000 : l'échelle est 1/500 000."], units=["cm"]),
+    number("p33", "problemes", "8 m de tissu coûtent 6 400 F. Quel est le prix de 5 m de ce tissu, en F ?", Fraction(4000), 1, ["Prix d'un mètre d'abord."], ["6 400 ÷ 8 = 800 F le mètre.", "800 × 5 = 4 000 F."], units=["F"]),
+    number("p34", "problemes", "Une machine fabrique 90 pièces en 6 minutes. Combien de pièces fabrique-t-elle en 15 minutes ?", Fraction(225), 2, ["Pièces par minute d'abord."], ["90 ÷ 6 = 15 pièces par minute.", "15 × 15 = 225 pièces."]),
+    number("p35", "problemes", "Une sauce pour 5 personnes demande 750 mL de lait. Combien de millilitres pour 8 personnes ?", Fraction(1200), 2, ["Quantité pour une personne d'abord."], ["750 ÷ 5 = 150 mL par personne.", "150 × 8 = 1 200 mL."], units=["mL"]),
+    number("p36", "problemes", "Trois amis se partagent 1 200 F en proportion de 1, de 2 et de 3. Combien reçoit le troisième, en F ?", Fraction(600), 3, ["Compte les parts : 1 + 2 + 3."], ["1 + 2 + 3 = 6 parts. 1 200 ÷ 6 = 200 F la part.", "Le troisième a 3 parts : 3 × 200 = 600 F."], units=["F"]),
+    number("p37", "problemes", "Un robinet débite 45 L en 9 minutes. Quel volume débite-t-il en 20 minutes, en L ?", Fraction(100), 2, ["Débit par minute d'abord."], ["45 ÷ 9 = 5 L par minute.", "5 × 20 = 100 L."], units=["L"]),
+    number("p38", "problemes", "12 kg de riz coûtent 7 800 F. Quel est le prix de 20 kg, en F ?", Fraction(13000), 3, ["Prix d'un kilogramme d'abord."], ["7 800 ÷ 12 = 650 F le kilogramme.", "650 × 20 = 13 000 F."], units=["F"]),
 ]
 
 SUMMARY = [
@@ -240,6 +301,7 @@ CONCEPTS = {
     "calculer": ("Calculer une valeur manquante", "calculer"),
     "pourcentage": ("Pourcentages", "pourcentage"),
     "echelle": ("Échelles", "pourcentage"),
+    "problemes": ("Résoudre des problèmes", "problemes"),
 }
 
 
@@ -337,14 +399,15 @@ CHAPTER = Chapter(
     id=CHAPTER_ID, country="sn", level="6e", number=5, title="La proportionnalité", language="fr",
     intro="Le prix de 3 kg de sucre, la distance parcourue à vitesse constante, la réduction annoncée dans un magasin, la distance sur une carte : toutes ces situations utilisent la proportionnalité. "
           "Ce chapitre t'apprend à la reconnaître, à calculer une valeur manquante, à calculer des pourcentages et à utiliser une échelle.",
-    objectives=["Reconnaître un tableau de proportionnalité et trouver son coefficient.",
+    objectives=["Résoudre un problème de proportionnalité avec la valeur pour une unité, le coefficient ou le partage proportionnel, et comparer deux offres.",
+                "Reconnaître un tableau de proportionnalité et trouver son coefficient.",
                 "Compléter un tableau de proportionnalité par le coefficient, le passage à l'unité ou la linéarité.",
                 "Calculer un pourcentage d'une quantité et exprimer une proportion en pourcentage.",
                 "Utiliser une échelle pour passer d'une longueur sur un plan à une longueur réelle, et inversement.",
                 "Justifier qu'une situation n'est pas une situation de proportionnalité."],
     prerequisites=[{"text": "Multiplier et diviser des nombres décimaux."},
                    {"text": "Comprendre les décimaux et leurs conversions avec les fractions."}],
-    sections=[S1, S2, S3], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
+    sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
     status_note="Fifth chapter of the Senegal Sixième course. Its topics follow the proportionality chapter of the ADEM-Dakar booklet, with our own explanations and exercises. "
                 "The list of contents was checked against lesson 12 of the Côte d'Ivoire Sixième programme (proportional quantities, coefficient, tables, linearity, percentages, scale), "

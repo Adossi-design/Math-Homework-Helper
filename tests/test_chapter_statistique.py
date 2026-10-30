@@ -35,7 +35,9 @@ def test_fixed_answers_match_an_independent_recount():
              "s3-g1": F(50 * 30, 100), "s3-g2": F(24 * 100, 40), "s3-g3": 50 - (12 + 18), "s3-g4": F(20 * 100, 50), "s3-g5": F(400 * 35, 100),
              "p3": 11 + 7 + 15 + 7, "p4": 45 - (8 + 13 + 9), "p7": 1, "p8": 30 - (12 + 7), "p9": F(10, 40), "p10": F(5, 25), "p11": F(7 * 100, 20), "p12": F(30 * 100, 50),
              "p14": F(14 * 100, 80), "p15": 100 - 22 - 48, "p16": 1, "p17": 0, "p18": 1, "p19": 1, "p21": F(80 * 25, 100), "p22": F(500 * 18, 100), "p23": F(36 * 100, 45),
-             "p24": F(21 * 100, 30), "p25": 100 - 42 - 35, "p26": F(40 * 45, 100), "p27": F(40 * 35, 100), "p28": 40 - (18 + 14), "p29": F(360 * 100, 45), "p30": F(250 * (100 - 40 - 28), 100)}
+             "p24": F(21 * 100, 30), "p25": 100 - 42 - 35, "p26": F(40 * 45, 100), "p27": F(40 * 35, 100), "p28": 40 - (18 + 14), "p29": F(360 * 100, 45), "p30": F(250 * (100 - 40 - 28), 100),
+             "s4-g1": 0, "s4-g2": F(300 * (100 - 40 - 35), 100), "s4-g3": F(14 * 100, 50), "s4-g4": F(45 * 100, 30), "s4-g5": F((80 - 24 - 36) * 100, 80),
+             "p31": max(F(8 * 100, 25), F(14 * 100, 40)), "p32": F(400 * 15, 100), "p33": F(36 * 100, 45), "p34": F((250 - 60 - 100) * 100, 250), "p35": F(150 * 40, 100), "p36": 1}
     for key, value in plain.items():
         assert BY_ID[key].answer.value == F(value), (key, BY_ID[key].answer.value, value)
     accounted = set(plain) | {"s1-g1", "s1-g5", "p1", "p2", "p5", "p6", "p13", "p20"}
@@ -43,7 +45,7 @@ def test_fixed_answers_match_an_independent_recount():
 
 
 def test_chapter_shape_vocabulary_and_alignment():
-    assert STAT.number == 9 and len(STAT.sections) == 3 and STAT.also_for == ("ci",)
+    assert STAT.number == 9 and len(STAT.sections) == 4 and STAT.also_for == ("ci",)
     text = repr([s.blocks for s in STAT.sections]) + repr([e.prompt for e in STAT.exercises().values()]) + STAT.intro
     for word in ("modalité", "caractère", "population"):
         assert word not in text.lower(), word
