@@ -19,18 +19,37 @@
 {% endif %}
 
 {% if cards %}
-<div class="stack">
+{% set tones = ["indigo", "cyan", "violet", "teal", "pink", "amber", "green", "blue", "rose", "indigo"] %}
+{% set ns = namespace(total=0, done=0, minutes=0) %}
+{% for card in cards %}{% set ns.total = ns.total + (card.chapter.sections | length) %}{% set ns.done = ns.done + (card.progress.sections_done | length) %}{% for s in card.chapter.sections %}{% set ns.minutes = ns.minutes + s.minutes %}{% endfor %}{% endfor %}
+<div class="card path-hero">
+  <span class="chap-num lg" aria-hidden="true">{{ icon("target") }}</span>
+  <div class="meter">
+    <strong>{{ _("{done} of {total} sections done", done=ns.done, total=ns.total) }}</strong>
+    <div class="progress {{ 'success' if ns.done == ns.total }}"><span style="width:{{ (100 * ns.done / ns.total) | round | int }}%"></span></div>
+    <p class="small muted" style="margin-top:8px">{{ _("About {n} minutes of lessons, plus practice and an assessment for every chapter.", n=ns.minutes) }}</p>
+  </div>
+</div>
+<div class="chapter-grid">
   {% for card in cards %}
   {% set progress = card.progress %}
   {% set total = card.chapter.sections | length %}
   {% set finished = progress.sections_done | length %}
-  <a class="card card-link card-body course-card tone-blue" href="{{ url_for('curriculum.chapter', chapter_id=card.chapter.id) }}">
-    <div class="top">
-      <span class="glyph">0,5</span>
-      <div><div class="small faint">{{ _("Chapter {n}", n=card.chapter.number) }}</div><h3>{{ card.view.title }}</h3><p>{{ card.view.intro | rich_inline }}</p></div>
+  {% set minutes = card.chapter.sections | sum(attribute="minutes") %}
+  <a class="card card-link chapter-card tone-{{ tones[(card.chapter.number - 1) % 10] }} {{ 'is-complete' if finished == total }}" data-number="{{ card.chapter.number }}" href="{{ url_for('curriculum.chapter', chapter_id=card.chapter.id) }}">
+    <div class="row">
+      <span class="chap-num">{{ card.chapter.number }}</span>
+      <div class="small faint">{{ _("Chapter {n}", n=card.chapter.number) }}</div>
     </div>
-    <div class="foot">
-      <div class="row"><span>{{ _("{n} sections", n=total) }}</span><span>{% if finished == total %}{{ _("Completed") }}{% else %}{{ _("{done} of {total} done", done=finished, total=total) }}{% endif %}</span></div>
+    <h3>{{ card.view.title }}</h3>
+    <p class="intro">{{ card.view.intro | rich_inline }}</p>
+    <div class="chips-row">
+      <span class="chip-stat">{{ icon("book", "sm") }} {{ _("{n} sections", n=total) }}</span>
+      <span class="chip-stat">{{ icon("clock", "sm") }} {{ _("{n} min read", n=minutes) }}</span>
+      <span class="chip-stat">{{ icon("target", "sm") }} {{ _("{n} exercises", n=card.chapter.exercises() | length) }}</span>
+    </div>
+    <div>
+      <div class="row" style="justify-content:space-between;font-size:13px;color:var(--faint);font-weight:600;margin-bottom:8px"><span>{% if finished == total %}{{ _("Completed") }}{% elif finished == 0 %}{{ _("Not started") }}{% else %}{{ _("{done} of {total} done", done=finished, total=total) }}{% endif %}</span><span>{{ (100 * finished / total) | round | int }}%</span></div>
       <div class="progress {{ 'success' if finished == total }}"><span style="width:{{ (100 * finished / total) | round | int }}%"></span></div>
     </div>
   </a>

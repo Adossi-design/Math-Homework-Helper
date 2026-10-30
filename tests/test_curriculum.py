@@ -325,7 +325,7 @@ def test_a_level_without_chapters_is_not_presented_as_supported(student):
 
 def test_chapter_hub_and_overview_for_a_senegal_sixieme_student(student, translated):
     page = student.get("/curriculum/").get_data(as_text=True)
-    assert "Senegal, Sixième" in page and "0 of 5 done" in page
+    assert "Senegal, Sixième" in page and "Not started" in page
     chapter = student.get(f"/curriculum/{CID}").get_data(as_text=True)
     assert "0 of 5 sections done" in chapter and "Sources and licences" in chapter and "interdit" in chapter
     assert "has not been checked against the official" in chapter or "EN Reference chapter" in chapter

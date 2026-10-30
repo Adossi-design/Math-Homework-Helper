@@ -840,7 +840,82 @@
   }
 
   // Curriculum exercises: check answers on the server, open hints one at a time and show the solution on request.
+  // Count the solved guided exercises of a section next to a progress bar.
+  function updateCount() {
+    const counter = $("[data-exercise-count]");
+    if (!counter) return;
+    const total = Number(counter.dataset.total) || 0;
+    const done = $$("[data-exercise].is-solved").length;
+    $(".progress span", counter).style.width = `${total ? Math.min(100, Math.round((100 * done) / total)) : 0}%`;
+    $("strong", counter).textContent = `${Math.min(done, total)} / ${total}`;
+  }
+
+  // Show the steps of a worked example one at a time, with the answer last.
+  function initWorked() {
+    $$(".worked").forEach((box) => {
+      const items = $$(".calc > li", box);
+      const answer = $(".answer", box);
+      if (items.length < 2) return;
+      let shown = 1;
+      const bar = document.createElement("div");
+      bar.className = "stepper-bar";
+      bar.innerHTML = `<button type="button" class="btn btn-soft btn-sm" data-next>${svg("arrow-right")} <span></span></button>` +
+        `<button type="button" class="btn btn-ghost btn-sm" data-all>${t("Show all steps")}</button><span class="count" aria-live="polite"></span><span class="stepper-dots" aria-hidden="true">${"<i></i>".repeat(items.length)}</span>`;
+      const next = $("[data-next]", bar);
+      const all = $("[data-all]", bar);
+      const render = (fresh) => {
+        items.forEach((li, index) => {
+          li.hidden = index >= shown;
+          if (fresh && index === shown - 1) {
+            li.classList.remove("step-in");
+            void li.offsetWidth;
+            li.classList.add("step-in");
+          }
+        });
+        $$(".stepper-dots i", bar).forEach((dot, index) => dot.classList.toggle("on", index < shown));
+        const finished = shown >= items.length;
+        if (answer) {
+          answer.hidden = !finished;
+          if (finished && fresh) {
+            answer.classList.remove("step-in");
+            void answer.offsetWidth;
+            answer.classList.add("step-in");
+          }
+        }
+        $(".count", bar).textContent = t("Step {n} of {total}", { n: shown, total: items.length });
+        $("span", next).textContent = finished ? t("Replay the steps") : t("Show the next step");
+        all.hidden = finished;
+      };
+      next.addEventListener("click", () => {
+        shown = shown >= items.length ? 1 : shown + 1;
+        render(true);
+      });
+      all.addEventListener("click", () => {
+        shown = items.length;
+        render(true);
+      });
+      $(".calc", box).after(bar);
+      render(false);
+    });
+  }
+
+  // Fill a bar at the top of a lesson while the student reads it.
+  function initReadProgress() {
+    const bar = $("[data-read-progress]");
+    if (!bar) return;
+    const update = () => {
+      const page = document.documentElement;
+      const room = page.scrollHeight - page.clientHeight;
+      bar.style.width = room > 0 ? `${Math.min(100, (100 * page.scrollTop) / room)}%` : "0";
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+
   function initCurriculum() {
+    initWorked();
+    initReadProgress();
+    updateCount();
     $$("[data-exercise]").forEach((box) => {
       const form = $("[data-exercise-form]", box);
       const feedback = $("[data-feedback]", box);
@@ -889,8 +964,12 @@
               mark.innerHTML = svg("check");
             }
             if (reply.solution) showSolution(reply.solution);
+            updateCount();
           } else if (reply.status === "wrong") {
             sound("bad");
+            box.classList.remove("is-wrong");
+            void box.offsetWidth;
+            box.classList.add("is-wrong");
           }
         } catch (error) {
           toast(error.message, "error");

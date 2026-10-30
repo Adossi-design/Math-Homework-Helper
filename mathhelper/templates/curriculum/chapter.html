@@ -6,8 +6,9 @@
 {% set finished = progress.sections_done | length %}
 <a class="back-link" href="{{ url_for('curriculum.index', country=chapter.country, grade=chapter.level) }}">{{ icon("arrow-left", "sm") }} {{ label(place, lang) }}, {{ label(stage, lang) }}</a>
 
-<div class="card card-body course-hero tone-blue">
-  <span class="glyph lg">0,5</span>
+{% set tones = ["indigo", "cyan", "violet", "teal", "pink", "amber", "green", "blue", "rose", "indigo"] %}
+<div class="card card-body course-hero tone-{{ tones[(chapter.number - 1) % 10] }}">
+  <span class="chap-num lg">{{ chapter.number }}</span>
   <div class="grow">
     <div class="small faint">{{ label(place, lang) }}, {{ label(stage, lang) }}, {{ _("Chapter {n}", n=chapter.number) }}</div>
     <h1>{{ view.title }}</h1>

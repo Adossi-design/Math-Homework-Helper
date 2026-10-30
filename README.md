@@ -1,6 +1,6 @@
 # Math Homework Helper
 
-A web app that solves math problems from a photo or typed question, explains every step, and helps students learn with lessons and practice.
+A web app that solves math problems from a photo or typed question, explains every step, and helps students learn with full curriculum chapters and practice.
 
 Built with Python (Flask), SQLite and Google Gemini. The AI key stays on the server and is never sent to the browser.
 
@@ -9,11 +9,11 @@ Built with Python (Flask), SQLite and Google Gemini. The AI key stays on the ser
 - **Solve**: take or upload a photo (or paste one), or type the problem. Every problem on the page gets an answer, the full working line by line, each step's math line with its explanation underneath, and a tip. There is no level to choose: explanations are written so learners of any age and teachers can follow them.
 - **Ask the tutor**: a chat under each solution for simpler explanations, checking your own work, or a similar problem to try.
 - **Library**: every solution is saved, with search, topic filters and a Saved tab.
-- **Learn**: 13 courses and 39 short lessons from elementary arithmetic to college linear algebra. Each lesson has key ideas, a worked example and a common mistake.
+- **Learn**: curriculum chapters by country and level (see Curriculum below). Each lesson is long, with worked examples that open one step at a time, guided exercises with instant feedback, independent practice and a chapter assessment.
 - **My curriculum**: pick a country and school level in Settings (your language is chosen separately and never changes it). Each chapter is a textbook style course: sections with definitions, worked examples where every step is explained, guided exercises with hints, independent practice, a summary and a 12 question assessment with new numbers every time, detailed corrections and revision advice. Answers are checked exactly (3,5, 3.50 and 7/2 are the same number, and a form such as "fully simplified" can be required). Progress is saved per student. A lesson tutor answers questions about the lesson in front of the student, and the solver uses the student's level. See `docs/curriculum.md`.
 - **Practice**: 23 skills that generate fresh questions every round, with instant feedback, sounds, keyboard shortcuts, scores and a full review.
-- **Progress**: day streak, weekly activity, practice accuracy, lessons completed and personal bests.
-- **Admin dashboard**: one admin account runs the platform at `/admin`: an overview of activity, users (view, suspend, reactivate, delete), lessons (add, edit, preview, delete, restore) and practice sets (write your own questions, edit, preview, delete, restore). The admin account has no student pages, and every admin page and action is checked on the server.
+- **Progress**: day streak, weekly activity, practice accuracy, sections completed and personal bests.
+- **Admin dashboard**: one admin account runs the platform at `/admin`: an overview of activity, users (view, suspend, reactivate, delete), and practice sets (write your own questions, edit, preview, delete, restore). The admin account has no student pages, and every admin page and action is checked on the server.
 - **Accounts**: email and password sign up, Google sign in, password reset by email, profile, theme (light, dark or system), password change and account deletion.
 - **Beral**: the mascot greets, thinks while a problem is solved, and celebrates or encourages after real events. Today Beral is shown with four pictures. The app is ready for a rigged 3D Beral (Three.js, GLB with animation clips); see `docs/beral-3d.md` for the model brief, where the file goes and how to test it.
 - **English and French**: the app follows the browser language, and a globe switch showing both languages sits at the top of every page (in the sidebar on desktop) and in Settings. Screens, lessons, practice questions, AI answers, emails and the legal pages are all translated.
@@ -61,11 +61,10 @@ Optional extras: `APP_NAME`, `PORT`, `SOLVES_PER_HOUR` (default 30), `QUESTIONS_
 
 ## Admin
 
-Log in on the normal login page with `ADMIN_EMAIL` and `ADMIN_PASSWORD` from `.env`. The admin goes straight to the dashboard and only sees Overview, Users, Lessons and Practice. Student pages send the admin back to the dashboard.
+Log in on the normal login page with `ADMIN_EMAIL` and `ADMIN_PASSWORD` from `.env`. The admin goes straight to the dashboard and only sees Overview, Users, Practice and Translations. Student pages send the admin back to the dashboard.
 
-- **Overview**: number of users, suspended accounts, lessons and practice sets, plus problems solved, practice rounds and lessons finished this week.
+- **Overview**: number of users, suspended accounts, chapters and practice sets, plus problems solved, practice rounds and sections finished this week.
 - **Users**: search, see join date and activity, suspend, reactivate or delete. A suspended user is signed out and cannot log in until reactivated.
-- **Lessons**: add lessons to any course, edit, preview or delete any lesson, and keep drafts hidden. The built in lessons can always be restored.
 - **Practice**: write new practice sets with your own multiple choice questions (2 to 4 choices, optional explanation and French text), or rename and hide the built in sets, which make new questions every round. Built in sets can always be restored.
 
 Deleting always asks for confirmation first. Only the account in `ADMIN_EMAIL` is an admin, and regular users get a "You cannot open this page" error on every admin address.
@@ -121,7 +120,6 @@ mathhelper/
   timeutil.py          Local time zones and friendly dates
   i18n.py              Language choice, translation lookups and localized dates
   translations/fr.py   French text for the interface
-  content/             Course and lesson content in English and French
   curriculum/          Country and level catalog, chapters (chapters/), exact answer checker, translation cache, progress, AI context
   practice/            Question generators, and catalog.py for the admin's practice sets
   views/               Routes for each section

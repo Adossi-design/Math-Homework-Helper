@@ -4,6 +4,7 @@
 {% block page_class %}narrow{% endblock %}
 
 {% block content %}
+<div class="read-progress" aria-hidden="true"><span data-read-progress></span></div>
 <a class="back-link" href="{{ url_for('curriculum.chapter', chapter_id=chapter.id) }}">{{ icon("arrow-left", "sm") }} {{ chapter_title }}</a>
 <div class="page-head">
   <div>
@@ -29,6 +30,7 @@
 <section class="section">
   <div class="section-head"><h2>{{ _("Guided practice") }}</h2></div>
   <p class="muted small" style="margin-bottom:14px">{{ _("Try each one yourself. Check your answer, open a hint if you are stuck, and ask for the solution when you need it.") }}</p>
+  <div class="exercise-count" data-exercise-count data-total="{{ view.guided | length }}"><div class="progress"><span style="width:0"></span></div><strong>0 / {{ view.guided | length }}</strong></div>
   <div class="stack">
     {% for e in view.guided %}{{ exercise(e, loop.index, solved) }}{% endfor %}
   </div>

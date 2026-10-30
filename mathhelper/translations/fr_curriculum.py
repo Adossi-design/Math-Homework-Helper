@@ -4,6 +4,13 @@ CURRICULUM = {
     # Settings and the curriculum hub.
     "Curriculum": "Programme scolaire",
     "My curriculum": "Mon programme",
+    "Show all steps": "Montrer toutes les étapes",
+    "Step {n} of {total}": "Étape {n} sur {total}",
+    "Replay the steps": "Revoir les étapes",
+    "Show the next step": "Montrer l'étape suivante",
+    "About {n} minutes of lessons, plus practice and an assessment for every chapter.": "Environ {n} minutes de leçons, plus des exercices et une évaluation pour chaque chapitre.",
+    "{n} exercises": "{n} exercices",
+    "Not started": "Pas commencé",
     "Chapters": "Chapitres",
     "Choose your country and level": "Choisis ton pays et ton niveau",
     "Country and level": "Pays et niveau",
