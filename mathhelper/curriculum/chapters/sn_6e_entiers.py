@@ -61,6 +61,12 @@ S1 = Section(
                  ("1 305 se termine par 5", "Il est impair."),
                  ("Le suivant de 1 305 est 1 306, qui se termine par 6", "C'est le nombre pair qui suit 1 305.")],
                 "48 et 270 ; 1 306", "48%2==0 and 270%2==0 and 1305%2==1 and 1306%2==0"),
+        example("Exemple 4", "Quel est le plus grand entier de 3 chiffres ? le plus petit de 4 chiffres ? Que remarque-t-on ?",
+                "On cherche le nombre qui précède et le nombre qui suit.",
+                [("Le plus grand entier de 3 chiffres est 999", "Tous ses chiffres sont les plus grands possibles."),
+                 ("Le plus petit entier de 4 chiffres est 1 000", "Il faut un 1 suivi de trois zéros."),
+                 (N("999 + 1") + " = " + N("1000"), "Ce sont deux entiers consécutifs : 1 000 est le suivant de 999.")],
+                "999 et 1 000, deux entiers consécutifs", "999+1==1000 and len(str(999))==3 and len(str(1000))==4"),
         warning("Entre 12 et 20, il y a 7 entiers (et non 8) si on ne compte pas les extrémités. Ne confonds pas la différence 20 − 12 = 8 avec le nombre d'entiers qui les séparent."),
     ],
     [
@@ -103,6 +109,11 @@ S2 = Section(
                 [("50 ÷ 8 = 6, reste 2", "8 × 6 = 48 est plus petit que 50."),
                  ("8 × 7 = 56", "56 est plus grand que 50 : c'est le premier multiple de 8 qui dépasse 50.")],
                 N("56"), "8*6==48<50<56==8*7"),
+        example("Exemple 4", "36 est-il un multiple de 9 ? 36 est-il un diviseur de 72 ?",
+                "On cherche un entier k tel que 36 = 9 × k, puis un entier k tel que 72 = 36 × k.",
+                [("36 = 9 × 4", "4 est un entier : 36 est un multiple de 9."),
+                 ("72 = 36 × 2", "2 est un entier : 72 est un multiple de 36, donc 36 est un diviseur de 72.")],
+                "Oui et oui", "36==9*4 and 72==36*2"),
         warning("Un multiple n'est pas un diviseur : 12 est un multiple de 3, mais 3 est un diviseur de 12. Et 0 est un multiple de tous les nombres, mais on ne peut jamais diviser par 0."),
     ],
     [
@@ -202,6 +213,9 @@ PRACTICE = [
     number("p25", "consecutifs", "Combien de nombres pairs y a-t-il entre 1 et 20, ces deux nombres compris ?", Fraction(10), 1, ["Un nombre sur deux est pair."], ["2, 4, 6, ..., 20 : 20 ÷ 2 = 10 nombres pairs."]),
     choice("p26", "consecutifs", "Quel nombre est impair ?", ["1 408", "3 615", "250"], 1, 1, ["Regarde le chiffre des unités."], ["3 615 se termine par 5 : il est impair."], wrong={0: "1 408 se termine par 8 : il est pair.", 2: "250 se termine par 0 : il est pair."}),
     number("p27", "criteres", "Parmi 3 000 ; 4 500 ; 6 200 ; 8 000, combien sont divisibles par 1 000 ?", Fraction(2), 2, ["Il faut trois zéros à la fin."], ["3 000 et 8 000 se terminent par trois zéros : 2 nombres."]),
+    number("p28", "consecutifs", "Combien de nombres pairs y a-t-il strictement entre 11 et 31 ?", Fraction(10), 2, ["Écris-les : 12, 14, ..."], ["12, 14, 16, 18, 20, 22, 24, 26, 28, 30 : 10 nombres pairs."]),
+    number("p29", "multiples", "Quel est le plus grand multiple de 9 inférieur à 100 ?", Fraction(99), 2, ["11 × 9 = 99."], ["9 × 11 = 99 et 9 × 12 = 108 dépasse 100 : c'est 99."]),
+    number("p30", "multiples", "Combien de diviseurs a 28 ?", Fraction(6), 3, ["Cherche-les par paires : 1 × 28, 2 × 14, ..."], ["1 × 28, 2 × 14, 4 × 7 : les diviseurs sont 1, 2, 4, 7, 14, 28, soit 6 diviseurs."]),
     number("p24", "criteres", "Quel chiffre c faut-il pour que 6c5 soit divisible par 3, le plus grand possible ?", Fraction(7), 3, ["La somme 6 + c + 5 doit être un multiple de 3."], ["6 + 5 = 11. Les multiples de 3 possibles : 12, 15, 18, ...", "c = 1, 4 ou 7. Le plus grand est 7 : 675 = 3 × 225."]),
 ]
 

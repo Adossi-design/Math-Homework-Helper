@@ -195,6 +195,11 @@ S3 = Section(
                 [(N("4250 \\div 1000") + " = " + N("4,25"), "Trois rangs vers la gauche : 4 250 g = 4,25 kg."),
                  (N("2500 \\div 1000") + " = " + N("2,5"), "2 500 mL = 2,5 L.")],
                 "4 250 g = 4,25 kg et 2 500 mL = 2,5 L", "d('4250')/1000==d('4,25') and d('2500')/1000==d('2,5')"),
+        example("Exemple 4", "Calculer " + N("0,35 \\div 0,01") + " et " + N("45 \\div 0,001") + ".",
+                "Diviser par 0,01 revient à multiplier par 100, et diviser par 0,001 à multiplier par 1 000 : la virgule se décale vers la droite.",
+                [(N("0,35 \\div 0,01") + " = " + N("35"), "Deux rangs vers la droite : 0,35 devient 35."),
+                 (N("45 \\div 0,001") + " = " + N("45000"), "Trois rangs vers la droite : on ajoute trois zéros à 45.")],
+                N("35") + " et " + N("45000"), "d('0,35')/d('0,01')==35 and 45/d('0,001')==45000"),
         warning("Diviser par 0,1 agrandit : " + N("8 \\div 0,1 = 80") + " et non 0,8. Et diviser par 10 rend dix fois plus petit : " + N("8 \\div 10 = 0,8") + "."),
     ],
     [

@@ -31,6 +31,7 @@ INDEPENDENT = {
     "p19": len([n for n in (63, 81, 104, 222, 459) if n % 9 == 0]), "p20": len([n for n in (135, 250, 90, 165) if n % 15 == 0]), "p21": 0,
     "p22": min(n for n in range(100, 1000) if n % 5 == 0 and n % 9 == 0), "p23": len([n for n in range(1, 51) if n % 5 == 0]),
     "p24": max(c for c in range(10) if int(f"6{c}5") % 3 == 0),
+    "p28": len([n for n in range(12, 31) if n % 2 == 0]), "p29": max(n for n in range(1, 100) if n % 9 == 0), "p30": len(divisors_of(28)),
     "p25": len([n for n in range(1, 21) if n % 2 == 0]), "p26": 1, "p27": len([n for n in (3000, 4500, 6200, 8000) if n % 1000 == 0]),
 }
 

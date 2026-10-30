@@ -276,9 +276,15 @@ def assessment(rng):
     length, width, height = box()
     questions.append(number("a1", "elements", f"Quelle est la longueur totale des arêtes d'un pavé droit de {length} cm sur {width} cm sur {height} cm, en cm ?", Fraction(4 * (length + width + height)), 2,
                             ["4 arêtes pour chaque dimension."], [f"4 × ({length} + {width} + {height}) = 4 × {length + width + height} = {4 * (length + width + height)} cm."], units=["cm"]))
-    # 2. total edge length of a cube
-    edge = rng.choice([e for e in range(2, 16) if e not in (5, 7, 9)])
-    questions.append(number("a2", "elements", f"Un cube a une arête de {edge} cm. Quelle est la longueur totale de ses arêtes, en cm ?", Fraction(12 * edge), 1, ["Un cube a 12 arêtes égales."], [f"12 × {edge} = {12 * edge} cm."], units=["cm"]))
+    # 2. the net of a cylinder or of a box
+    if rng.random() < 0.5:
+        radius = rng.randint(2, 9)
+        questions.append(number("a2", "elements", f"Le patron d'un cylindre droit de rayon {radius} cm contient un rectangle. Quelle est la longueur de ce rectangle, en cm ? (pi = 3,14)", 2 * PI * radius, 2,
+                                ["La longueur du rectangle est le périmètre d'une base."], [f"2 × 3,14 × {radius} = {show(2 * PI * radius)} cm."], units=["cm"]))
+    else:
+        edge = rng.randint(2, 15)
+        questions.append(number("a2", "elements", f"Un cube d'arête {edge} cm est dessiné en patron. Quelle est l'aire totale du patron, en cm² ?", Fraction(6 * edge * edge), 2,
+                                ["Le patron d'un cube est formé de 6 carrés égaux."], [f"Un carré : {edge} × {edge} = {edge * edge}.", f"6 × {edge * edge} = {6 * edge * edge} cm²."], units=["cm2", "cm²"]))
     # 3. lateral area
     length, width, height = box()
     questions.append(number("a3", "aires", f"Quelle est l'aire latérale d'un pavé droit dont la base mesure {length} cm sur {width} cm et la hauteur {height} cm, en cm² ?", Fraction(2 * (length + width) * height), 2,
@@ -341,6 +347,7 @@ CHAPTER = Chapter(
                    {"text": "Connaître le périmètre et l'aire d'un rectangle et d'un carré."}],
     sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
+    assessment_version=2,
     status_note="Tenth chapter of the Senegal Sixième course. Its contents follow lesson 8 of the Côte d'Ivoire Sixième programme (box, cube and cylinder, their parts and nets, areas and volumes), which was read for it, "
                 "so it is also offered there, but the programme's own situations are not reproduced. This chapter has no figures: it is meant to be studied with a real box, and it takes 3,14 for pi. Building a net or a solid by hand, which that lesson also asks for, is not covered. It has not been checked against the official Senegalese programme.",
 )

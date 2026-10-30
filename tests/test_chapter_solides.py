@@ -45,7 +45,8 @@ def test_assessment_keys_match_a_recalculation_from_each_prompt():
         assert sorted(q, key=lambda k: int(k[1:])) == [f"a{i}" for i in range(1, 13)]
         a, b, c = numbers_in(q["a1"].prompt)[:3]
         assert q["a1"].answer.value == 4 * (a + b + c)
-        assert q["a2"].answer.value == 12 * numbers_in(q["a2"].prompt)[0]
+        first = numbers_in(q["a2"].prompt)[0]
+        assert q["a2"].answer.value == (2 * PI * first if "cylindre" in q["a2"].prompt else 6 * first * first)
         a, b, c = numbers_in(q["a3"].prompt)[:3]
         assert q["a3"].answer.value == 2 * (a + b) * c
         a, b, c = numbers_in(q["a4"].prompt)[:3]
@@ -81,3 +82,13 @@ def test_pages_render_and_unit_answers_are_read(student):
         assert student.post("/curriculum/check", json={"exercise": f"{SOL.id}/s1-g4", "answer": typed}).get_json()["status"] == "correct", typed
     for typed in ["16 cm²", "16 cm2", "16"]:
         assert student.post("/curriculum/check", json={"exercise": f"{SOL.id}/s2-g1", "answer": typed}).get_json()["status"] == "correct", typed
+
+
+def test_counting_answers_may_carry_the_counted_word():
+    from mathhelper.curriculum.checker import check
+
+    for typed in ["6", "6 faces", "6 face", "6faces"]:
+        assert check(BY_ID["s1-g1"].answer, typed).status == "correct", typed
+    assert check(BY_ID["s1-g1"].answer, "7 faces").status == "wrong"
+    assert check(BY_ID["s1-g2"].answer, "12 arêtes").status == "correct"
+    assert check(BY_ID["p4"].answer, "3 pièces").status == "correct"

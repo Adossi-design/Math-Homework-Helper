@@ -23,7 +23,6 @@ CURRICULUM = {
         "Les leçons et les explications utilisent les méthodes de ce niveau. Les niveaux marqués comme disponibles ont des chapitres complets.",
     "Choose a country and a level from the list.": "Choisis un pays et un niveau dans la liste.",
     "Your curriculum was saved. Your language stays the same.": "Ton programme est enregistré. Ta langue reste la même.",
-    "Complete chapters by country and level": "Des chapitres complets par pays et par niveau",
     "Open": "Ouvrir",
     "Change in Settings": "Modifier dans les paramètres",
     "Choose your country and level to see the chapters written for it.": "Choisis ton pays et ton niveau pour voir les chapitres écrits pour eux.",

@@ -562,12 +562,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .suggestions { display: flex; gap: 8px; flex-wrap: wrap; padding: 0 22px 14px; }
 
 /* Learn pages. */
-.course-card { display: flex; flex-direction: column; gap: 14px; height: 100%; }
-.course-card .top { display: flex; gap: 14px; align-items: flex-start; }
-.course-card h3 { font-size: 16px; }
-.course-card p { color: var(--muted); font-size: 14px; margin-top: 4px; }
-.course-card .foot { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
-.course-card .foot .row { justify-content: space-between; font-size: 13px; color: var(--faint); font-weight: 550; }
 .level-block + .level-block { margin-top: 32px; }
 .level-title { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--faint); font-weight: 750; }
 .level-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
@@ -591,7 +585,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .callout .icon { color: var(--danger); margin-top: 2px; }
 .callout strong { display: block; color: var(--danger); margin-bottom: 2px; }
 .lesson-nav { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
-.lesson-intro { font-size: 17px; line-height: 1.6; }
 
 /* Practice pages. */
 .skill-card { display: flex; flex-direction: column; gap: 12px; height: 100%; }
@@ -1002,9 +995,6 @@ html[lang="fr"] .how .feature::before { content: "\00C9tape " counter(how); }
   .skill-card .score { grid-column: 1; grid-row: 2; }
   .skill-card .foot .btn { grid-column: 2; grid-row: 1 / span 2; }
   .skill-card .progress { grid-column: 1 / -1; grid-row: 3; height: 5px; margin-top: 6px; }
-  .course-card { gap: 12px; }
-  .course-card p { display: none; }
-  .course-card .top { align-items: center; }
   .level-block + .level-block { margin-top: 24px; }
 
   .dropzone { min-height: 220px; }

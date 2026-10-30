@@ -59,6 +59,12 @@ S1 = Section(
                 [(N("3 \\div 4") + " = " + N("0,75"), "3 ÷ 4 : 30 ÷ 4 = 7 reste 2, puis 20 ÷ 4 = 5. Donc 3/4 = 0,75."),
                  (N("0,6") + " = " + N("6/10"), "Un chiffre après la virgule : le dénominateur est 10.")],
                 N("3/4 = 0,75") + " et " + N("0,6 = 6/10"), "d('3')/4==d('0,75') and d('6')/10==d('0,6')"),
+        example("Exemple 4", "Écrire 2 unités et 3 quarts sous la forme d'une seule fraction.",
+                "Une unité vaut 4 quarts : on compte tous les quarts.",
+                [("2 unités = " + N("2 \\times 4") + " = " + N("8") + " quarts", "Chaque unité contient 4 quarts."),
+                 ("8 quarts + 3 quarts = " + N("11") + " quarts", "On additionne les quarts."),
+                 ("11 quarts s'écrivent " + N("11/4"), "Le dénominateur 4 dit qu'on compte des quarts.")],
+                N("11/4"), "2*4+3==11"),
         warning("Les parts doivent être égales : si une galette est coupée en 4 parts de tailles différentes, une part n'est pas " + N("1/4") + " de la galette. Et le dénominateur ne peut jamais être 0 : on ne peut pas partager en 0 part."),
     ],
     [

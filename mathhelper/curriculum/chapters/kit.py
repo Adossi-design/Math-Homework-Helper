@@ -77,12 +77,26 @@ UNIT_SYNONYMS = {
 }
 
 
+COUNT_QUESTION = re.compile(r"^Combien (?:de |d'|du |des )([^\W\d_]+)", re.IGNORECASE)
+
+
+def counted_nouns(prompt):
+    """Return the spellings of the noun a 'Combien de ...' question counts, so that '6 faces' is read like '6'."""
+    match = COUNT_QUESTION.match(prompt)
+    if not match:
+        return ()
+    noun = match.group(1).lower()
+    singular = noun[:-1] if noun.endswith("s") else noun
+    return tuple(dict.fromkeys((noun, singular, singular + "s")))
+
+
 def make_kit(chapter_id, default_form=""):
     """Return the exercise builders of one chapter, which prefix every exercise id with the chapter id. A default form can be required for every number answer."""
 
     def number(exercise_id, concept, prompt, value, level=1, hints=(), solution=(), units=(), form="", wrong=None):
         """Build an exercise whose answer is one number, given as an exact fraction."""
         units = tuple(units) + tuple(word for unit in units for word in UNIT_SYNONYMS.get(unit, ()))
+        units += counted_nouns(prompt) if not units else ()
         return Exercise(f"{chapter_id}/{exercise_id}", concept, prompt, Answer("number", value, units, form or default_form),
                         list(hints), list(solution), level=level, wrong=wrong or {})
 

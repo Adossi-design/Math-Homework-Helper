@@ -219,3 +219,13 @@ a.lesson-row:hover .lesson-num { transform: scale(1.08); }
   .stepper-dots { margin-left: 0; width: 100%; }
   .stepper-dots i { flex: 1; }
 }
+
+/* ----- Polish ----- */
+.auth-side .brand span, .auth-top .brand span { background: none; -webkit-text-fill-color: #fff; color: #fff; }
+.exercise > .options, .exercise > .input { margin-top: 12px; }
+.exercise > .input { max-width: 420px; }
+.option input[type="radio"] { appearance: none; -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border-strong); background: transparent; display: inline-grid; place-items: center; flex: none; margin: 0; }
+.option input[type="radio"]::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--grad); transform: scale(0); transition: transform 0.15s ease; }
+.option input[type="radio"]:checked { border-color: #6a63f5; }
+.option input[type="radio"]:checked::after { transform: scale(1); }
+.choice { background: color-mix(in srgb, var(--surface) 85%, transparent); border-color: var(--glass-edge); }
