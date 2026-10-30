@@ -229,3 +229,16 @@ a.lesson-row:hover .lesson-num { transform: scale(1.08); }
 .option input[type="radio"]:checked { border-color: #6a63f5; }
 .option input[type="radio"]:checked::after { transform: scale(1); }
 .choice { background: color-mix(in srgb, var(--surface) 85%, transparent); border-color: var(--glass-edge); }
+
+/* ----- Geometry figures ----- */
+.fig-box { margin: 4px 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.fig { width: 100%; max-width: 440px; height: auto; display: block; }
+.fig-bg { fill: var(--surface-2); stroke: var(--glass-edge); stroke-width: 1; }
+.fig-seg { stroke: var(--text); stroke-width: 2.4; fill: none; stroke-linecap: round; }
+.fig-line { stroke: #6a63f5; stroke-width: 2.2; fill: none; stroke-linecap: round; }
+.fig-circle { stroke: #6a63f5; stroke-width: 2.4; fill: rgba(106, 99, 245, 0.1); }
+.fig-mark { stroke: var(--text); stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.fig-pt { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
+.fig-label { fill: var(--text); font: 700 15px var(--font); }
+.fig-note { fill: var(--muted); font: 600 13px var(--font); }
+.fig-box figcaption { font-size: 14px; color: var(--muted); text-align: center; max-width: 520px; line-height: 1.5; }

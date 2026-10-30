@@ -59,6 +59,8 @@ def lesson_text(view):
             out.append(f"Worked example. {block['problem']} Method: {block['method']}")
             out += [f"  {step['math']}   ({step['why']})" for step in block["steps"]]
             out.append(f"  Answer: {block['answer']}")
+        elif kind == "figure":
+            out.append(f"Figure: {block['alt']} ({block['caption']})")
         elif kind == "table":
             out.append("Table: " + " | ".join(block["head"]) + " / " + " | ".join(block["rows"][0]))
         else:

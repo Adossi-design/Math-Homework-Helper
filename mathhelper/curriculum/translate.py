@@ -17,7 +17,7 @@ MATH = re.compile(r"\$\$.+?\$\$|\$[^$]+?\$", re.S)
 HIDDEN = re.compile(r"\$\$.+?\$\$|\$[^$]+?\$|[0-9]+(?:[.,][0-9]+)*|(?<![^\W\d_])[A-Z](?: [A-Z]){3,}(?![^\W\d_])|(?<=pour )[A-Z](?![^\W\d_])", re.S)
 HOLE = re.compile(r"⟦(\d+)⟧")
 WORDS = re.compile(r"[^\W\d_]{2,}")
-SKIP_KEYS = {"type", "id", "concept", "verify", "kind", "value", "course", "lesson", "given", "status", "level", "form"}
+SKIP_KEYS = {"type", "id", "concept", "verify", "kind", "value", "course", "lesson", "given", "status", "level", "form", "svg"}
 
 
 @dataclass

@@ -9,6 +9,11 @@
 </div>
 {% elif b.type == "warning" %}
 <div class="callout">{{ icon("alert") }}<div><strong>{{ _("Watch out") }}</strong>{{ b.text | rich_inline }}</div></div>
+{% elif b.type == "figure" %}
+<figure class="fig-box" role="img" aria-label="{{ b.alt }}">
+  {{ b.svg | safe }}
+  <figcaption>{{ b.caption | rich_inline }}</figcaption>
+</figure>
 {% elif b.type == "table" %}
 <div class="place-table" role="region" tabindex="0" aria-label="{{ b.label or _("Place value table") }}">
   <table>
