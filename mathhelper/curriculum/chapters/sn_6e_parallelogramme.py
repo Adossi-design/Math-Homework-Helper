@@ -87,8 +87,8 @@ S2 = Section(
         para("Pour être sûr qu'une figure est un parallélogramme, il ne suffit pas qu'elle en ait l'air. Il faut une raison. Heureusement, les propriétés vues à la section précédente marchent aussi dans l'autre sens."),
         rule("Trois façons de montrer qu'un quadrilatère est un parallélogramme",
              "1. Par la définition : si ses côtés opposés sont parallèles deux à deux. 2. Par les diagonales : si ses diagonales se coupent en leur milieu. 3. Par les côtés : si ses côtés opposés ont la même longueur deux à deux. "
-             "Les propriétés 2 et 3 sont les réciproques des propriétés du parallélogramme."),
-        figure(HALVES, "Un parallélogramme ABCD avec sa diagonale [AC] en pointillés qui le partage en deux triangles.", "La diagonale [AC] partage le parallélogramme en deux triangles ABC et ACD de même forme."),
+             "Les propriétés 2 et 3 sont les réciproques des propriétés du parallélogramme, pour un quadrilatère non croisé (dont les côtés ne se traversent pas). On peut aussi montrer qu'un quadrilatère non croisé est un parallélogramme si deux de ses côtés opposés sont à la fois égaux et parallèles."),
+        figure(HALVES, "Un parallélogramme ABCD avec sa diagonale [AC] en pointillés qui le partage en deux triangles.", "La diagonale [AC] partage le parallélogramme en deux triangles ABC et ACD de même aire."),
         example("Exemple 1", "ABCD est un quadrilatère avec AB = DC = 6 cm et AD = BC = 4 cm. Est-ce un parallélogramme ?",
                 "On regarde si les côtés opposés sont égaux deux à deux.",
                 [("AB = DC = 6 cm", "Une première paire de côtés opposés égaux."),
@@ -101,11 +101,11 @@ S2 = Section(
                  ("Les diagonales se coupent en leur milieu", "ABCD est un parallélogramme."),
                  (N("AC = 2 \\times 5") + " = " + N("10") + " et " + N("BD = 2 \\times 3") + " = " + N("6"), "Les diagonales sont les doubles des demi-diagonales.")],
                 "Oui, c'est un parallélogramme, avec " + N("AC = 10") + " cm et " + N("BD = 6") + " cm.", "5==5 and 3==3 and 2*5==10 and 2*3==6"),
-        example("Exemple 3", "ABCD est un quadrilatère avec AB = DC = 5 cm, mais AD = 3 cm et BC = 4 cm. Peut-on affirmer que c'est un parallélogramme ?",
-                "Il faut que les deux paires de côtés opposés soient égales.",
-                [("AB = DC : une paire de côtés opposés est égale", "Ce n'est pas suffisant."),
-                 ("AD = 3 et BC = 4 : l'autre paire n'est pas égale", "La réciproque ne s'applique pas.")],
-                "Non, on ne peut pas affirmer que c'est un parallélogramme.", "5==5 and 3!=4"),
+        example("Exemple 3", "ABCD est un quadrilatère avec AB = DC = 5 cm, mais AD = 3 cm et BC = 4 cm. Est-ce un parallélogramme ?",
+                "Dans un parallélogramme, les côtés opposés sont égaux deux à deux : on vérifie les deux paires.",
+                [("AB = DC : la première paire de côtés opposés est égale", "Cette paire est compatible avec un parallélogramme."),
+                 ("AD = 3 cm et BC = 4 cm : la deuxième paire n'est pas égale", "Dans un parallélogramme, on aurait AD = BC.")],
+                "Non, ce n'est pas un parallélogramme.", "5==5 and 3!=4"),
         example("Exemple 4", "ABCD est un parallélogramme. On sait que AB = 8 cm, BC = 5 cm et que la diagonale [AC] mesure 9 cm. Quelle est la longueur OA, O étant le point d'intersection des diagonales ?",
                 "O est le milieu de [AC] : OA est la moitié de AC.",
                 [(N("OA = AC \\div 2") + " = " + N("9 \\div 2"), "Les diagonales se coupent en leur milieu."),
@@ -117,8 +117,8 @@ S2 = Section(
     [
         choice("s2-g1", "justifier", "ABCD a AB = DC = 7 cm et AD = BC = 5 cm. Que peut-on affirmer ?", ["ABCD est un parallélogramme", "ABCD n'est pas un parallélogramme", "On ne peut rien affirmer"], 0,
                hints=["Les deux paires de côtés opposés sont égales."], solution=["Ses côtés opposés ont la même longueur deux à deux : c'est un parallélogramme."], wrong={1: "La réciproque s'applique.", 2: "La propriété des côtés opposés permet de conclure."}),
-        choice("s2-g2", "justifier", "ABCD a AB = DC = 6 cm, mais AD = 4 cm et BC = 5 cm. Que peut-on affirmer ?", ["ABCD est un parallélogramme", "On ne peut pas affirmer que c'est un parallélogramme", "ABCD est un losange"], 1,
-               hints=["Une seule paire de côtés égaux ne suffit pas."], solution=["Les côtés AD et BC ne sont pas égaux : la réciproque ne s'applique pas."], wrong={0: "Les côtés AD et BC sont différents.", 2: "Rien n'indique un losange."}),
+        choice("s2-g2", "justifier", "ABCD a AB = DC = 6 cm, mais AD = 4 cm et BC = 5 cm. Que peut-on affirmer ?", ["ABCD est un parallélogramme", "ABCD n'est pas un parallélogramme", "On ne peut rien affirmer"], 1,
+               hints=["Dans un parallélogramme, les deux paires de côtés opposés sont égales."], solution=["Dans un parallélogramme, on aurait AD = BC. Ici AD = 4 cm et BC = 5 cm : ABCD n'est pas un parallélogramme."], wrong={0: "Les côtés AD et BC sont différents.", 2: "La propriété des côtés opposés permet de conclure."}),
         choice("s2-g3", "justifier", "Les diagonales de ABCD se coupent en O avec OA = OC et OB = OD. Que peut-on affirmer ?", ["ABCD est un parallélogramme", "ABCD est un cercle", "ABCD est un triangle"], 0,
                hints=["Les diagonales se coupent en leur milieu."], solution=["Si les diagonales se coupent en leur milieu, le quadrilatère est un parallélogramme."], wrong={1: "ABCD est un quadrilatère.", 2: "ABCD a quatre sommets."}),
         number("s2-g4", "justifier", "Les diagonales d'un quadrilatère ABCD se coupent en O avec OA = OC = 6 cm. Si ABCD est un parallélogramme, quelle est la longueur de la diagonale AC, en cm ?", Fraction(12), units=["cm"],
@@ -225,7 +225,7 @@ PRACTICE = [
     choice("p6", "definition", "Dans le parallélogramme ABCD, quel côté est égal à [AD] ?", ["[AB]", "[BC]", "[CD]"], 1, 1, ["Le côté opposé à [AD]."], ["[BC] est opposé à [AD] : AD = BC."], wrong={0: "[AB] est consécutif à [AD].", 2: "[CD] est consécutif à [AD]."}),
     number("p7", "definition", "Les diagonales d'un parallélogramme mesurent 14 cm et 10 cm. Elles se coupent en O. Quelle est la somme OA + OB, en cm ?", Fraction(12), 3, ["OA = AC ÷ 2 et OB = BD ÷ 2."], ["OA = 14 ÷ 2 = 7 cm et OB = 10 ÷ 2 = 5 cm.", "7 + 5 = 12 cm."], units=["cm"]),
     choice("p8", "justifier", "ABCD a AB = DC = 8 cm et AD = BC = 3 cm. Que peut-on affirmer ?", ["ABCD est un parallélogramme", "ABCD n'est pas un parallélogramme", "On ne peut rien affirmer"], 0, 1, ["Côtés opposés égaux deux à deux."], ["Les côtés opposés sont égaux deux à deux : c'est un parallélogramme."], wrong={1: "La réciproque s'applique.", 2: "La propriété permet de conclure."}),
-    choice("p9", "justifier", "ABCD a OA = OC = 4 cm et OB = 6 cm, OD = 5 cm (O est le point d'intersection des diagonales). Que peut-on affirmer ?", ["ABCD est un parallélogramme", "On ne peut pas affirmer que c'est un parallélogramme", "ABCD est un carré"], 1, 2, ["Les deux diagonales doivent se couper en leur milieu."], ["O est le milieu de [AC] mais pas de [BD] (OB ≠ OD) : on ne peut pas conclure."], wrong={0: "OB et OD ne sont pas égaux.", 2: "Rien n'indique un carré."}),
+    choice("p9", "justifier", "ABCD a OA = OC = 4 cm et OB = 6 cm, OD = 5 cm (O est le point d'intersection des diagonales). Que peut-on affirmer ?", ["ABCD est un parallélogramme", "ABCD n'est pas un parallélogramme", "On ne peut rien affirmer"], 1, 2, ["Dans un parallélogramme, les deux diagonales se coupent en leur milieu."], ["Dans un parallélogramme, on aurait OB = OD. Ici OB = 6 cm et OD = 5 cm : ABCD n'est pas un parallélogramme."], wrong={0: "OB et OD ne sont pas égaux.", 2: "La propriété des diagonales permet de conclure."}),
     choice("p10", "justifier", "Léa dit : « mon quadrilatère a deux côtés opposés égaux, donc c'est un parallélogramme ». Qu'en penses-tu ?", ["Elle a raison", "Elle a tort : il faut les deux paires de côtés opposés égaux", "Elle a tort : il faut un angle droit"], 1, 2, ["Une seule paire ne suffit pas."], ["Il faut que les deux paires de côtés opposés soient égales (ou une paire égale et parallèle)."], wrong={0: "Une paire ne suffit pas.", 2: "Un parallélogramme n'a pas forcément d'angle droit."}),
     number("p11", "justifier", "ABCD est un parallélogramme de diagonales [AC] et [BD] qui se coupent en O. OA = 3,5 cm. Quelle est la longueur AC, en cm ?", Fraction(7), 1, ["AC = 2 × OA."], ["2 × 3,5 = 7 cm."], units=["cm"]),
     number("p12", "justifier", "Combien de diagonales un parallélogramme a-t-il ?", Fraction(2), 1, ["Elles joignent les sommets opposés."], ["[AC] et [BD] : 2 diagonales."]),
@@ -271,9 +271,9 @@ def assessment(rng):
     questions = []
     cm, cm2 = ["cm"], ["cm2", "cm²"]
     # 1. opposite sides are equal
-    x = rand_decimal(rng, 3, 15, 1)
-    questions.append(number("a1", "definition", f"ABCD est un parallélogramme et AB = {show(x)} cm. Quelle est la longueur DC, en cm ?", x, 1,
-                            ["[DC] est le côté opposé à [AB]."], [f"DC = AB = {show(x)} cm."], units=cm))
+    x, y = rand_decimal(rng, 3, 15, 1), rand_decimal(rng, 3, 12, 1)
+    questions.append(number("a1", "definition", f"ABCD est un parallélogramme avec AB = {show(x)} cm et BC = {show(y)} cm. Quelle est la longueur CD + DA, en cm ?", x + y, 1,
+                            ["CD est le côté opposé à AB et DA est le côté opposé à BC."], [f"CD = AB = {show(x)} cm et DA = BC = {show(y)} cm.", f"{show(x)} + {show(y)} = {show(x + y)} cm."], units=cm))
     # 2. half a diagonal
     y = 2 * rng.randint(4, 20)
     questions.append(number("a2", "definition", f"ABCD est un parallélogramme de diagonales [AC] et [BD], qui se coupent en O. AC = {y} cm. Quelle est la longueur OA, en cm ?", Fraction(y // 2), 1,

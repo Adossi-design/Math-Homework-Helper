@@ -57,7 +57,8 @@ def test_assessment_keys_match_a_recalculation_from_each_prompt():
         assert q["a3"].answer.value == 180 - numbers_in(q["a3"].prompt)[0] > 0
         assert q["a4"].answer.value == 90 - numbers_in(q["a4"].prompt)[0] > 0
         assert q["a5"].answer.value == numbers_in(q["a5"].prompt)[-1] // 2 and numbers_in(q["a5"].prompt)[-1] % 2 == 0
-        assert q["a6"].answer.value == smallest_clock_angle(numbers_in(q["a6"].prompt)[0])
+        hours = numbers_in(q["a6"].prompt)[0]
+        assert q["a6"].answer.value == (smallest_clock_angle(hours) if "plus petit angle" in q["a6"].prompt else 30 * hours)
         n = numbers_in(q["a7"].prompt)[0]
         assert q["a7"].answer.value == n * (n - 1) // 2
         assert q["a8"].answer.value == 90 * numbers_in(q["a8"].prompt)[0]

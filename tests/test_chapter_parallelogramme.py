@@ -42,7 +42,7 @@ def test_assessment_keys_match_a_recalculation_from_each_prompt():
     for seed in range(300):
         q = {x.id.split("/")[1]: x for x in assessment(random.Random(f"par{seed}"))}
         assert sorted(q, key=lambda k: int(k[1:])) == [f"a{i}" for i in range(1, 13)]
-        assert q["a1"].answer.value == numbers_in(q["a1"].prompt)[0]
+        assert q["a1"].answer.value == sum(numbers_in(q["a1"].prompt)[:2])
         assert q["a2"].answer.value * 2 == numbers_in(q["a2"].prompt)[0]
         assert q["a3"].answer.value == 2 * numbers_in(q["a3"].prompt)[0]
         a, b = numbers_in(q["a4"].prompt)[:2]

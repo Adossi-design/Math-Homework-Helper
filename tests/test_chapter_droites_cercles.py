@@ -50,8 +50,8 @@ def test_assessment_keys_match_a_recalculation_from_each_prompt():
         assert q["a2"].answer.value == total - ab > 0
         n = int(numbers_in(q["a3"].prompt)[0])
         assert q["a3"].answer.value == n * (n - 1) // 2
-        assert q["a4"].options[q["a4"].answer.value] in ("Elles sont parallèles", "Elles sont perpendiculaires")
-        assert ("perpendiculaires" if "// (d₂)" in q["a4"].prompt else "parallèles") in q["a4"].options[q["a4"].answer.value]
+        expected = "perpendiculaires" if "(E) ⟂ (D)" in q["a4"].prompt else "parallèles"
+        assert expected in q["a4"].options[q["a4"].answer.value] and "(d₁)" not in q["a4"].prompt
         n = int(numbers_in(q["a5"].prompt)[0])
         assert q["a5"].answer.value == n * (n - 1) // 2
         assert q["a6"].answer.value == PI * numbers_in(q["a6"].prompt)[0]
@@ -93,3 +93,20 @@ def test_pages_render_with_their_figures_in_both_languages(student):
     assert page.count('<svg class="fig"') == 2 and 'class="fig-box"' in page and "&lt;svg" not in page
     assert student.post("/curriculum/check", json={"exercise": f"{GEO.id}/s1-g1", "answer": "1 droite"}).get_json()["status"] == "correct"
     assert student.post("/curriculum/check", json={"exercise": f"{GEO.id}/s3-g1", "answer": "14 cm"}).get_json()["status"] == "correct"
+
+
+def test_counted_words_are_read_even_when_the_question_does_not_start_with_combien():
+    from mathhelper.curriculum.checker import check
+
+    assert check(BY_ID["s1-g2"].answer, "10 droites").status == "correct"
+    assert check(BY_ID["s1-g2"].answer, "10").status == "correct"
+    assert check(BY_ID["s1-g2"].answer, "9 droites").status == "wrong"
+
+
+def test_degree_spellings_are_read():
+    from mathhelper.curriculum.chapters.sn_6e_angles import CHAPTER as ANG
+    from mathhelper.curriculum.checker import check
+
+    answer = {e.id.split("/")[1]: e for e in ANG.exercises().values()}["s2-g3"].answer
+    for typed in ["270", "270°", "270 deg", "270 degres", "270 degrés"]:
+        assert check(answer, typed).status == "correct", typed

@@ -100,7 +100,7 @@ def ci_student(app, make_user):
 
 def test_the_chapter_is_offered_in_both_countries_and_all_pages_render(ci_student):
     hub = ci_student.get("/curriculum/").get_data(as_text=True)
-    assert hub.count("chapter-card") == 10
+    assert hub.count("chapter-card") == 11
     for path in ["", "/practice", "/summary", "/assessment?seed=abcd1234", "/s/sens", "/s/egales", "/s/operations", "/s/quantite"]:
         for headers in ({}, {"Accept-Language": "fr-FR,fr;q=0.9"}):
             assert ci_student.get(f"/curriculum/{FRAC.id}{path}", headers=headers).status_code == 200, path

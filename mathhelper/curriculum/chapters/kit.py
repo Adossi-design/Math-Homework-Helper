@@ -73,16 +73,16 @@ def spaced(value, places):
 UNIT_SYNONYMS = {
     "F": ("FCFA", "F CFA", "CFA", "francs CFA", "francs", "franc"), "L": ("litres", "litre", "dm³", "dm3"), "cm2": ("cm^2", "centimètres carrés"), "cm²": ("cm^2", "centimètres carrés"), "cm3": ("cm^3", "centimètres cubes"), "cm³": ("cm^3", "centimètres cubes"), "m": ("mètres", "mètre"), "kg": ("kilogrammes",), "km": ("kilomètres",),
     "cm": ("centimètres", "centimètre"), "g": ("grammes", "gramme"), "min": ("minutes", "minute", "mn"), "s": ("secondes", "seconde"), "%": ("pour cent",),
-    "m2": ("m²", "m^2", "mètres carrés"), "m²": ("m2", "m^2", "mètres carrés"), "dm3": ("dm³", "dm^3"), "dm³": ("dm3", "dm^3"), "°C": ("degrés", "degré", "°"),
+    "m2": ("m²", "m^2", "mètres carrés"), "m²": ("m2", "m^2", "mètres carrés"), "dm3": ("dm³", "dm^3"), "dm³": ("dm3", "dm^3"), "°C": ("degrés", "degré", "°"), "°": ("deg", "degres", "degrés", "degré"),
 }
 
 
-COUNT_QUESTION = re.compile(r"^Combien (?:de |d'|du |des )([^\W\d_]+)", re.IGNORECASE)
+COUNT_QUESTION = re.compile(r"Combien (?:de |d'|du |des )([^\W\d_]+)", re.IGNORECASE)
 
 
 def counted_nouns(prompt):
     """Return the spellings of the noun a 'Combien de ...' question counts, so that '6 faces' is read like '6'."""
-    match = COUNT_QUESTION.match(prompt)
+    match = COUNT_QUESTION.search(prompt)
     if not match:
         return ()
     noun = match.group(1).lower()

@@ -21,7 +21,7 @@ ACUTE = Figure().point("O", 60, 150, -14, 22).point("A", 280, 150, -4, 22).point
 RIGHT = Figure().point("O", 80, 150, -14, 22).point("A", 280, 150, -4, 22).point("B", 80, 30, 10, 4).ray("O", "A").ray("O", "B").right_angle("O", "A", "B", 16)
 OBTUSE = Figure().point("O", 170, 150, -4, 22).point("A", 300, 150, -4, 22).point("B", 60, 60, -8, -10).ray("O", "A").ray("O", "B").arc("O", "A", "B", 34)
 FLAT = Figure().point("A", 40, 120, -4, 24).point("O", 170, 120, -4, 24).point("B", 300, 120, -4, 24).line("A", "B")
-ADJACENT = (Figure().point("O", 60, 150, -14, 22).point("A", 290, 150, -4, 22).point("B", 210, 50, 10, 4).point("C", 110, 40, -6, -10)
+ADJACENT = (Figure().point("O", 60, 150, -14, 22).point("A", 290, 150, -4, 22).point("B", 250, 105, 10, 4).point("C", 110, 40, -6, -10)
             .ray("O", "A").ray("O", "B").ray("O", "C").arc("O", "A", "B", 44).arc("O", "B", "C", 44))
 BISECT = (Figure().point("O", 60, 160, -14, 22).point("A", 290, 160, -4, 22).point("B", 250, 35, 10, 0).point("M", 252, 103, 10, 4)
           .ray("O", "A").ray("O", "B").ray("O", "M", "fig-seg").arc("O", "A", "M", 36).arc("O", "M", "B", 48))
@@ -191,7 +191,7 @@ S4 = Section(
         figure(BISECT, "Un angle AOB partagé par la demi-droite [OM) en deux angles égaux, marqués par deux arcs.", "[OM) est la bissectrice de l'angle AOB : les angles AOM et MOB sont égaux."),
         definition("L'horloge et les angles",
                    "Le cadran d'une horloge est un tour complet de 360° partagé en 12 heures. Entre deux nombres voisins du cadran, il y a donc " + N("360 \\div 12") + " = " + N("30") + "°. "
-                   "À une heure pile, l'angle entre les deux aiguilles est le nombre d'heures depuis 12, multiplié par 30°, ou son complément à 360° si on veut le plus petit angle."),
+                   "À une heure entière pile (comme 4 h pile), l'angle entre les deux aiguilles est le nombre d'heures depuis 12, multiplié par 30°, ou son complément à 360° si on veut le plus petit angle."),
         figure(CLOCK, "Un cadran d'horloge avec deux aiguilles, l'une vers le 12 et l'autre vers le 4, et un arc entre elles.", "À 4 heures pile, les aiguilles forment un angle de 4 × 30° = 120°."),
         example("Exemple 1", "[OM) est la bissectrice de l'angle " + N("\\widehat{AOB}") + " qui mesure 70°. Calculer " + N("\\widehat{AOM}") + ".",
                 "La bissectrice partage l'angle en deux angles égaux : on prend la moitié.",
@@ -312,8 +312,12 @@ def assessment(rng):
     # 6. a clock
     hour = rng.randint(1, 11)
     smallest = min(30 * hour, 360 - 30 * hour)
-    questions.append(number("a6", "bissectrice", f"Il est {hour} heures pile. Quel est le plus petit angle entre les deux aiguilles, en degrés ?", Fraction(smallest), 2,
-                            ["Une heure du cadran mesure 30°."], [f"{hour} × 30 = {30 * hour}°." + ("" if 30 * hour <= 180 else f" Le plus petit angle est 360 − {30 * hour} = {smallest}°.")], units=deg))
+    if rng.random() < 0.5:
+        questions.append(number("a6", "bissectrice", f"Il est {hour} heures pile. Quel est le plus petit angle entre les deux aiguilles, en degrés ?", Fraction(smallest), 2,
+                                ["Une heure du cadran mesure 30°."], [f"{hour} × 30 = {30 * hour}°." + ("" if 30 * hour <= 180 else f" Le plus petit angle est 360 − {30 * hour} = {smallest}°.")], units=deg))
+    else:
+        questions.append(number("a6", "bissectrice", f"La petite aiguille d'une horloge a tourné de {hour} heures depuis le 12. De combien de degrés a-t-elle tourné ?", Fraction(30 * hour), 2,
+                                ["Une heure du cadran mesure 30°."], [f"{hour} × 30 = {30 * hour}°."], units=deg))
     # 7. angles formed by half-lines
     n = rng.randint(3, 9)
     questions.append(number("a7", "angle", f"{n} demi-droites ont la même origine. Combien d'angles forment-elles deux à deux ?", Fraction(n * (n - 1) // 2), 2,
@@ -329,7 +333,7 @@ def assessment(rng):
     # 10. which of four angles is obtuse
     values = rng.sample([10, 25, 40, 55, 70, 85], 3) + [rng.choice([97, 110, 126, 143, 158, 170])]
     rng.shuffle(values)
-    questions.append(choice("a10", "mesure", "Quel angle est obtus ?", [f"{v}°" for v in values], next(i for i, v in enumerate(values) if v > 90), 2,
+    questions.append(choice("a10", "mesure", "Parmi ces angles, lequel est obtus ?", [f"{v}°" for v in values], next(i for i, v in enumerate(values) if v > 90), 2,
                             ["Un angle obtus est entre 90° et 180°."], ["Un seul angle dépasse 90° : c'est l'angle obtus."]))
     # 11. double of an angle
     x = rng.randint(12, 88)

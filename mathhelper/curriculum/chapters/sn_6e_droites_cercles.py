@@ -175,7 +175,7 @@ S3 = Section(
                 [(N("d = 2 \\times 5") + " = " + N("10") + " cm", "Le diamètre est le double du rayon."),
                  (N("P = 3,14 \\times 10") + " = " + N("31,4") + " cm", "Le périmètre est π fois le diamètre."),
                  (N("A = 3,14 \\times 5 \\times 5") + " = " + N("78,5") + " cm²", "5 × 5 = 25, puis 3,14 × 25 = 78,5.")],
-                "Diamètre " + N("10") + " cm, périmètre " + N("31,4") + " cm, aire " + N("78,5") + " cm².", "2*5==10 and d('3,14')*10==d('31,4') and d('3,14')*5*5==d('78,5')"),
+                "Diamètre " + N("10") + " cm, périmètre environ " + N("31,4") + " cm, aire environ " + N("78,5") + " cm².", "2*5==10 and d('3,14')*10==d('31,4') and d('3,14')*5*5==d('78,5')"),
         example("Exemple 2", "Le cercle C(A ; 4 cm) est tracé. M est un point tel que AM = 4 cm, N un point tel que AN = 3 cm et P un point tel que AP = 6 cm. Où sont M, N et P par rapport au cercle ?",
                 "On compare chaque distance au centre avec le rayon 4 cm.",
                 [("AM = 4 : égal au rayon", "M est sur le cercle."),
@@ -212,8 +212,8 @@ S3 = Section(
 
 # ----- Section 4: midpoint and comparing lengths -----
 S4 = Section(
-    "milieu", "Milieu d'un segment, médiatrice et comparaison de longueurs", 22, "milieu",
-    "Reconnaître le milieu d'un segment, calculer avec les moitiés, comparer et reporter des longueurs, et connaître la médiatrice.",
+    "milieu", "Milieu d'un segment, médiatrice et report de longueurs", 22, "milieu",
+    "Reconnaître le milieu d'un segment, calculer avec les moitiés, reporter des longueurs, et connaître la médiatrice.",
     [
         para("Pour planter des fleurs à égale distance de deux cocotiers, il faut trouver le milieu du segment qui les relie, puis tous les points qui sont à égale distance des deux. "
              "Ce sont deux idées très utiles : le milieu et la médiatrice."),
@@ -275,7 +275,7 @@ PRACTICE = [
     choice("p10", "paralleles", "(d₁) // (d₂) et (d₂) // (d₃). Que peut-on dire de (d₁) et (d₃) ?", ["Elles sont parallèles", "Elles sont perpendiculaires", "Elles sont sécantes"], 0, 2, ["Deux droites parallèles à une même troisième sont parallèles entre elles."], ["(d₁) et (d₃) sont toutes les deux parallèles à (d₂) : elles sont parallèles."], wrong={1: "Rien n'indique un angle droit.", 2: "Des droites parallèles ne se coupent pas."}),
     choice("p11", "paralleles", "(d₁) ⟂ (d₂) et (d₂) // (d₃). Que peut-on dire de (d₁) et (d₃) ?", ["Elles sont parallèles", "Elles sont perpendiculaires", "On ne peut rien dire"], 1, 2, ["Une droite perpendiculaire à l'une de deux parallèles l'est à l'autre."], ["(d₁) est perpendiculaire à (d₂) qui est parallèle à (d₃) : (d₁) ⟂ (d₃)."], wrong={0: "(d₁) coupe (d₂) à angle droit : elle coupe aussi (d₃).", 2: "La propriété 4 permet de conclure."}),
     number("p12", "paralleles", "Six droites sont deux à deux sécantes, et trois quelconques d'entre elles ne passent jamais par le même point. Combien de points d'intersection y a-t-il ?", Fraction(15), 3, ["Compte les paires de droites."], ["5 + 4 + 3 + 2 + 1 = 15 paires de droites.", "15 points."]),
-    number("p13", "paralleles", "Trois droites sont deux à deux parallèles. Combien de points d'intersection ont-elles, deux à deux ?", Fraction(0), 1, ["Des droites parallèles ne se coupent pas."], ["Aucune paire ne se coupe : 0 point."]),
+    number("p13", "paralleles", "Trois droites distinctes sont deux à deux parallèles. Combien de points d'intersection ont-elles, deux à deux ?", Fraction(0), 1, ["Des droites parallèles ne se coupent pas."], ["Aucune paire ne se coupe : 0 point."]),
     choice("p14", "paralleles", "Par un point A qui n'est pas sur la droite (d), combien de droites passent par A et sont perpendiculaires à (d) ?", ["Une seule", "Aucune", "Une infinité"], 0, 2, ["La perpendiculaire est unique."], ["Par un point donné, il passe une seule droite perpendiculaire à une droite donnée."], wrong={1: "On peut toujours la tracer avec une équerre.", 2: "Une seule direction fait un angle droit avec (d)."}),
     choice("p15", "paralleles", "Lisa dit : « sur mon dessin, (d₁) et (d₂) ne se coupent pas, donc elles sont parallèles ». Que penses-tu ?", ["Elle a raison : un dessin suffit", "Il faut une propriété ou une donnée : les droites peuvent se couper plus loin que la feuille", "Elle a tort : elles sont perpendiculaires"], 1, 3, ["Un dessin n'est qu'un morceau des droites."], ["Deux droites peuvent se couper en dehors de la feuille : on ne peut conclure que d'après une propriété ou une donnée."], wrong={0: "Un dessin ne prouve rien tout seul.", 2: "Rien n'indique un angle droit."}),
     number("p16", "cercles", "Un cercle a un diamètre de 18 cm. Quel est son rayon, en cm ?", Fraction(9), 1, ["Le rayon est la moitié du diamètre."], ["18 ÷ 2 = 9 cm."], units=["cm"]),
@@ -310,7 +310,7 @@ CONCEPTS = {
     "points": ("Points, droites, demi-droites, segments", "points"),
     "paralleles": ("Droites sécantes, perpendiculaires, parallèles", "paralleles"),
     "cercles": ("Cercle et disque", "cercles"),
-    "milieu": ("Milieu, médiatrice, comparaison de longueurs", "milieu"),
+    "milieu": ("Milieu, médiatrice, report de longueurs", "milieu"),
 }
 
 
@@ -332,12 +332,16 @@ def assessment(rng):
     questions.append(number("a3", "points", f"{n} points sont placés de sorte que trois quelconques d'entre eux ne soient jamais alignés. Combien de droites passent par deux de ces points ?", Fraction(n * (n - 1) // 2), 2,
                             ["Compte les paires de points."], [f"Chaque point forme une paire avec les {n - 1} autres, et chaque paire est comptée deux fois : {n} × {n - 1} ÷ 2 = {n * (n - 1) // 2}."]))
     # 4. a property of parallels and perpendiculars
-    if rng.random() < 0.5:
-        prompt, good, wrong = "(d₁) ⟂ (d) et (d₂) ⟂ (d). Que peut-on dire de (d₁) et de (d₂) ?", "Elles sont parallèles", ["Elles sont perpendiculaires", "Elles sont confondues"]
+    case = rng.choice(["perp-perp", "par-perp", "par-par"])
+    if case == "perp-perp":
+        prompt, good, wrong = "(D) ⟂ (L) et (D') ⟂ (L). Que peut-on dire de (D) et de (D') ?", "Elles sont parallèles", ["Elles sont perpendiculaires", "Elles sont confondues"]
         why = "Deux droites perpendiculaires à une même droite sont parallèles entre elles."
-    else:
-        prompt, good, wrong = "(d₁) // (d₂) et (d₃) ⟂ (d₁). Que peut-on dire de (d₃) et de (d₂) ?", "Elles sont perpendiculaires", ["Elles sont parallèles", "Elles sont confondues"]
+    elif case == "par-perp":
+        prompt, good, wrong = "(D) // (D') et (E) ⟂ (D). Que peut-on dire de (E) et de (D') ?", "Elles sont perpendiculaires", ["Elles sont parallèles", "Elles sont confondues"]
         why = "Une droite perpendiculaire à l'une de deux parallèles est perpendiculaire à l'autre."
+    else:
+        prompt, good, wrong = "(D) // (L) et (L) // (D'). Que peut-on dire de (D) et de (D') ?", "Elles sont parallèles", ["Elles sont perpendiculaires", "Elles sont sécantes sans être perpendiculaires"]
+        why = "Deux droites parallèles à une même troisième sont parallèles entre elles."
     options = [good] + wrong
     order = [0, 1, 2]
     rng.shuffle(order)

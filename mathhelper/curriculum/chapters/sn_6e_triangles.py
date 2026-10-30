@@ -18,7 +18,7 @@ CHAPTER_ID = "sn-6e-triangles"
 number, choice, ordered, between = make_kit(CHAPTER_ID, default_form="decimal")
 
 # ----- Figures -----
-ANY = Figure().point("A", 60, 150, -8, 22).point("B", 280, 160, 8, 22).point("C", 170, 40, 8, -6).segment("A", "B").segment("B", "C").segment("C", "A")
+ANY = Figure().point("A", 60, 150, -8, 22).point("B", 290, 165, 8, 22).point("C", 220, 30, 8, -6).segment("A", "B").segment("B", "C").segment("C", "A")
 ISOSCELES = (Figure().point("A", 170, 40, 8, -6).point("B", 90, 160, -14, 22).point("C", 250, 160, 6, 22).segment("A", "B").segment("B", "C").segment("C", "A")
              .tick("A", "B", 1).tick("A", "C", 1))
 EQUILATERAL = (Figure().point("A", 170, 35, 8, -6).point("B", 95, 165, -14, 22).point("C", 245, 165, 6, 22).segment("A", "B").segment("B", "C").segment("C", "A")
@@ -29,6 +29,9 @@ HEIGHT = (Figure().point("A", 50, 160, -14, 22).point("B", 290, 160, 6, 22).poin
           .segment("A", "B").segment("B", "C").segment("C", "A").segment("C", "H", "fig-dash").right_angle("H", "B", "C", 12))
 MEDIAN = (Figure().point("A", 60, 160, -14, 22).point("B", 280, 160, 6, 22).point("C", 150, 35, 8, -6).point("M", 170, 160, -4, 22)
           .segment("A", "B").segment("B", "C").segment("C", "A").segment("C", "M", "fig-dash").tick("A", "M", 1).tick("M", "B", 1))
+
+HEIGHT_OUT = (Figure().point("A", 70, 150, -14, 22).point("B", 180, 150, -4, 22).point("C", 270, 40, 8, -6).point("H", 270, 150, 6, 22)
+              .segment("A", "B").segment("B", "C").segment("C", "A").segment("B", "H", "fig-dash").segment("C", "H", "fig-dash").right_angle("H", "B", "C", 12))
 
 # ----- Section 1: kinds of triangle -----
 S1 = Section(
@@ -145,6 +148,8 @@ S3 = Section(
         rule("Aire d'un triangle",
              "L'aire d'un triangle est égale à la base multipliée par la hauteur correspondante, divisée par 2 : " + N("A = \\dfrac{b \\times h}{2}") + ". "
              "Pour un triangle rectangle, les deux côtés de l'angle droit sont une base et sa hauteur : " + N("A = \\dfrac{a \\times b}{2}") + ". L'aire se mesure en unités carrées."),
+        para("Attention : dans un triangle dont un angle est obtus, le pied de la hauteur peut tomber en dehors du côté, sur son prolongement. La formule de l'aire reste la même : base × hauteur ÷ 2, avec la hauteur perpendiculaire à la droite qui porte la base."),
+        figure(HEIGHT_OUT, "Un triangle ABC avec un angle obtus en B, dont la hauteur [CH] tombe sur le prolongement du côté [AB], en pointillés.", "Ici le pied H de la hauteur issue de C est en dehors du segment [AB], sur son prolongement. C'est normal : la hauteur est perpendiculaire à la droite (AB)."),
         example("Exemple 1", "Un triangle a une base de 8 cm et une hauteur correspondante de 5 cm. Calculer son aire.",
                 "On utilise la formule A = b × h ÷ 2.",
                 [(N("8 \\times 5") + " = " + N("40"), "Le produit de la base par la hauteur."),
@@ -219,7 +224,7 @@ S4 = Section(
                  ("Une hauteur par sommet aussi", "Il y a 3 hauteurs.")],
                 N("3") + " médianes et " + N("3") + " hauteurs.", "3*1==3"),
         warning("Ne confonds pas médiane et hauteur : la médiane passe par le milieu du côté, mais n'est pas forcément perpendiculaire à ce côté ; la hauteur est perpendiculaire à la base, mais ne tombe pas forcément au milieu. "
-                "Dans un triangle isocèle, la droite issue du sommet principal est les deux à la fois."),
+                "Dans un triangle isocèle, la hauteur issue du sommet principal est aussi la médiane et la médiatrice de la base."),
     ],
     [
         number("s4-g1", "droites", "[AM] est une médiane du triangle ABC, M étant sur [BC]. BC = 18 cm. Quelle est la longueur BM, en cm ?", Fraction(9), units=["cm"],
@@ -238,7 +243,7 @@ S4 = Section(
 # ----- Independent practice -----
 PRACTICE = [
     choice("p1", "natures", "Un triangle a pour côtés 7 cm, 7 cm et 7 cm. Quelle est sa nature ?", ["Quelconque", "Isocèle non équilatéral", "Équilatéral"], 2, 1, ["Compare les trois côtés."], ["Trois côtés égaux : équilatéral."], wrong={0: "Les côtés sont égaux.", 1: "Le troisième côté n'est pas différent."}),
-    choice("p2", "natures", "Un triangle a pour côtés 3 cm, 4 cm et 5 cm. Quelle est sa nature d'après les côtés ?", ["Quelconque", "Isocèle", "Équilatéral"], 0, 1, ["Compare les trois longueurs."], ["Les trois côtés sont différents : il est quelconque."], wrong={1: "Il faudrait deux côtés égaux.", 2: "Il faudrait trois côtés égaux."}),
+    choice("p2", "natures", "Un triangle a pour côtés 4 cm, 6 cm et 9 cm. Quelle est sa nature d'après les côtés ?", ["Quelconque", "Isocèle", "Équilatéral"], 0, 1, ["Compare les trois longueurs."], ["Les trois côtés sont différents : il est quelconque."], wrong={1: "Il faudrait deux côtés égaux.", 2: "Il faudrait trois côtés égaux."}),
     choice("p3", "natures", "Un triangle a pour côtés 6 cm, 9 cm et 6 cm. Quelle est sa nature ?", ["Quelconque", "Isocèle non équilatéral", "Équilatéral"], 1, 1, ["Deux côtés sont-ils égaux ?"], ["Deux côtés mesurent 6 cm, le troisième 9 cm : isocèle."], wrong={0: "Deux côtés sont égaux.", 2: "Le troisième côté est différent."}),
     choice("p4", "natures", "Quel triangle est à la fois isocèle et équilatéral ?", ["Un triangle de côtés 5, 5 et 8", "Un triangle de côtés 6, 6 et 6", "Un triangle de côtés 3, 4 et 5"], 1, 2, ["Un triangle équilatéral est un cas particulier d'isocèle."], ["Le triangle de côtés 6, 6 et 6 a trois côtés égaux : il est équilatéral, donc aussi isocèle."], wrong={0: "5, 5 et 8 est isocèle seulement.", 2: "3, 4 et 5 est quelconque."}),
     number("p5", "natures", "Un triangle isocèle a deux côtés de 12 cm et un périmètre de 40 cm. Quelle est la longueur du troisième côté, en cm ?", Fraction(16), 2, ["Périmètre moins les deux côtés égaux."], ["12 + 12 = 24.", "40 − 24 = 16 cm."], units=["cm"]),
@@ -287,6 +292,11 @@ CONCEPTS = {
 }
 
 
+def is_triangle(sides):
+    """Return True when three lengths can be the sides of a triangle: the longest is shorter than the sum of the others."""
+    return max(sides) < sum(sides) - max(sides)
+
+
 def assessment(rng):
     """Build twelve fresh questions covering every concept, from a seeded random generator."""
     questions = []
@@ -295,7 +305,7 @@ def assessment(rng):
     kind = rng.choice(["iso", "equi", "any"])
     if kind == "iso":
         a, b = rng.randint(3, 12), rng.randint(3, 12)
-        while b == a:
+        while b == a or b >= 2 * a:
             b = rng.randint(3, 12)
         sides = [a, a, b]
     elif kind == "equi":
@@ -303,16 +313,22 @@ def assessment(rng):
         sides = [a, a, a]
     else:
         sides = rng.sample(range(3, 13), 3)
+        while not is_triangle(sides):
+            sides = rng.sample(range(3, 13), 3)
     rng.shuffle(sides)
     right = {"iso": 0, "equi": 1, "any": 2}[kind]
     questions.append(choice("a1", "natures", f"Un triangle a pour côtés {sides[0]} cm, {sides[1]} cm et {sides[2]} cm. Quelle est sa nature ?", ["Isocèle non équilatéral", "Équilatéral", "Quelconque"], right, 1,
                             ["Compare les trois longueurs."], ["Compte les côtés égaux : " + ["deux seulement, isocèle.", "trois, équilatéral.", "aucun, quelconque."][right]]))
     # 2. perimeter with decimals
     x, y, z = rand_decimal(rng, 2, 9, 1), rand_decimal(rng, 2, 9, 1), rand_decimal(rng, 2, 9, 1)
+    while not is_triangle([x, y, z]):
+        x, y, z = rand_decimal(rng, 2, 9, 1), rand_decimal(rng, 2, 9, 1), rand_decimal(rng, 2, 9, 1)
     questions.append(number("a2", "perimetre", f"Un triangle a pour côtés {show(x)} cm, {show(y)} cm et {show(z)} cm. Quel est son périmètre, en cm ?", x + y + z, 1,
                             ["Additionne les trois côtés."], [f"{show(x)} + {show(y)} + {show(z)} = {show(x + y + z)} cm."], units=cm))
     # 3. perimeter of an isosceles triangle
     a, b = rng.randint(4, 14), rng.randint(3, 10)
+    while b >= 2 * a:
+        b = rng.randint(3, 10)
     questions.append(number("a3", "perimetre", f"Un triangle isocèle a deux côtés de {a} cm et une base de {b} cm. Quel est son périmètre, en cm ?", Fraction(2 * a + b), 1,
                             ["2 × côté égal + base."], [f"2 × {a} = {2 * a}.", f"{2 * a} + {b} = {2 * a + b} cm."], units=cm))
     # 4. equilateral side from the perimeter
@@ -320,7 +336,8 @@ def assessment(rng):
     questions.append(number("a4", "natures", f"Un triangle équilatéral a un périmètre de {3 * a} cm. Quelle est la longueur d'un côté, en cm ?", Fraction(a), 1,
                             ["Divise le périmètre par 3."], [f"{3 * a} ÷ 3 = {a} cm."], units=cm))
     # 5. the missing side
-    p, s1, s2 = rng.randint(30, 60), rng.randint(8, 14), rng.randint(8, 14)
+    s1, s2, s3 = rng.randint(8, 14), rng.randint(8, 14), rng.randint(8, 14)
+    p = s1 + s2 + s3
     questions.append(number("a5", "perimetre", f"Un triangle a un périmètre de {p} cm. Deux côtés mesurent {s1} cm et {s2} cm. Quelle est la longueur du troisième côté, en cm ?", Fraction(p - s1 - s2), 2,
                             ["Retire les deux côtés connus du périmètre."], [f"{s1} + {s2} = {s1 + s2}.", f"{p} − {s1 + s2} = {p - s1 - s2} cm."], units=cm))
     # 6. area from base and height
@@ -343,6 +360,8 @@ def assessment(rng):
                             ["M est le milieu de [BC]."], [f"{2 * half} ÷ 2 = {half} cm."], units=cm))
     # 10. the cost of a fence
     s = rng.sample(range(10, 41), 3)
+    while not is_triangle(s):
+        s = rng.sample(range(10, 41), 3)
     price = rng.choice([100, 200, 250, 500])
     questions.append(number("a10", "perimetre", f"Un champ triangulaire a pour côtés {s[0]} m, {s[1]} m et {s[2]} m. On le clôture avec un grillage à {price} F le mètre. Quel est le prix, en F ?", Fraction(sum(s) * price), 3,
                             ["Périmètre d'abord, puis prix."], [f"{s[0]} + {s[1]} + {s[2]} = {sum(s)} m.", f"{sum(s)} × {price} = {sum(s) * price} F."], units=["F"]))

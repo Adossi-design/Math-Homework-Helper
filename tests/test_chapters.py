@@ -97,7 +97,7 @@ def test_assessments_accept_their_own_answers_for_many_seeds(chapter):
 
 
 def test_chapters_of_the_same_level_come_in_order_and_declare_real_prerequisites():
-    assert [c.number for c in chapters_for("sn", "6e")] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+    assert [c.number for c in chapters_for("sn", "6e")] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     for chapter in CHAPTERS:
         for item in chapter.prerequisites:
             assert "text" in item and ("chapter" not in item or (item["chapter"] in BY_ID and BY_ID[item["chapter"]].number < chapter.number))
@@ -195,7 +195,7 @@ def student(logged_in):
 def test_both_chapters_are_listed_and_the_second_links_to_the_first(student):
     hub = student.get("/curriculum/").get_data(as_text=True)
     assert "Les nombres décimaux arithmétiques" in hub or "decimal" in hub.lower()
-    assert hub.count("chapter-card") == 14
+    assert hub.count("chapter-card") == 15
     page = student.get(f"/curriculum/{CID}").get_data(as_text=True)
     assert "/curriculum/sn-6e-decimaux" in page and "Open the chapter" in page
 
@@ -285,7 +285,7 @@ def test_chapter_three_assessment_keys_match_a_recalculation_from_each_prompt():
 
 def test_chapter_three_is_in_the_app(student_division):
     page = student_division.get("/curriculum/").get_data(as_text=True)
-    assert page.count("chapter-card") == 14
+    assert page.count("chapter-card") == 15
     for path in ["", "/practice", "/summary", "/assessment?seed=abcd1234", "/s/quotient", "/s/diviseur_decimal", "/s/decalage_div", "/s/approche"]:
         assert student_division.get(f"/curriculum/{DIV.id}{path}").status_code == 200, path
 
@@ -422,7 +422,7 @@ def test_chapter_five_is_offered_to_cote_d_ivoire_students_with_an_honest_note(a
     client.post("/login", data={"email": "yao@example.com", "password": "secret123"})
     client.post("/settings/curriculum", data={"curriculum": "ci:6e"})
     hub = client.get("/curriculum/").get_data(as_text=True)
-    assert hub.count("chapter-card") == 10
+    assert hub.count("chapter-card") == 11
     page = client.get(f"/curriculum/{PROP.id}").get_data(as_text=True)
     assert "lesson 12 of the C" in page and "Sixième programme (proportional" in page and "belongs to another curriculum" not in page
     for path in ["", "/practice", "/summary", "/assessment?seed=abcd1234", "/s/reconnaitre", "/s/calculer", "/s/pourcentage"]:

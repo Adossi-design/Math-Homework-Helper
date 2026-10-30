@@ -195,7 +195,7 @@ S4 = Section(
     "Comparer des fréquences, retrouver un effectif ou un total à partir d'un pourcentage, et conclure à partir d'un tableau.",
     [
         para("Une enquête ne sert à rien si on ne sait pas lire ses résultats. Comparer deux groupes de tailles différentes avec les seuls effectifs est trompeur : 14 sur 40 et 11 sur 25 ne se comparent pas directement. "
-             "Il faut passer aux fréquences, qui se ramènent toutes à 100."),
+             "Il faut passer aux fréquences, qu'on peut écrire en pourcentages, c'est-à-dire sur 100."),
         rule("Comparer et conclure",
              "Pour comparer deux groupes, on calcule la fréquence de chacun avec le même mode d'écriture (nombre décimal ou pourcentage) et on compare les fréquences, pas les effectifs. "
              "Pour retrouver un effectif, on multiplie la fréquence par l'effectif total. Pour retrouver le total, on divise l'effectif par la fréquence."),
@@ -228,7 +228,7 @@ S4 = Section(
                  (N("54 \\div 0,3") + " = " + N("180"), "On divise l'effectif par la fréquence."),
                  ("Vérification : " + N("180 \\times 0,3") + " = " + N("54"), "On retrouve l'effectif de départ.")],
                 N("180") + " personnes.", "54*100//30==180 and 180*d('0,3')==54"),
-        warning("Ne compare jamais des effectifs quand les totaux sont différents : 14 sur 40 n'est pas plus petit que 11 sur 25 parce que 14 > 11, ni parce que 40 > 25. Une fréquence est toujours comprise entre 0 et 1 (entre 0 % et 100 %)."),
+        warning("Ne compare jamais des effectifs quand les totaux sont différents : ne conclus pas que 14 sur 40 est plus grand que 11 sur 25 parce que 14 > 11 : en fait 14 ÷ 40 = 0,35 est plus petit que 11 ÷ 25 = 0,44. Une fréquence est toujours comprise entre 0 et 1 (entre 0 % et 100 %)."),
     ],
     [
         choice("s4-g1", "interpreter", "Dans la classe A, 9 élèves sur 20 portent des lunettes. Dans la classe B, c'est 12 élèves sur 30. Où la fréquence est-elle la plus grande ?",

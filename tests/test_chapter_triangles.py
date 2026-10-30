@@ -5,7 +5,7 @@ from fractions import Fraction as F
 
 import pytest
 
-from mathhelper.curriculum.chapters.sn_6e_triangles import CHAPTER as TRI, assessment
+from mathhelper.curriculum.chapters.sn_6e_triangles import CHAPTER as TRI, assessment, is_triangle
 
 BY_ID = {e.id.split("/")[1]: e for e in TRI.exercises().values()}
 
@@ -48,6 +48,11 @@ def test_assessment_keys_match_a_recalculation_from_each_prompt():
         expected = 1 if len(set(sides)) == 1 else 0 if len(set(sides)) == 2 else 2
         assert q["a1"].answer.value == expected
         assert q["a2"].answer.value == sum(numbers_in(q["a2"].prompt)[:3])
+        assert is_triangle(numbers_in(q["a1"].prompt)[:3]) and is_triangle(numbers_in(q["a2"].prompt)[:3])
+        assert is_triangle(list(numbers_in(q["a10"].prompt)[:3]))
+        assert is_triangle(numbers_in(q["a5"].prompt)[1:3] + [q["a5"].answer.value])
+        a3, b3 = numbers_in(q["a3"].prompt)[:2]
+        assert is_triangle([a3, a3, b3])
         a, b = numbers_in(q["a3"].prompt)[:2]
         assert q["a3"].answer.value == 2 * a + b
         assert q["a4"].answer.value * 3 == numbers_in(q["a4"].prompt)[0]
