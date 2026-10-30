@@ -464,7 +464,7 @@ CHAPTER = Chapter(
                 "Donner un quotient approché par défaut, par excès ou arrondi quand la division ne se termine pas.",
                 "Résoudre des problèmes de partage et de contenance."],
     prerequisites=[{"text": "Avoir terminé le chapitre sur la multiplication des nombres décimaux : multiplier, décaler la virgule.", "chapter": "sn-6e-multiplication"},
-                   {"text": "Connaître la division des nombres entiers : quotient et reste.", "course": "whole-numbers", "lesson": "multiply-divide"}],
+                   {"text": "Connaître la division des nombres entiers : quotient et reste."}],
     sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E],
     status_note="Third chapter of the Senegal Sixième course. Its topics follow the division chapter of the ADEM-Dakar booklet, with our own explanations and exercises. It has not been checked against the official Senegalese programme.",

@@ -5,10 +5,12 @@ from sqlalchemy import select
 
 from .. import stats
 from ..extensions import db
+from ..curriculum.progress import next_section
 from ..images import load_image
 from ..models import Solution
 from ..i18n import COOKIE, LANGUAGES, format_date, language
 from ..timeutil import greeting, local_now
+from .curriculum import present
 from .helpers import safe_next
 
 bp = Blueprint("main", __name__)
@@ -52,16 +54,20 @@ def home():
     ).all()
     done = stats.completed_keys(current_user)
     best = stats.best_scores(current_user)
-    course, lesson = stats.next_lesson(done)
+    chapter, section = next_section(current_user)
+    upcoming = None
+    if chapter:
+        view, _fallback = present(chapter, {"chapter": chapter.title, "section": section.title})
+        upcoming = {"chapter": view["chapter"], "section": view["section"], "minutes": section.minutes,
+                    "url": url_for("curriculum.section", chapter_id=chapter.id, section_id=section.id)}
     return render_template(
         "home.html",
         greeting=greeting(),
         today=format_date(local_now(), "day"),
         numbers=stats.summary(current_user),
         recent=recent,
-        next_course=course,
-        next_lesson=lesson,
-        suggestion=stats.suggested_skill(best, lesson.skill if lesson else None),
+        upcoming=upcoming,
+        suggestion=stats.suggested_skill(best),
         best=best,
     )
 

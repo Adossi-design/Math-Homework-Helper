@@ -2,7 +2,6 @@
 {% block title %}{{ _("My curriculum") }} | {{ app_name }}{% endblock %}
 
 {% block content %}
-<a class="back-link" href="{{ url_for('learn.index') }}">{{ icon("arrow-left", "sm") }} {{ _("All courses") }}</a>
 <div class="page-head">
   <div>
     <h1>{{ _("My curriculum") }}</h1>
@@ -40,9 +39,9 @@
 {% elif place and stage %}
 <div class="card card-body">
   <h2 style="font-size:17px">{{ _("No chapters here yet") }}</h2>
-  <p class="muted" style="margin-top:6px">{{ _("Complete chapters for this country and level have not been written and checked yet, so they are not offered. The general courses in Learn and the problem solver still work for you.") }}</p>
+  <p class="muted" style="margin-top:6px">{{ _("Complete chapters for this country and level have not been written and checked yet, so they are not offered. The problem solver and the practice sets still work for you.") }}</p>
   <div class="row wrap" style="margin-top:14px">
-    <a class="btn btn-soft" href="{{ url_for('learn.index') }}">{{ icon("book") }} {{ _("Open Learn") }}</a>
+    <a class="btn btn-soft" href="{{ url_for('practice.index') }}">{{ icon("target") }} {{ _("Practice") }}</a>
     <a class="btn btn-outline" href="{{ url_for('solve.new') }}">{{ icon("camera") }} {{ _("Solve a problem") }}</a>
   </div>
 </div>

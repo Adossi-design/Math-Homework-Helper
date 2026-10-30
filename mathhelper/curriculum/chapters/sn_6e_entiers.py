@@ -305,8 +305,8 @@ CHAPTER = Chapter(
                 "Reconnaître un multiple et un diviseur, lister des multiples et tous les diviseurs d'un nombre inférieur à 1 000.",
                 "Reconnaître sans diviser si un nombre est divisible par 2, 3, 5, 9, 10, 100 ou 1 000.",
                 "Résoudre des problèmes de partage en tas égaux."],
-    prerequisites=[{"text": "Multiplier et diviser des nombres entiers.", "course": "whole-numbers", "lesson": "multiply-divide"},
-                   {"text": "Lire et écrire les nombres entiers et connaître le rang des chiffres.", "course": "whole-numbers", "lesson": "place-value"}],
+    prerequisites=[{"text": "Multiplier et diviser des nombres entiers."},
+                   {"text": "Lire et écrire les nombres entiers et connaître le rang des chiffres."}],
     sections=[S1, S2, S3], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
     status_note="Eighth chapter of the Senegal Sixième course. Its contents follow lesson 9 of the Côte d'Ivoire Sixième programme (consecutive natural numbers, multiples and divisors, divisibility by 2, 3, 5, 9, 10, 100, 1000), which was read for it, "

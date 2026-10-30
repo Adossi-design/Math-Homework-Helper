@@ -475,7 +475,7 @@ CHAPTER = Chapter(
                 "Calculer le carré et le cube d'un nombre décimal, et les relier à l'aire d'un carré et au volume d'un cube.",
                 "Résoudre des problèmes de prix, d'aire et de volume qui utilisent des multiplications."],
     prerequisites=[{"text": "Avoir terminé le chapitre sur les nombres décimaux : rang des chiffres, comparer, additionner et soustraire.", "chapter": "sn-6e-decimaux"},
-                   {"text": "Multiplier des nombres entiers.", "course": "whole-numbers", "lesson": "multiply-divide"}],
+                   {"text": "Multiplier des nombres entiers."}],
     sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E],
     status_note="Second chapter of the Senegal Sixième course. Its topics follow the multiplication chapter of the ADEM-Dakar booklet, with our own explanations and exercises. It has not been checked against the official Senegalese programme.",

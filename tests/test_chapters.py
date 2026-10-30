@@ -100,7 +100,7 @@ def test_chapters_of_the_same_level_come_in_order_and_declare_real_prerequisites
     assert [c.number for c in chapters_for("sn", "6e")] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     for chapter in CHAPTERS:
         for item in chapter.prerequisites:
-            assert "chapter" in item and item["chapter"] in BY_ID and BY_ID[item["chapter"]].number < chapter.number or "course" in item
+            assert "text" in item and ("chapter" not in item or (item["chapter"] in BY_ID and BY_ID[item["chapter"]].number < chapter.number))
     done = {f"cur:sn-6e-decimaux:{s.id}" for s in BY_ID["sn-6e-decimaux"].sections}
     assert [p["done"] for p in prerequisites(MULT, done)] == [True, False]
     assert [p["done"] for p in prerequisites(MULT, set())] == [False, False]

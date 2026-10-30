@@ -4,6 +4,8 @@ CURRICULUM = {
     # Settings and the curriculum hub.
     "Curriculum": "Programme scolaire",
     "My curriculum": "Mon programme",
+    "Chapters": "Chapitres",
+    "Choose your country and level": "Choisis ton pays et ton niveau",
     "Country and level": "Pays et niveau",
     "Not chosen": "Non choisi",
     "chapters available": "chapitres disponibles",
@@ -21,9 +23,8 @@ CURRICULUM = {
     "You are browsing another level. Your own curriculum in Settings has not changed.":
         "Tu regardes un autre niveau. Ton programme dans les paramètres n'a pas changé.",
     "No chapters here yet": "Pas encore de chapitres ici",
-    "Complete chapters for this country and level have not been written and checked yet, so they are not offered. The general courses in Learn and the problem solver still work for you.":
-        "Les chapitres complets pour ce pays et ce niveau ne sont pas encore écrits ni vérifiés, donc ils ne sont pas proposés. Les cours généraux dans Apprendre et le solveur de problèmes restent disponibles.",
-    "Open Learn": "Ouvrir Apprendre",
+    "Complete chapters for this country and level have not been written and checked yet, so they are not offered. The problem solver and the practice sets still work for you.":
+        "Les chapitres complets pour ce pays et ce niveau ne sont pas encore écrits ni vérifiés, donc ils ne sont pas proposés. Le solveur de problèmes et les séries d'entraînement restent disponibles.",
     "Levels with chapters available": "Niveaux avec des chapitres disponibles",
     "Reference chapter": "Chapitre de référence",
     "Other countries and levels will be added one chapter at a time, after the content has been checked.":
@@ -44,7 +45,6 @@ CURRICULUM = {
     "Last assessment: {score}": "Dernière évaluation : {score}",
     "What you will learn": "Ce que tu vas apprendre",
     "Before you start": "Avant de commencer",
-    "Open the review lesson": "Ouvrir la leçon de rappel",
     "Open the chapter": "Ouvrir le chapitre",
     "Sections": "Sections",
     "Practice and assessment": "Exercices et évaluation",

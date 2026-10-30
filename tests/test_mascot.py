@@ -61,9 +61,10 @@ def test_solving_a_problem_makes_mascot_celebrate_once(logged_in):
 
 
 def test_completing_a_lesson_makes_mascot_celebrate_and_undoing_does_not(logged_in):
-    done = logged_in.post("/learn/algebra-1/solving-equations/complete", follow_redirects=True)
+    logged_in.post("/settings/curriculum", data={"curriculum": "sn:6e"})
+    done = logged_in.post("/curriculum/sn-6e-decimaux/s/ecritures/complete", follow_redirects=True)
     assert mascot(done)["event"] == "completed"
-    undone = logged_in.post("/learn/algebra-1/solving-equations/complete", follow_redirects=True)
+    undone = logged_in.post("/curriculum/sn-6e-decimaux/s/ecritures/complete", follow_redirects=True)
     assert mascot(undone)["event"] is None
 
 

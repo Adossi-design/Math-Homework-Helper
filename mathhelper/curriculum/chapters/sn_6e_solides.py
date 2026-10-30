@@ -338,7 +338,7 @@ CHAPTER = Chapter(
                 "Calculer le volume d'un pavé droit, d'un cube et d'un cylindre droit, et convertir en litres.",
                 "Résoudre un problème de contenance."],
     prerequisites=[{"text": "Multiplier et diviser des nombres décimaux.", "chapter": "sn-6e-division"},
-                   {"text": "Connaître le périmètre et l'aire d'un rectangle et d'un carré.", "course": "measurement", "lesson": "area"}],
+                   {"text": "Connaître le périmètre et l'aire d'un rectangle et d'un carré."}],
     sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
     status_note="Tenth chapter of the Senegal Sixième course. Its contents follow lesson 8 of the Côte d'Ivoire Sixième programme (box, cube and cylinder, their parts and nets, areas and volumes), which was read for it, "

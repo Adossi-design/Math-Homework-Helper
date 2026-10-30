@@ -1,4 +1,4 @@
-"""The admin dashboard: users, lessons and practice, open to the admin account only."""
+"""The admin dashboard: users, practice and translations, open to the admin account only."""
 import re
 import secrets
 from datetime import timedelta
@@ -10,14 +10,12 @@ from sqlalchemy import delete, func, or_, select
 from .. import mascot
 from ..accounts import delete_user
 from ..ai import TOPICS
-from ..content import COURSES, courses, forget_lessons, lesson_from_row, stored_lessons
-from ..content.courses import LOCALIZED
-from ..content.courses_fr import FR_COURSES
 from ..extensions import db
 from ..i18n import gettext as _
 from ..i18n import language
+from ..curriculum.catalog import CHAPTERS
 from ..curriculum.translate import correct_translation, shown_translation
-from ..models import LessonCompletion, PracticeAttempt, SavedLesson, SavedPractice, Solution, TranslationCache, User, utcnow
+from ..models import LessonCompletion, PracticeAttempt, SavedPractice, Solution, TranslationCache, User, utcnow
 from ..practice import SKILLS, build_round
 from ..practice.catalog import all_skills, forget_practice, stored_practice
 from ..translations.fr import FR
@@ -25,10 +23,7 @@ from .helpers import safe_next
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
 PER_PAGE = 20
-TEXT_FIELDS = ("title", "intro", "problem", "answer", "mistake")
-LIST_FIELDS = ("points", "steps")
-COURSE_IDS = {course.id for course in COURSES}
-STUDENT_PAGES = {"solve", "library", "learn", "practice", "curriculum"}
+STUDENT_PAGES = {"solve", "library", "practice", "curriculum"}
 STUDENT_ENDPOINTS = {"main.home", "main.upload"}
 MIN_QUESTIONS, MAX_QUESTIONS, CHOICES = 3, 30, 4
 QUESTION_FIELD = re.compile(r"q-(\d{1,3})-")
@@ -64,7 +59,7 @@ def index():
         "users": db.session.scalar(students),
         "new": db.session.scalar(students.where(User.created_at >= week)),
         "suspended": db.session.scalar(students.where(User.suspended_at.is_not(None))),
-        "lessons": sum(len(course.lessons) for course in courses()),
+        "lessons": len(CHAPTERS),
         "practice": len(all_skills()),
         "solved": this_week(Solution),
         "rounds": this_week(PracticeAttempt),
@@ -154,26 +149,7 @@ def remove_user(user_id):
     return back_to_users()
 
 
-# Lessons.
-
-def builtin(course_id, slug):
-    """Return the built in lesson with this key, or None."""
-    course = next((item for item in COURSES if item.id == course_id), None)
-    return next((item for item in course.lessons if item.id == slug), None) if course else None
-
-
-def builtin_content(course_id, lesson):
-    """Return the text of a built in lesson in both languages, ready for the edit form."""
-    french = FR_COURSES[course_id]["lessons"][lesson.id]
-    english = {"title": lesson.title, "intro": lesson.intro, "points": list(lesson.points), "problem": lesson.example.problem,
-               "steps": list(lesson.example.steps), "answer": lesson.example.answer, "mistake": lesson.mistake}
-    return {"en": english, "fr": {name: french[name] for name in TEXT_FIELDS + LIST_FIELDS}}
-
-
-def saved(course_id, slug):
-    """Return the admin's row for a lesson, or None."""
-    return db.session.scalar(select(SavedLesson).where(SavedLesson.course_id == course_id, SavedLesson.slug == slug))
-
+# Practice.
 
 def slugify(title, taken, prefix=""):
     """Turn a title into a short web address that is not already taken."""
@@ -183,156 +159,6 @@ def slugify(title, taken, prefix=""):
         slug, number = f"{base}-{number}", number + 1
     return slug
 
-
-def free_slug(course_id, title):
-    """Return a web address for a new lesson that no other lesson in the course uses."""
-    taken = {row.slug for row in stored_lessons() if row.course_id == course_id}
-    taken |= {item.id for course in COURSES if course.id == course_id for item in course.lessons}
-    return slugify(title, taken)
-
-
-def read_lesson_form():
-    """Read the lesson form and return its values with an error message, if any."""
-    def text(name):
-        return request.form.get(name, "").strip()[:2000]
-
-    def lines(name):
-        return [line.strip()[:500] for line in request.form.get(name, "").splitlines() if line.strip()][:12]
-
-    content = {"en": {**{name: text(name) for name in TEXT_FIELDS}, **{name: lines(name) for name in LIST_FIELDS}},
-               "fr": {**{name: text(f"fr_{name}") for name in TEXT_FIELDS}, **{name: lines(f"fr_{name}") for name in LIST_FIELDS}}}
-    content["en"]["title"], content["fr"]["title"] = content["en"]["title"][:120], content["fr"]["title"][:120]
-    minutes = min(max(request.form.get("minutes", 5, type=int) or 5, 1), 60)
-    values = {"content": content, "minutes": minutes, "skill": request.form.get("skill", ""),
-              "published": request.form.get("published") == "on"}
-    error = None
-    if not all(content["en"].values()):
-        error = _("Fill in every English field. The French fields are optional.")
-    elif values["skill"] not in all_skills():
-        error = _("Choose a practice skill.")
-    return values, error
-
-
-def lesson_form(values, error, **extra):
-    """Show the lesson form with the course and skill choices."""
-    return render_template("admin/lesson_form.html", tab="lessons", form=values, error=error,
-                           course_choices=LOCALIZED.get(language(), COURSES), skills=all_skills().values(), **extra)
-
-
-def lesson_for_preview(course_id, slug):
-    """Return the course and lesson to preview, including drafts and deleted lessons."""
-    lang = language()
-    course = next((item for item in LOCALIZED.get(lang, COURSES) if item.id == course_id), None)
-    row = saved(course_id, slug)
-    if course is None or (row is None and builtin(course_id, slug) is None):
-        abort(404)
-    if row is not None and row.content:
-        return course, lesson_from_row(row, lang)
-    return course, next(item for item in course.lessons if item.id == slug)
-
-
-@bp.get("/lessons")
-def lessons():
-    lang = language()
-    rows = {(row.course_id, row.slug): row for row in stored_lessons()}
-    groups = []
-    for course in LOCALIZED.get(lang, COURSES):
-        items = []
-        for item in course.lessons:
-            row = rows.pop((course.id, item.id), None)
-            shown = lesson_from_row(row, lang) if row and row.content else item
-            state = "builtin" if row is None else "deleted" if row.deleted else "edited"
-            items.append({"lesson": shown, "state": state, "draft": bool(row) and not row.published and not row.deleted})
-        for row in [row for key, row in rows.items() if key[0] == course.id]:
-            items.append({"lesson": lesson_from_row(row, lang), "state": "custom", "draft": not row.published})
-        groups.append((course, items))
-    return render_template("admin/lessons.html", tab="lessons", groups=groups, skills=all_skills(hidden=True))
-
-
-@bp.get("/lessons/<course_id>/<slug>/preview")
-def preview_lesson(course_id, slug):
-    course, lesson = lesson_for_preview(course_id, slug)
-    return render_template("admin/lesson_preview.html", tab="lessons", course=course, lesson=lesson,
-                           skill=all_skills(hidden=True).get(lesson.skill))
-
-
-@bp.route("/lessons/new", methods=["GET", "POST"])
-def new_lesson():
-    blank = {name: "" for name in TEXT_FIELDS} | {name: [] for name in LIST_FIELDS}
-    values = {"content": {"en": dict(blank), "fr": dict(blank)}, "minutes": 5, "skill": "", "published": True}
-    course_id, error = request.values.get("course_id", ""), None
-    if request.method == "POST":
-        values, error = read_lesson_form()
-        if not error and course_id not in COURSE_IDS:
-            error = _("Choose a course.")
-        if not error:
-            db.session.add(SavedLesson(course_id=course_id, slug=free_slug(course_id, values["content"]["en"]["title"]), **values))
-            db.session.commit()
-            forget_lessons()
-            flash(_("Lesson published.") if values["published"] else _("Lesson saved as a draft."), "success")
-            return redirect(url_for("admin.lessons"))
-    return lesson_form(values, error, course_id=course_id, editing=None)
-
-
-@bp.route("/lessons/<course_id>/<slug>/edit", methods=["GET", "POST"])
-def edit_lesson(course_id, slug):
-    row, original = saved(course_id, slug), builtin(course_id, slug)
-    if row is None and original is None:
-        abort(404)
-    error = None
-    if request.method == "POST":
-        values, error = read_lesson_form()
-        if not error:
-            if row is None:
-                row = SavedLesson(course_id=course_id, slug=slug)
-                db.session.add(row)
-            row.content, row.minutes, row.skill = values["content"], values["minutes"], values["skill"]
-            row.published, row.deleted = values["published"], False
-            db.session.commit()
-            forget_lessons()
-            flash(_("Lesson updated."), "success")
-            return redirect(url_for("admin.lessons"))
-    elif row is not None and row.content:
-        values = {"content": row.content, "minutes": row.minutes, "skill": row.skill, "published": row.published}
-    else:
-        values = {"content": builtin_content(course_id, original), "minutes": original.minutes, "skill": original.skill,
-                  "published": True}
-    return lesson_form(values, error, course_id=course_id, editing=slug)
-
-
-@bp.post("/lessons/<course_id>/<slug>/delete")
-def delete_lesson(course_id, slug):
-    row, original = saved(course_id, slug), builtin(course_id, slug)
-    if row is None and original is None:
-        abort(404)
-    if original is not None:
-        # A built in lesson stays hidden through a marker row, so it can be restored later.
-        if row is None:
-            row = SavedLesson(course_id=course_id, slug=slug, minutes=original.minutes, skill=original.skill, content={})
-            db.session.add(row)
-        row.deleted = True
-    else:
-        db.session.delete(row)
-        db.session.execute(delete(LessonCompletion).where(LessonCompletion.lesson_key == f"{course_id}/{slug}"))
-    db.session.commit()
-    forget_lessons()
-    flash(_("Lesson deleted."), "info")
-    return redirect(url_for("admin.lessons"))
-
-
-@bp.post("/lessons/<course_id>/<slug>/restore")
-def restore_lesson(course_id, slug):
-    row = saved(course_id, slug)
-    if row is None or builtin(course_id, slug) is None:
-        abort(404)
-    db.session.delete(row)
-    db.session.commit()
-    forget_lessons()
-    flash(_("The original lesson is back."), "success")
-    return redirect(url_for("admin.lessons"))
-
-
-# Practice.
 
 def practice_row(skill_id):
     """Return the admin's row for a practice set, or None."""

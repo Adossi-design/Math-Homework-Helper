@@ -4,7 +4,7 @@ from mathhelper import create_app
 
 def test_landing_is_public_and_app_pages_need_login(client):
     assert client.get("/").status_code == 200
-    for path in ["/home", "/solve", "/library", "/learn/", "/practice/", "/settings/"]:
+    for path in ["/home", "/solve", "/library", "/curriculum/", "/practice/", "/settings/"]:
         response = client.get(path)
         assert response.status_code == 302
         assert "/login" in response.location

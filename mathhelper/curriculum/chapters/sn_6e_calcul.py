@@ -336,7 +336,7 @@ CHAPTER = Chapter(
                 "Traduire une phrase en une expression, et une expression en phrase, avec le vocabulaire somme, différence, produit, quotient.",
                 "Résoudre un problème en plusieurs étapes en l'écrivant en une seule ligne."],
     prerequisites=[{"text": "Avoir terminé les chapitres sur les quatre opérations avec les nombres décimaux.", "chapter": "sn-6e-division"},
-                   {"text": "Connaître l'ordre des opérations sur les nombres entiers.", "course": "integers-expressions", "lesson": "order-of-operations"}],
+                   {"text": "Connaître l'ordre des opérations sur les nombres entiers."}],
     sections=[S1, S2, S3], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E],
     status_note="Fourth chapter of the Senegal Sixième course. Its topics follow the 'organisation d'un calcul' chapter of the ADEM-Dakar booklet, with our own explanations and exercises. It has not been checked against the official Senegalese programme.",

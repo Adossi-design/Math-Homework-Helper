@@ -36,6 +36,20 @@ def chapter_progress(user, chapter):
     }
 
 
+def next_section(user):
+    """Return the first unfinished chapter and section of the student's own curriculum, or (None, None)."""
+    from .catalog import chapters_for
+
+    if not user.country or not user.grade:
+        return None, None
+    done = done_keys(user)
+    for chapter in chapters_for(user.country, user.grade):
+        for section in chapter.sections:
+            if section_key(chapter.id, section.id) not in done:
+                return chapter, section
+    return None, None
+
+
 def revision(chapter, results, last):
     """List the concepts to review: weak in the latest assessment, or an exercise tried three times without success."""
     weak = {}
@@ -66,7 +80,7 @@ def prerequisites(chapter, done):
             earlier = find_chapter(item["chapter"])
             finished = bool(earlier) and all(section_key(earlier.id, s.id) in done for s in earlier.sections)
         else:
-            finished = f"{item['course']}/{item['lesson']}" in done
+            finished = False
         out.append({**item, "done": finished})
     return out
 

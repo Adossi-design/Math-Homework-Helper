@@ -1,27 +1,22 @@
-"""Learn pages, settings, the dashboard and text helpers."""
+"""Settings, the dashboard and text helpers."""
 from datetime import date
 
-from mathhelper.content import COURSES
-from mathhelper.practice import SKILLS
 from mathhelper.stats import streak
 from mathhelper.text import plain, rich, rich_inline
 
 
-def test_every_course_and_lesson_page_renders(logged_in):
-    for course in COURSES:
-        assert logged_in.get(f"/learn/{course.id}").status_code == 200
-        for lesson in course.lessons:
-            assert lesson.skill in SKILLS
-            assert logged_in.get(f"/learn/{course.id}/{lesson.id}").status_code == 200
-    assert logged_in.get("/learn/nope").status_code == 404
+def test_the_old_learn_section_is_gone_and_the_curriculum_replaces_it(logged_in):
+    assert logged_in.get("/learn/").status_code == 404 and logged_in.get("/learn/algebra-1").status_code == 404
+    assert 'href="/curriculum/"' in logged_in.get("/home").get_data(as_text=True)
+    assert logged_in.get("/curriculum/").status_code == 200
 
 
-def test_completing_a_lesson_moves_to_the_next(logged_in):
-    response = logged_in.post("/learn/algebra-1/solving-equations/complete")
-    assert response.location.endswith("/learn/algebra-1/slope-lines")
-    assert "1 of 3 done" in logged_in.get("/learn/").get_data(as_text=True)
-    logged_in.post("/learn/algebra-1/solving-equations/complete")
-    assert "0 of 3 done" in logged_in.get("/learn/").get_data(as_text=True)
+def test_the_dashboard_continues_the_students_own_curriculum(logged_in):
+    logged_in.post("/settings/curriculum", data={"curriculum": "sn:6e"})
+    html = logged_in.get("/home").get_data(as_text=True)
+    assert "/curriculum/sn-6e-decimaux/s/" in html and "Continue learning" in html
+    logged_in.post("/curriculum/sn-6e-decimaux/s/ecritures/complete")
+    assert "Lessons done" in logged_in.get("/home").get_data(as_text=True)
 
 
 def test_dashboard_shows_progress(logged_in):
@@ -117,11 +112,9 @@ def test_about_page_is_public_and_linked_from_the_landing_page(client):
 
 
 def test_there_is_no_level_anywhere_for_students(client, logged_in):
-    for path in ["/learn/", "/practice/", "/settings/", "/solve", "/home", "/learn/algebra-1"]:
+    for path in ["/curriculum/", "/practice/", "/settings/", "/solve", "/home"]:
         page = logged_in.get(path).get_data(as_text=True)
         assert 'name="level"' not in page and "?level=" not in page and "High School" not in page and "College<" not in page, path
-    learn = logged_in.get("/learn/").get_data(as_text=True)
-    assert learn.index("Whole Numbers") < learn.index("Algebra I") < learn.index("Linear Algebra")
     practice = logged_in.get("/practice/").get_data(as_text=True)
     assert practice.index("Adding and subtracting") < practice.index("Derivatives")
     logged_in.post("/logout")

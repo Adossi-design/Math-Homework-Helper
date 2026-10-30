@@ -7,7 +7,6 @@ from flask_login import current_user, login_required
 from sqlalchemy import func, select
 
 from .. import mascot, stats
-from ..content import courses
 from ..extensions import db
 from ..models import PracticeAttempt
 from ..practice import QUESTIONS_PER_ROUND, build_round
@@ -17,15 +16,6 @@ from ..i18n import gettext as _
 
 bp = Blueprint("practice", __name__, url_prefix="/practice")
 SEED = re.compile(r"[0-9a-f]{16}")
-
-
-def lesson_for(skill_id):
-    """Return the first course and lesson that teach a skill."""
-    for course in courses():
-        for lesson in course.lessons:
-            if lesson.skill == skill_id:
-                return course, lesson
-    return None, None
 
 
 def parse_answers(raw):
@@ -68,8 +58,7 @@ def play(skill_id):
     skill = find_skill(skill_id) or abort(404)
     seed = secrets.token_hex(8)
     questions = [q.__dict__ for q in build_round(skill_id, seed, skill=skill)]
-    course, lesson = lesson_for(skill_id)
-    return render_template("practice/round.html", skill=skill, seed=seed, questions=questions, course=course, lesson=lesson)
+    return render_template("practice/round.html", skill=skill, seed=seed, questions=questions)
 
 
 @bp.post("/<skill_id>/finish")
@@ -103,7 +92,6 @@ def results(attempt_id):
             PracticeAttempt.id < attempt.id,
         )
     )
-    course, lesson = lesson_for(attempt.skill_id)
     return render_template(
         "practice/results.html",
         attempt=attempt,
@@ -111,6 +99,4 @@ def results(attempt_id):
         review=list(zip(questions, picks)),
         headline=feedback(attempt.percent),
         new_best=earlier_best is not None and attempt.correct > earlier_best,
-        course=course,
-        lesson=lesson,
     )

@@ -359,7 +359,7 @@ CHAPTER = Chapter(
                 "Additionner deux nombres relatifs, de même signe ou de signes contraires.",
                 "Résoudre des problèmes avec des gains, des pertes et des températures."],
     prerequisites=[{"text": "Comparer et ranger des nombres décimaux positifs.", "chapter": "sn-6e-decimaux"},
-                   {"text": "Additionner et soustraire des nombres entiers.", "course": "whole-numbers", "lesson": "add-subtract"}],
+                   {"text": "Additionner et soustraire des nombres entiers."}],
     sections=[S1, S2, S3], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
     status_note="Seventh chapter of the Senegal Sixième course. Its contents follow lesson 10 of the Côte d'Ivoire Sixième programme (relative integers and decimals, opposite, comparing, adding, abscissa on a graduated line), which was read for it, "

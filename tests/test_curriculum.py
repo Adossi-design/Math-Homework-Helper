@@ -329,7 +329,7 @@ def test_chapter_hub_and_overview_for_a_senegal_sixieme_student(student, transla
     chapter = student.get(f"/curriculum/{CID}").get_data(as_text=True)
     assert "0 of 5 sections done" in chapter and "Sources and licences" in chapter and "interdit" in chapter
     assert "has not been checked against the official" in chapter or "EN Reference chapter" in chapter
-    assert "Start chapter" in chapter and "Open the review lesson" in chapter
+    assert "Start chapter" in chapter
 
 
 def test_language_does_not_change_curriculum_and_french_needs_no_translation(app, student, translated):

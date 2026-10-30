@@ -169,28 +169,6 @@ class LessonCompletion(db.Model):
     user: Mapped[User] = relationship(back_populates="completions")
 
 
-class SavedLesson(db.Model):
-    """A lesson written or changed by the admin, which replaces the built in lesson with the same key."""
-
-    __table_args__ = (UniqueConstraint("course_id", "slug"),)
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    course_id: Mapped[str] = mapped_column(String(40), index=True)
-    slug: Mapped[str] = mapped_column(String(60))
-    minutes: Mapped[int] = mapped_column(default=5)
-    skill: Mapped[str] = mapped_column(String(40))
-    content: Mapped[dict] = mapped_column(JSON, default=dict)
-    published: Mapped[bool] = mapped_column(default=True)
-    deleted: Mapped[bool] = mapped_column(default=False)
-    created_at: Mapped[datetime] = mapped_column(default=utcnow)
-    updated_at: Mapped[datetime] = mapped_column(default=utcnow, onupdate=utcnow)
-
-    @property
-    def visible(self):
-        """Return True when students can see this lesson."""
-        return self.published and not self.deleted
-
-
 class SavedPractice(db.Model):
     """A practice set written or changed by the admin, which replaces the built in skill with the same id."""
 

@@ -416,8 +416,8 @@ CHAPTER = Chapter(
                 "Reconnaître des fractions égales, les compléter et simplifier une fraction.",
                 "Comparer, additionner et soustraire des fractions, en les réduisant au même dénominateur.",
                 "Calculer la fraction d'une quantité et exprimer une part sous forme de fraction."],
-    prerequisites=[{"text": "Comprendre ce que veut dire une fraction : partager l'unité en parts égales.", "course": "fractions-decimals", "lesson": "fraction-meaning"},
-                   {"text": "Multiplier et diviser des nombres entiers.", "course": "whole-numbers", "lesson": "multiply-divide"}],
+    prerequisites=[{"text": "Comprendre ce que veut dire une fraction : partager l'unité en parts égales."},
+                   {"text": "Multiplier et diviser des nombres entiers."}],
     sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
     status_note="Sixth chapter of the Senegal Sixième course. Its contents follow lesson 11 of the Côte d'Ivoire Sixième programme (fractions, decimal fractions, equal fractions, simplifying, comparing, adding, a fraction of a quantity), which was read for it, "

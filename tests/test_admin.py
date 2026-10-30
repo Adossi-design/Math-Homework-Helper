@@ -1,4 +1,4 @@
-"""The admin account and dashboard: access control, users, lessons and practice."""
+"""The admin account and dashboard: access control, users and practice."""
 import sqlite3
 from html import unescape
 
@@ -6,15 +6,9 @@ from sqlalchemy import select
 
 from mathhelper import create_app, schema
 from mathhelper.extensions import db
-from mathhelper.models import PracticeAttempt, SavedLesson, SavedPractice, Solution, User
+from mathhelper.models import PracticeAttempt, SavedPractice, Solution, User
 
 STUDENT = {"email": "ama@example.com", "password": "secret123"}
-LESSON = {
-    "course_id": "algebra-1", "title": "Checking answers", "minutes": "4", "skill": "linear-equations", "published": "on",
-    "intro": "Always check your answer.", "points": "Substitute the value\nCompare both sides",
-    "problem": "Check $x = 2$ in $x + 1 = 3$", "steps": "Put $2$ in place of $x$\n$2 + 1 = 3$", "answer": "It works",
-    "mistake": "Skipping the check.",
-}
 PRACTICE = {
     "title": "Times tables", "blurb": "Quick multiplication facts.", "topic": "Arithmetic", "published": "on",
     "fr_title": "Tables de multiplication",
@@ -23,10 +17,9 @@ PRACTICE = {
     "q-1-prompt": "What is $5 \\times 5$?", "q-1-choice-0": "$10$", "q-1-choice-1": "$25$", "q-1-answer": "1",
     "q-4-prompt": "What is $2 \\times 9$?", "q-4-choice-0": "$11$", "q-4-choice-2": "$18$", "q-4-choice-3": "$29$", "q-4-answer": "2",
 }
-PAGES = ["/admin/", "/admin/users", "/admin/lessons", "/admin/lessons/new", "/admin/lessons/algebra-1/systems/edit",
-         "/admin/lessons/algebra-1/systems/preview", "/admin/practice", "/admin/practice/new", "/admin/practice/slope/edit",
+PAGES = ["/admin/", "/admin/users", "/admin/practice", "/admin/practice/new", "/admin/practice/slope/edit",
          "/admin/practice/slope/preview"]
-STUDENT_PAGES = ["/home", "/solve", "/library", "/learn/", "/learn/algebra-1", "/learn/algebra-1/systems", "/practice/",
+STUDENT_PAGES = ["/home", "/solve", "/library", "/curriculum/", "/practice/",
                  "/practice/slope", "/practice/results/1"]
 
 
@@ -41,14 +34,13 @@ def test_admin_pages_and_actions_are_closed_to_everyone_else(app, admin, logged_
         assert visitor.get(path).status_code == 302 and "/login" in visitor.get(path).location, path
         assert logged_in.get(path).status_code == 403, path
         assert admin.get(path).status_code == 200, path
-    actions = ["/admin/users/1/suspend", "/admin/users/1/delete", "/admin/users/1/reactivate", "/admin/lessons/new",
-               "/admin/lessons/algebra-1/systems/delete", "/admin/lessons/algebra-1/systems/edit", "/admin/practice/new",
+    actions = ["/admin/users/1/suspend", "/admin/users/1/delete", "/admin/users/1/reactivate", "/admin/practice/new",
                "/admin/practice/slope/edit", "/admin/practice/slope/delete"]
     for path in actions:
-        assert logged_in.post(path, data={**LESSON, **PRACTICE}).status_code == 403, path
-        assert visitor.post(path, data={**LESSON, **PRACTICE}).status_code == 302, path
+        assert logged_in.post(path, data=PRACTICE).status_code == 403, path
+        assert visitor.post(path, data=PRACTICE).status_code == 302, path
     with app.app_context():
-        assert db.session.scalar(select(SavedLesson)) is None and db.session.scalar(select(SavedPractice)) is None
+        assert db.session.scalar(select(SavedPractice)) is None
         assert db.session.scalar(select(User).where(User.email == STUDENT["email"])).is_active
     assert "/admin/" not in logged_in.get("/home").get_data(as_text=True)
 
@@ -59,9 +51,9 @@ def test_the_admin_only_sees_the_dashboard_and_never_the_student_pages(app, admi
         assert response.status_code == 302 and response.location.endswith("/admin/"), path
     assert admin.get("/").location.endswith("/admin/")
     overview = page(admin.get("/admin/"))
-    for link in ['href="/home"', 'href="/solve"', 'href="/library"', 'href="/learn/"', 'href="/practice/"', "assignments"]:
+    for link in ['href="/home"', 'href="/solve"', 'href="/library"', 'href="/curriculum/"', 'href="/practice/"', "assignments"]:
         assert link not in overview, link
-    for link in ['href="/admin/users"', 'href="/admin/lessons"', 'href="/admin/practice"', 'href="/settings/"', "/logout"]:
+    for link in ['href="/admin/users"', 'href="/admin/practice"', 'href="/settings/"', "/logout"]:
         assert link in overview, link
     assert '"welcome": false' in overview
     settings = page(admin.get("/settings/"))
@@ -181,53 +173,6 @@ def test_admin_cannot_delete_or_rename_the_admin_account_in_settings(app, admin)
         assert db.session.scalar(select(User).where(User.is_admin.is_(True))).email == "boss@example.com"
 
 
-def test_admin_creates_edits_and_deletes_lessons(app, admin, logged_in):
-    assert "Fill in every English field" in page(admin.post("/admin/lessons/new", data={**LESSON, "intro": ""}))
-    assert "Choose a course" in page(admin.post("/admin/lessons/new", data={**LESSON, "course_id": "nope"}))
-    assert "Lesson published" in page(admin.post("/admin/lessons/new", data=LESSON, follow_redirects=True))
-    course = page(logged_in.get("/learn/algebra-1"))
-    assert "Checking answers" in course and "0 of 4 lessons done" in course
-    lesson = page(logged_in.get("/learn/algebra-1/checking-answers"))
-    assert "Always check your answer." in lesson and "Compare both sides" in lesson and "Skipping the check." in lesson
-    assert logged_in.post("/learn/algebra-1/checking-answers/complete").status_code == 302
-
-    draft = {**LESSON, "title": "Secret draft", "published": ""}
-    assert "saved as a draft" in page(admin.post("/admin/lessons/new", data=draft, follow_redirects=True))
-    assert logged_in.get("/learn/algebra-1/secret-draft").status_code == 404
-    assert "Secret draft" in page(admin.get("/admin/lessons")) and "Secret draft" not in page(logged_in.get("/learn/algebra-1"))
-
-    form = page(admin.get("/admin/lessons/algebra-1/systems/edit"))
-    assert "Systems of equations" in form and "Systèmes d'équations" in form
-    changed = {**LESSON, "title": "Systems, the easy way", "fr_title": "Les systèmes, simplement"}
-    assert "Lesson updated" in page(admin.post("/admin/lessons/algebra-1/systems/edit", data=changed, follow_redirects=True))
-    assert "Systems, the easy way" in page(logged_in.get("/learn/algebra-1/systems"))
-    logged_in.get("/language/fr")
-    french = page(logged_in.get("/learn/algebra-1/systems"))
-    assert "Les systèmes, simplement" in french and "Always check your answer." in french
-    logged_in.get("/language/en")
-    admin.post("/admin/lessons/algebra-1/systems/restore")
-    assert "Systems of equations" in page(logged_in.get("/learn/algebra-1/systems"))
-
-    assert "Lesson deleted" in page(admin.post("/admin/lessons/algebra-1/systems/delete", follow_redirects=True))
-    assert logged_in.get("/learn/algebra-1/systems").status_code == 404
-    assert "Systems of equations" not in page(logged_in.get("/learn/algebra-1"))
-    admin.post("/admin/lessons/algebra-1/systems/restore")
-    assert logged_in.get("/learn/algebra-1/systems").status_code == 200
-
-    admin.post("/admin/lessons/algebra-1/checking-answers/delete")
-    assert logged_in.get("/learn/algebra-1/checking-answers").status_code == 404
-    assert "0 of 3 lessons done" in page(logged_in.get("/learn/algebra-1"))
-    assert admin.post("/admin/lessons/algebra-1/missing/delete").status_code == 404
-
-
-def test_a_course_with_every_lesson_deleted_disappears_without_errors(admin, logged_in):
-    for slug in ["solving-equations", "slope-lines", "systems"]:
-        admin.post(f"/admin/lessons/algebra-1/{slug}/delete")
-    assert logged_in.get("/learn/algebra-1").status_code == 404
-    assert logged_in.get("/learn/").status_code == 200 and logged_in.get("/home").status_code == 200
-    assert admin.get("/admin/lessons").status_code == 200 and admin.get("/admin/").status_code == 200
-
-
 def test_admin_writes_edits_and_deletes_practice_sets_that_students_play(app, admin, logged_in):
     assert "at least 3 questions" in page(admin.post("/admin/practice/new", data={**PRACTICE, "q-4-prompt": "", "q-4-choice-0": "",
                                                                                      "q-4-choice-2": "", "q-4-choice-3": ""}))
@@ -285,12 +230,10 @@ def test_admin_renames_hides_and_restores_a_built_in_practice_set(admin, logged_
     assert logged_in.get("/practice/slope").status_code == 200
     admin.post("/admin/practice/slope/delete")
     assert logged_in.get("/practice/slope").status_code == 404 and "Slopes of lines" not in page(logged_in.get("/practice/"))
-    assert logged_in.get("/home").status_code == 200 and logged_in.get("/learn/algebra-1/slope-lines").status_code == 200
+    assert logged_in.get("/home").status_code == 200
     admin.post("/admin/practice/slope/restore")
     restored = page(logged_in.get("/practice/"))
     assert "Slope" in restored and "Slopes of lines" not in restored
-    lessons = page(admin.get("/admin/lessons/new"))
-    assert 'value="slope"' in lessons
 
 
 def test_admin_dashboard_shows_the_numbers_in_french_too(admin, logged_in):

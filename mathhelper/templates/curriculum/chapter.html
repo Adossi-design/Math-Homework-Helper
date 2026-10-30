@@ -54,11 +54,18 @@
   <div class="section-head"><h2>{{ _("Before you start") }}</h2></div>
   <div class="card">
     {% for item in progress.prerequisites %}
-    <a class="lesson-row" href="{{ url_for('curriculum.chapter', chapter_id=item.chapter) if item.chapter else url_for('learn.lesson', course_id=item.course, lesson_id=item.lesson) }}">
+    {% if item.chapter %}
+    <a class="lesson-row" href="{{ url_for('curriculum.chapter', chapter_id=item.chapter) }}">
       <span class="lesson-num {{ 'done' if item.done }}">{% if item.done %}{{ icon("check", "sm") }}{% else %}{{ loop.index }}{% endif %}</span>
-      <div class="body"><strong>{{ view.prerequisites[loop.index0].text }}</strong><span>{{ _("Open the chapter") if item.chapter else _("Open the review lesson") }}{% if item.done %}, {{ _("completed") }}{% endif %}</span></div>
+      <div class="body"><strong>{{ view.prerequisites[loop.index0].text }}</strong><span>{{ _("Open the chapter") }}{% if item.done %}, {{ _("completed") }}{% endif %}</span></div>
       {{ icon("chevron-right") }}
     </a>
+    {% else %}
+    <div class="lesson-row">
+      <span class="lesson-num">{{ loop.index }}</span>
+      <div class="body"><strong>{{ view.prerequisites[loop.index0].text }}</strong></div>
+    </div>
+    {% endif %}
     {% endfor %}
   </div>
 </section>

@@ -6,7 +6,6 @@ from pathlib import Path
 from flask import g
 
 from mathhelper import ai
-from mathhelper.content.courses import COURSES, LOCALIZED
 from mathhelper.i18n import JS_KEYS
 from mathhelper.models import LEVELS
 from mathhelper.practice import SKILLS, build_round
@@ -72,10 +71,8 @@ def test_app_pages_render_in_french(logged_in):
     logged_in.get("/language/fr")
     home = logged_in.get("/home").get_data(as_text=True)
     assert "Solutions récentes" in home and "Accueil" in home and "Exercices" in home
-    learn = logged_in.get("/learn/").get_data(as_text=True)
-    assert "Nombres entiers" in learn and "Whole Numbers" not in learn
-    lesson = unescape(logged_in.get("/learn/algebra-1/systems").get_data(as_text=True))
-    assert "Systèmes d'équations" in lesson and "Idées clés" in lesson and "Exemple corrigé" in lesson
+    curriculum = unescape(logged_in.get("/curriculum/").get_data(as_text=True))
+    assert "Mon programme" in curriculum and "My curriculum" not in curriculum
     practice = unescape(logged_in.get("/practice/").get_data(as_text=True))
     assert "Équations du second degré" in practice and "Pas encore essayé" in practice
     for path in ["/solve", "/library", "/settings/", "/privacy", "/terms", "/about", "/forgot-password"]:
@@ -101,15 +98,12 @@ def test_french_messages_and_reset_email(client, make_user, outbox):
     assert "Réinitialise ton mot de passe" in outbox[0]["subject"] and "Bonjour Ama" in outbox[0]["html"]
 
 
-def test_practice_and_courses_are_translated(app):
+def test_practice_is_translated(app):
     with app.test_request_context("/"):
         g.lang = "fr"
         question = build_round("add-subtract", "demo")[0]
         assert question.prompt.startswith("Combien font")
     assert build_round("add-subtract", "demo")[0].prompt.startswith("What is")
-    assert [c.id for c in LOCALIZED["fr"]] == [c.id for c in COURSES]
-    for english_course, french_course in zip(COURSES, LOCALIZED["fr"]):
-        assert french_course.title != "" and len(french_course.lessons) == len(english_course.lessons)
 
 
 def test_ai_is_told_to_answer_in_french(app, monkeypatch):
@@ -130,7 +124,7 @@ def test_ai_is_told_to_answer_in_french(app, monkeypatch):
 
 
 def test_language_switch_is_on_every_screen_and_keeps_the_page(client, logged_in):
-    for path in ["/home", "/solve", "/library?q=x", "/learn/", "/practice/", "/settings/", "/about"]:
+    for path in ["/home", "/solve", "/library?q=x", "/curriculum/", "/practice/", "/settings/", "/about"]:
         page = unescape(logged_in.get(path).get_data(as_text=True))
         assert 'class="lang-toggle' in page and ">English<" in page and ">Français<" in page, path
     assert "/language/fr?next=/library?q%3Dx" in logged_in.get("/library?q=x").get_data(as_text=True).replace("%3F", "?")

@@ -1,9 +1,8 @@
-"""Progress numbers for the dashboard, practice and learn pages."""
+"""Progress numbers for the dashboard, practice and learning."""
 from datetime import timedelta
 
 from sqlalchemy import func, select
 
-from .content import courses, lesson_key
 from .extensions import db
 from .i18n import day_label
 from .models import LessonCompletion, PracticeAttempt, Solution
@@ -66,21 +65,12 @@ def summary(user):
         "problems": sum(len(p or []) for p in problem_lists),
         "accuracy": round(100 * correct / total) if total else None,
         "rounds": rounds,
-        "lessons": sum(course_progress(course, done) for course in courses()),
+        "lessons": sum(1 for key in done if key.startswith("cur:")),
     }
 
 
-def next_lesson(done):
-    """Return the first unfinished course and lesson, from the basics up."""
-    for course in courses():
-        for lesson in course.lessons:
-            if lesson_key(course, lesson) not in done:
-                return course, lesson
-    return None, None
-
-
-def suggested_skill(best, preferred=None):
-    """Pick a practice set: a weak one already tried, else the one for the next lesson, else a new one."""
+def suggested_skill(best):
+    """Pick a practice set: a weak one already tried, else a new one."""
     skills = list(all_skills().values())
     if not skills:
         return None
@@ -88,13 +78,5 @@ def suggested_skill(best, preferred=None):
     weak = [s for s in skills if s.id in best and score(s) < 0.8]
     if weak:
         return min(weak, key=score)
-    match = next((s for s in skills if s.id == preferred), None)
-    if match:
-        return match
     untried = [s for s in skills if s.id not in best]
     return untried[0] if untried else min(skills, key=score)
-
-
-def course_progress(course, done):
-    """Return how many lessons of a course are finished."""
-    return sum(1 for lesson in course.lessons if lesson_key(course, lesson) in done)

@@ -74,21 +74,28 @@
   </section>
 
   <aside class="stack">
-    {% if next_lesson %}
+    {% if upcoming %}
     <div>
       <div class="section-head"><h2>{{ _("Continue learning") }}</h2></div>
-      <a class="card card-link card-body tone-{{ next_course.tone }}" href="{{ url_for('learn.lesson', course_id=next_course.id, lesson_id=next_lesson.id) }}">
+      <a class="card card-link card-body tone-indigo" href="{{ upcoming.url }}">
         <div class="row">
-          <span class="glyph">{{ next_course.glyph }}</span>
+          <span class="glyph">{{ icon("book") }}</span>
           <div>
-            <div class="small faint">{{ next_course.title }}</div>
-            <h3>{{ next_lesson.title }}</h3>
+            <div class="small faint">{{ upcoming.chapter }}</div>
+            <h3>{{ upcoming.section }}</h3>
           </div>
         </div>
         <div class="row" style="margin-top:16px;justify-content:space-between">
-          <span class="small muted">{{ icon("clock", "sm") }} {{ _("{n} min read", n=next_lesson.minutes) }}</span>
+          <span class="small muted">{{ icon("clock", "sm") }} {{ _("{n} min read", n=upcoming.minutes) }}</span>
           <span class="btn btn-soft btn-sm">{{ _("Start") }} {{ icon("arrow-right", "sm") }}</span>
         </div>
+      </a>
+    </div>
+    {% else %}
+    <div>
+      <div class="section-head"><h2>{{ _("Continue learning") }}</h2></div>
+      <a class="card card-link card-body tone-indigo" href="{{ url_for('curriculum.index') }}">
+        <div class="row"><span class="glyph">{{ icon("book") }}</span><div><div class="small faint">{{ _("My curriculum") }}</div><h3>{{ _("Choose your country and level") }}</h3></div></div>
       </a>
     </div>
     {% endif %}

@@ -342,8 +342,8 @@ CHAPTER = Chapter(
                 "Calculer un pourcentage d'une quantité et exprimer une proportion en pourcentage.",
                 "Utiliser une échelle pour passer d'une longueur sur un plan à une longueur réelle, et inversement.",
                 "Justifier qu'une situation n'est pas une situation de proportionnalité."],
-    prerequisites=[{"text": "Multiplier et diviser des nombres décimaux.", "course": "whole-numbers", "lesson": "multiply-divide"},
-                   {"text": "Comprendre les décimaux et leurs conversions avec les fractions.", "course": "fractions-decimals", "lesson": "decimals"}],
+    prerequisites=[{"text": "Multiplier et diviser des nombres décimaux."},
+                   {"text": "Comprendre les décimaux et leurs conversions avec les fractions."}],
     sections=[S1, S2, S3], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
     status_note="Fifth chapter of the Senegal Sixième course. Its topics follow the proportionality chapter of the ADEM-Dakar booklet, with our own explanations and exercises. "

@@ -15,7 +15,6 @@
     <p class="muted" style="margin-top:6px">{{ _("You got {correct} of {total} right in {skill}, {when}.", correct=attempt.correct, total=attempt.total, skill=_(skill.title), when=attempt.created_at | ago) }}</p>
     <div class="row wrap" style="margin-top:18px">
       <a class="btn btn-primary" href="{{ url_for('practice.play', skill_id=skill.id) }}">{{ icon("refresh") }} {{ _("New round") }}</a>
-      {% if lesson %}<a class="btn btn-outline" href="{{ url_for('learn.lesson', course_id=course.id, lesson_id=lesson.id) }}">{{ icon("book") }} {{ _("Review the lesson") }}</a>{% endif %}
     </div>
   </div>
 </div>

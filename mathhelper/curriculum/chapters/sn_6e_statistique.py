@@ -338,7 +338,7 @@ CHAPTER = Chapter(
                 "Compléter un tableau d'effectifs et de fréquences, et comparer deux séries par leurs fréquences.",
                 "Résoudre des problèmes de la vie courante avec des pourcentages."],
     prerequisites=[{"text": "Diviser des nombres décimaux et passer d'une fraction à un nombre décimal.", "chapter": "sn-6e-division"},
-                   {"text": "Comprendre les pourcentages simples.", "course": "ratios-percents", "lesson": "percents"}],
+                   {"text": "Comprendre les pourcentages simples."}],
     sections=[S1, S2, S3], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
     status_note="Ninth chapter of the Senegal Sixième course. Its contents follow lesson 13 of the Côte d'Ivoire Sixième programme (count, total count, frequency, frequency as a percentage, tables), which was read for it, "

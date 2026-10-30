@@ -14,8 +14,8 @@
     <div class="value">{{ numbers.suspended }}</div>
     <p class="small faint" style="margin-top:12px">{{ _("Cannot sign in") }}</p>
   </a>
-  <a class="card card-link stat" href="{{ url_for('admin.lessons') }}">
-    <div class="stat-top"><span class="stat-icon green">{{ icon("book", "sm") }}</span><span>{{ _("Lessons") }}</span></div>
+  <a class="card card-link stat" href="{{ url_for('admin.translations') }}">
+    <div class="stat-top"><span class="stat-icon green">{{ icon("book", "sm") }}</span><span>{{ _("Chapters") }}</span></div>
     <div class="value">{{ numbers.lessons }}</div>
     <p class="small faint" style="margin-top:12px">{{ _("Visible to students") }}</p>
   </a>
@@ -65,8 +65,7 @@
   <aside>
     <div class="section-head"><h2>{{ _("Quick actions") }}</h2></div>
     <div class="card card-body stack">
-      <a class="btn btn-primary btn-block" href="{{ url_for('admin.new_lesson') }}">{{ icon("plus") }} {{ _("New lesson") }}</a>
-      <a class="btn btn-soft btn-block" href="{{ url_for('admin.new_practice') }}">{{ icon("plus") }} {{ _("New practice set") }}</a>
+      <a class="btn btn-primary btn-block" href="{{ url_for('admin.new_practice') }}">{{ icon("plus") }} {{ _("New practice set") }}</a>
       <a class="btn btn-outline btn-block" href="{{ url_for('admin.users') }}">{{ icon("users") }} {{ _("Manage users") }}</a>
       <a class="btn btn-ghost btn-block" href="{{ url_for('admin.beral') }}">{{ icon("sparkles") }} {{ _("Beral 3D preview") }}</a>
     </div>
