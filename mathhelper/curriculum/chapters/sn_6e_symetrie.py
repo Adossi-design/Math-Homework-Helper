@@ -23,7 +23,7 @@ POINT = (Figure().point("A", 80, 60, -14, -8).point("O", 170, 105, 8, 20).point(
          .segment("A", "A'", "fig-dash").tick("A", "O", 1).tick("O", "A'", 1))
 SEGMENT = (Figure().point("A", 70, 60, -14, -8).point("B", 130, 40, 0, -10).point("O", 170, 105, 8, 20).point("A'", 270, 150, 8, 22).point("B'", 210, 170, -8, 22)
            .segment("A", "B").segment("A'", "B'").segment("A", "A'", "fig-dash").segment("B", "B'", "fig-dash").arrow_mark("A", "B", 1).arrow_mark("A'", "B'", 1))
-CIRCLE = (Figure().point("A", 100, 105, -6, 4).point("O", 170, 105, 0, 20).point("A'", 240, 105, 8, 4)
+CIRCLE = (Figure().point("A", 100, 105, -6, -14).point("O", 170, 105, 0, 22).point("A'", 240, 105, 6, -14)
           .circle("A", 40).circle("A'", 40).segment("A", "A'", "fig-dash"))
 CENTER = (Figure().point("A", 60, 150, -14, 22).point("B", 220, 150, 6, 22).point("C", 290, 60, 8, -4).point("D", 130, 60, -14, -6).point("O", 175, 105, 16, 26)
           .segment("A", "B").segment("B", "C").segment("C", "D").segment("D", "A").segment("A", "C", "fig-dash").segment("B", "D", "fig-dash")
