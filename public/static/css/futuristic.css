@@ -242,3 +242,4 @@ a.lesson-row:hover .lesson-num { transform: scale(1.08); }
 .fig-label { fill: var(--text); font: 700 15px var(--font); }
 .fig-note { fill: var(--muted); font: 600 13px var(--font); }
 .fig-box figcaption { font-size: 14px; color: var(--muted); text-align: center; max-width: 520px; line-height: 1.5; }
+.fig-arc { stroke: #f07b1d; stroke-width: 2.4; fill: none; stroke-linecap: round; }

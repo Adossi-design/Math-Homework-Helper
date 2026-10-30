@@ -93,6 +93,17 @@ class Figure:
             self.under.append(f'<polyline class="fig-mark" points="{left[0]:.1f},{left[1]:.1f} {tip[0]:.1f},{tip[1]:.1f} {right[0]:.1f},{right[1]:.1f}"/>')
         return self
 
+    def arc(self, vertex, a, b, radius=28, cls="fig-arc"):
+        """Draw the small arc that marks the angle between the directions of two points, around a vertex."""
+        x, y = self.points[vertex]
+        ux, uy = self._unit(vertex, a)
+        vx, vy = self._unit(vertex, b)
+        start = (x + radius * ux, y + radius * uy)
+        end = (x + radius * vx, y + radius * vy)
+        sweep = 1 if ux * vy - uy * vx > 0 else 0
+        self.under.append(f'<path class="{cls}" d="M {start[0]:.1f} {start[1]:.1f} A {radius} {radius} 0 0 {sweep} {end[0]:.1f} {end[1]:.1f}"/>')
+        return self
+
     def text(self, x, y, content):
         """Write a short note such as a length on the drawing."""
         self.over.append(f'<text class="fig-note" x="{x}" y="{y}" text-anchor="middle">{escape(content)}</text>')
