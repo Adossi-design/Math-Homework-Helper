@@ -88,6 +88,8 @@ def parse_number(text, units=()):
 def parse_list(text, units=()):
     """Read several numbers separated by semicolons or by the signs < and >, or return None."""
     text = clean(text)
+    if ";" not in text:
+        text = re.sub(r"(?<=\d),\s+", " ; ", text)
     if text.startswith("(") and text.endswith(")") and text.count("(") == 1 and ";" in text:
         text = text[1:-1]
     pieces = [p for p in _SEPARATORS.split(text) if p.strip()]

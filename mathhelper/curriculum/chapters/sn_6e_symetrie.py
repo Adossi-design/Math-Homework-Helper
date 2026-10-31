@@ -48,12 +48,12 @@ S1 = Section(
                 [(N("OA' = OA") + " = " + N("4") + " cm", "O est le milieu de [AA']."),
                  (N("AA' = 2 \\times 4") + " = " + N("8") + " cm", "[AA'] est formé de [AO] et [OA'].")],
                 N("OA' = 4") + " cm et " + N("AA' = 8") + " cm.", "4==4 and 2*4==8"),
-        example("Exemple 2", "O a pour coordonnées (2 ; 3) et A a pour coordonnées (5 ; 7). Quelles sont les coordonnées de A', symétrique de A par rapport à O ?",
-                "On utilise A' = (2a − x ; 2b − y), ou on fait le trajet inverse de O à A.",
-                [("De O à A : on avance de 5 − 2 = 3 vers la droite et de 7 − 3 = 4 vers le haut", "C'est le trajet de O vers A."),
-                 ("De O à A' : on recule de 3 et de 4 : 2 − 3 = −1 et 3 − 4 = −1", "Trajet inverse."),
-                 ("Avec la formule : 2 × 2 − 5 = −1 et 2 × 3 − 7 = −1", "On retrouve les mêmes coordonnées.")],
-                "A' a pour coordonnées " + N("(-1 ; -1)") + ".", "2*2-5==-1 and 2*3-7==-1 and (5-2)==3"),
+        example("Exemple 2", "O a pour coordonnées (5 ; 4) et A a pour coordonnées (2 ; 1). Quelles sont les coordonnées de A', symétrique de A par rapport à O ?",
+                "On fait à partir de O le trajet inverse de celui de O à A, ou on utilise la formule A' = (2a − x ; 2b − y).",
+                [("De O à A : on recule de 5 − 2 = 3 vers la gauche et on descend de 4 − 1 = 3", "C'est le trajet de O vers A."),
+                 ("De O à A' : on fait le trajet inverse, on avance de 3 et on monte de 3 : 5 + 3 = 8 et 4 + 3 = 7", "A' est de l'autre côté de O."),
+                 ("Avec la formule : 2 × 5 − 2 = 8 et 2 × 4 − 1 = 7", "On retrouve les mêmes coordonnées.")],
+                "A' a pour coordonnées " + N("(8 ; 7)") + ".", "2*5-2==8 and 2*4-1==7 and (5-2)==3"),
         example("Exemple 3", "A a pour coordonnées (6 ; 1) et A' a pour coordonnées (2 ; 5). Quelles sont les coordonnées de O, centre de symétrie qui échange A et A' ?",
                 "O est le milieu de [AA'] : chaque coordonnée de O est la moyenne des coordonnées de A et de A'.",
                 [(N("(6 + 2) \\div 2") + " = " + N("4"), "Abscisse de O."),
@@ -74,8 +74,8 @@ S1 = Section(
                hints=["AA' = 2 × OA."], solution=["AA' = 2 × 5,5 = 11 cm."]),
         number("s1-g3", "point", "AA' = 18 cm et A' est le symétrique de A par rapport à O. Quelle est la longueur OA, en cm ?", Fraction(9), units=["cm"],
                hints=["OA est la moitié de AA'."], solution=["OA = 18 ÷ 2 = 9 cm."]),
-        ordered("s1-g4", "point", "O a pour coordonnées (1 ; 2) et A (4 ; 6). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(-2), Fraction(-2)],
-                hints=["A' = (2a − x ; 2b − y)."], solution=["2 × 1 − 4 = −2 et 2 × 2 − 6 = −2.", "A' (−2 ; −2)."]),
+        ordered("s1-g4", "point", "O a pour coordonnées (4 ; 3) et A (1 ; 2). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(7), Fraction(4)],
+                hints=["Fais le trajet inverse de O à A : de combien recules-tu, de combien descends-tu ?"], solution=["De O à A : on recule de 3 et on descend de 1.", "De O à A' : on avance de 3 et on monte de 1 : (7 ; 4)."]),
         ordered("s1-g5", "point", "A (7 ; 1) et A' (3 ; 5) sont symétriques par rapport à O. Écris les coordonnées de O sous la forme abscisse ; ordonnée.", [Fraction(5), Fraction(3)],
                 hints=["O est le milieu de [AA']."], solution=["(7 + 3) ÷ 2 = 5 et (1 + 5) ÷ 2 = 3.", "O (5 ; 3)."]),
     ])
@@ -90,7 +90,7 @@ S2 = Section(
              "Le symétrique d'un segment [AB] est un segment [A'B'] de même longueur : " + N("A'B' = AB") + ". Le symétrique d'une droite est une droite parallèle. Le symétrique d'une demi-droite est une demi-droite. "
              "Le symétrique d'un angle est un angle de même mesure. Des points alignés ont des symétriques alignés. Le symétrique d'un cercle de rayon r est un cercle de même rayon. "
              "Deux droites perpendiculaires ont des symétriques perpendiculaires, et deux droites parallèles ont des symétriques parallèles."),
-        figure(SEGMENT, "Un segment [AB], son symétrique [A'B'] de l'autre côté du point O, et les deux segments marqués par les mêmes chevrons parce qu'ils sont parallèles.", "Le symétrique du segment [AB] est le segment [A'B'] : il a la même longueur et il est parallèle à [AB]."),
+        figure(SEGMENT, "Un segment [AB], son symétrique [A'B'] de l'autre côté du point O, et les deux segments marqués par des chevrons qui montrent qu'ils sont parallèles.", "Le symétrique du segment [AB] est le segment [A'B'] : il a la même longueur et il est parallèle à [AB]."),
         figure(CIRCLE, "Deux cercles de même rayon, symétriques par rapport au point O, milieu des deux centres.", "Le symétrique du cercle de centre A est le cercle de centre A', de même rayon : O est le milieu de [AA']."),
         example("Exemple 1", "[A'B'] est le symétrique du segment [AB] par rapport à O. AB = 6,5 cm. Calculer A'B'.",
                 "La symétrie centrale conserve les longueurs.",
@@ -105,11 +105,23 @@ S2 = Section(
                 [("Le rayon est conservé", "Le cercle de centre A' a pour rayon 3 cm."),
                  (N("AA' = 2 \\times 5") + " = " + N("10"), "A' est le symétrique de A : AA' est le double de OA.")],
                 "Le rayon est " + N("3") + " cm et " + N("AA' = 10") + " cm.", "3==3 and 2*5==10"),
-        example("Exemple 4", "Un triangle ABC a des côtés de 5 cm, 6 cm et 7 cm. Son symétrique A'B'C' par rapport à un point O a quel périmètre ? Quelle aire si l'aire de ABC est 14 cm² ?",
+        example("Exemple 4", "Un triangle ABC a des côtés de 3 cm, 4 cm et 5 cm, et une aire de 6 cm². Son symétrique A'B'C' par rapport à un point O a quel périmètre ? Quelle aire ?",
                 "Les longueurs sont conservées, donc le périmètre aussi ; la figure garde la même taille, donc l'aire aussi.",
-                [(N("5 + 6 + 7") + " = " + N("18"), "Le périmètre de A'B'C' est le même que celui de ABC."),
-                 ("L'aire est conservée", "L'aire de A'B'C' est 14 cm².")],
-                "Périmètre " + N("18") + " cm et aire " + N("14") + " cm².", "5+6+7==18"),
+                [(N("3 + 4 + 5") + " = " + N("12"), "Le périmètre de A'B'C' est le même que celui de ABC."),
+                 ("L'aire est conservée", "L'aire de A'B'C' est 6 cm².")],
+                "Périmètre " + N("12") + " cm et aire " + N("6") + " cm².", "3+4+5==12 and 3*4//2==6"),
+        example("Exemple 5", "M est le milieu du segment [AB] et AB = 8 cm. M', A' et B' sont les symétriques de M, A et B par rapport à O. Que peut-on dire de M' ? Calculer A'M'.",
+                "La symétrie centrale conserve les longueurs : A'B' = AB, et le milieu d'un segment a pour symétrique le milieu du segment symétrique.",
+                [("M est le milieu de [AB]", "On a AM = MB."),
+                 ("Les longueurs sont conservées : A'M' = AM et M'B' = MB", "Donc A'M' = M'B' : M' est le milieu de [A'B']."),
+                 (N("A'M' = 8 \\div 2") + " = " + N("4"), "A'M' est la moitié de A'B', qui mesure 8 cm.")],
+                "M' est le milieu de [A'B'] et " + N("A'M' = 4") + " cm.", "8//2==4"),
+        example("Exemple 6", "Les points A, B et C sont alignés, avec B entre A et C, AB = 3 cm et BC = 4 cm. Leurs symétriques A', B' et C' sont-ils alignés ? Que vaut A'C' ? Que devient la demi-droite [AB) ?",
+                "La symétrie centrale conserve l'alignement et les longueurs, et le symétrique d'une demi-droite est une demi-droite.",
+                [("A, B et C sont alignés", "Leurs symétriques A', B' et C' sont alignés."),
+                 (N("A'C' = AC = 3 + 4") + " = " + N("7"), "Les longueurs sont conservées."),
+                 ("La demi-droite [AB) a pour symétrique la demi-droite [A'B')", "Elle a pour origine A', le symétrique de A, et passe par B'.")],
+                "Oui, " + N("A'C' = 7") + " cm, et le symétrique de [AB) est [A'B').", "3+4==7"),
         warning("Le symétrique d'une droite est une droite parallèle, pas la même droite (sauf si elle passe par O). Et la symétrie centrale ne change jamais les longueurs ni les angles : si tes mesures changent, c'est que la figure est mal construite."),
     ],
     [
@@ -133,7 +145,7 @@ S3 = Section(
     [
         para("Certaines figures se retrouvent exactement identiques après un demi-tour : une pièce de monnaie, une roue, un cadre en parallélogramme. Le point autour duquel on tourne s'appelle le centre de symétrie de la figure."),
         definition("Centre de symétrie",
-                   "Un point O est un centre de symétrie d'une figure si le symétrique de la figure par rapport à O est la figure elle-même. Une figure a au plus un centre de symétrie, sauf des cas très particuliers comme une droite entière."),
+                   "Un point O est un centre de symétrie d'une figure si le symétrique de la figure par rapport à O est la figure elle-même. Une figure bornée (qui ne s'étend pas à l'infini) a au plus un centre de symétrie."),
         rule("Centres de symétrie à connaître",
              "Le centre de symétrie d'un segment est son milieu. Le centre de symétrie d'un cercle ou d'un disque est son centre. Le centre de symétrie d'un parallélogramme est le point d'intersection de ses diagonales. "
              "Un triangle n'a pas de centre de symétrie."),
@@ -193,11 +205,11 @@ S4 = Section(
                  (N("2 \\times 4 - 2") + " = " + N("6") + " et " + N("2 \\times 3 - 2") + " = " + N("4"), "B' a pour coordonnées (6 ; 4).")],
                 "O (4 ; 3) et B' (6 ; 4).", "(1+7)//2==4 and (5+1)//2==3 and 2*4-2==6 and 2*3-2==4"),
         example("Exemple 3", "Un cercle de centre A et de rayon 3 cm a pour symétrique, par rapport à O, un cercle de centre A'. OA = 8 cm. Les deux cercles se coupent-ils ?",
-                "On compare la distance entre les centres à la somme des rayons.",
+                "Deux cercles de même rayon r se coupent quand la distance entre leurs centres est plus petite que 2 × r ; ils se touchent en un point quand elle est égale à 2 × r ; ils sont séparés quand elle est plus grande.",
                 [(N("AA' = 2 \\times 8") + " = " + N("16"), "Les centres sont à 16 cm l'un de l'autre."),
-                 (N("3 + 3") + " = " + N("6"), "La somme des rayons est 6 cm."),
-                 ("16 est plus grand que 6", "Les deux cercles ne se touchent pas.")],
-                "Non, les deux cercles ne se coupent pas.", "2*8==16 and 3+3==6 and 16>6"),
+                 (N("2 \\times 3") + " = " + N("6"), "Le double du rayon est 6 cm."),
+                 ("16 est plus grand que 6", "Les deux cercles sont séparés : ils ne se coupent pas.")],
+                "Non, les deux cercles ne se coupent pas.", "2*8==16 and 2*3==6 and 16>6"),
         example("Exemple 4", "Un rectangle ABCD a une longueur de 8 cm et une largeur de 5 cm. Quel est le périmètre et l'aire de son symétrique par rapport à O ?",
                 "La symétrie centrale conserve les longueurs et les aires.",
                 [(N("2 \\times (8 + 5)") + " = " + N("26"), "Périmètre : 26 cm."),
@@ -209,8 +221,8 @@ S4 = Section(
     [
         number("s4-g1", "problemes", "ABCD est un parallélogramme de centre O. OA = 5 cm et OB = 3 cm. Quelle est la longueur AC + BD, en cm ?", Fraction(16), units=["cm"],
                hints=["AC = 2 × OA et BD = 2 × OB."], solution=["AC = 10 cm et BD = 6 cm.", "10 + 6 = 16 cm."]),
-        ordered("s4-g2", "problemes", "O (3 ; 4) et A (8 ; 1). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(-2), Fraction(7)],
-                hints=["A' = (2a − x ; 2b − y)."], solution=["2 × 3 − 8 = −2 et 2 × 4 − 1 = 7.", "A' (−2 ; 7)."]),
+        ordered("s4-g2", "problemes", "O (8 ; 6) et A (3 ; 2). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(13), Fraction(10)],
+                hints=["Fais le trajet inverse de O à A."], solution=["De O à A : on recule de 5 et on descend de 4.", "De O à A' : on avance de 5 et on monte de 4 : (13 ; 10)."]),
         ordered("s4-g3", "problemes", "A (9 ; 2) et A' (3 ; 8) sont symétriques par rapport à O. Écris les coordonnées de O sous la forme abscisse ; ordonnée.", [Fraction(6), Fraction(5)],
                 hints=["O est le milieu de [AA']."], solution=["(9 + 3) ÷ 2 = 6 et (2 + 8) ÷ 2 = 5.", "O (6 ; 5)."]),
         number("s4-g4", "problemes", "Un rectangle de 12 cm sur 7 cm a un symétrique par rapport à un point O. Quelle est l'aire de ce symétrique, en cm² ?", Fraction(84), units=["cm2", "cm²"],
@@ -224,13 +236,13 @@ PRACTICE = [
     number("p1", "point", "A est à 12 cm de O. A' est son symétrique par rapport à O. Quelle est la longueur OA', en cm ?", Fraction(12), 1, ["O est le milieu de [AA']."], ["OA' = OA = 12 cm."], units=["cm"]),
     number("p2", "point", "A est à 8,5 cm de O. A' est son symétrique par rapport à O. Quelle est la longueur AA', en cm ?", Fraction(17), 1, ["AA' = 2 × OA."], ["2 × 8,5 = 17 cm."], units=["cm"]),
     number("p3", "point", "AA' = 25 cm, A' étant le symétrique de A par rapport à O. Quelle est la longueur OA, en cm ?", d("12,5"), 2, ["OA est la moitié de AA'."], ["25 ÷ 2 = 12,5 cm."], units=["cm"]),
-    ordered("p4", "point", "O (0 ; 0) et A (3 ; 5). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(-3), Fraction(-5)], 1, ["Avec O à l'origine, A' = (−x ; −y)."], ["A' (−3 ; −5)."]),
-    ordered("p5", "point", "O (2 ; 2) et A (6 ; 3). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(-2), Fraction(1)], 2, ["A' = (2a − x ; 2b − y)."], ["2 × 2 − 6 = −2 et 2 × 2 − 3 = 1.", "A' (−2 ; 1)."]),
+    ordered("p4", "point", "O (3 ; 3) et A (1 ; 2). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(5), Fraction(4)], 1, ["Trajet inverse de O à A."], ["De O à A : on recule de 2 et on descend de 1.", "A' (5 ; 4)."]),
+    ordered("p5", "point", "O (6 ; 5) et A (2 ; 3). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(10), Fraction(7)], 2, ["A' = (2a − x ; 2b − y)."], ["2 × 6 − 2 = 10 et 2 × 5 − 3 = 7.", "A' (10 ; 7)."]),
     ordered("p6", "point", "O (5 ; 4) et A (1 ; 7). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(9), Fraction(1)], 2, ["A' = (2a − x ; 2b − y)."], ["2 × 5 − 1 = 9 et 2 × 4 − 7 = 1.", "A' (9 ; 1)."]),
     ordered("p7", "point", "A (2 ; 8) et A' (10 ; 4) sont symétriques par rapport à O. Écris les coordonnées de O sous la forme abscisse ; ordonnée.", [Fraction(6), Fraction(6)], 2, ["O est le milieu de [AA']."], ["(2 + 10) ÷ 2 = 6 et (8 + 4) ÷ 2 = 6.", "O (6 ; 6)."]),
-    ordered("p8", "point", "A (−3 ; 2) et A' (5 ; −4) sont symétriques par rapport à O. Écris les coordonnées de O sous la forme abscisse ; ordonnée.", [Fraction(1), Fraction(-1)], 3, ["O est le milieu de [AA']."], ["(−3 + 5) ÷ 2 = 1 et (2 + (−4)) ÷ 2 = −1.", "O (1 ; −1)."]),
-    choice("p9", "point", "A' est le symétrique de A par rapport à O. Que peut-on affirmer ?", ["O est le milieu de [AA']", "O est sur la médiatrice de [AA'] seulement", "A et A' sont confondus"], 0, 1, ["Définition du symétrique."], ["O est le milieu de [AA']."], wrong={1: "O est le milieu : il est même sur [AA'].", 2: "A et A' ne sont confondus que si A = O."}),
-    choice("p10", "point", "Quel est le symétrique de O par rapport à O ?", ["Un point différent de O", "O lui-même", "Il n'existe pas"], 1, 1, ["O est le milieu de [OO]."], ["O est le milieu de [OO] : son symétrique est O."], wrong={0: "O est déjà à la même distance de lui-même.", 2: "Chaque point a un symétrique."}),
+    ordered("p8", "point", "A (3 ; 2) et A' (9 ; 8) sont symétriques par rapport à O. Écris les coordonnées de O sous la forme abscisse ; ordonnée.", [Fraction(6), Fraction(5)], 3, ["O est le milieu de [AA']."], ["(3 + 9) ÷ 2 = 6 et (2 + 8) ÷ 2 = 5.", "O (6 ; 5)."]),
+    choice("p9", "point", "A' est le symétrique de A par rapport à O. Que peut-on affirmer ?", ["O est le milieu de [AA']", "O est plus près de A que de A'", "A et A' sont confondus"], 0, 1, ["Définition du symétrique."], ["O est le milieu de [AA']."], wrong={1: "O est à la même distance de A et de A'.", 2: "A et A' ne sont confondus que si A = O."}),
+    choice("p10", "point", "Quel est le symétrique de O par rapport à O ?", ["Un point différent de O", "O lui-même", "Il n'existe pas"], 1, 1, ["O est le milieu de [OO]."], ["O est le milieu de [OO] : son symétrique est O."], wrong={0: "Le milieu de [OO] est O lui-même.", 2: "Chaque point a un symétrique."}),
     number("p11", "figures", "[A'B'] est le symétrique de [AB] par rapport à O. AB = 3,8 cm. Quelle est la longueur A'B', en cm ?", d("3,8"), 1, ["Les longueurs sont conservées."], ["A'B' = AB = 3,8 cm."], units=["cm"]),
     number("p12", "figures", "L'angle ∠ABC mesure 113°. Quelle est la mesure de son symétrique, en degrés ?", Fraction(113), 1, ["Les angles sont conservés."], ["Même mesure : 113°."], units=["°", "degrés", "degré"]),
     number("p13", "figures", "Un triangle a pour côtés 9 cm, 12 cm et 15 cm. Quel est le périmètre de son symétrique par rapport à un point O, en cm ?", Fraction(36), 2, ["Les longueurs sont conservées."], ["9 + 12 + 15 = 36 cm."], units=["cm"]),
@@ -247,12 +259,14 @@ PRACTICE = [
     choice("p24", "centre", "Le centre de symétrie d'un segment est :", ["son milieu", "une extrémité", "n'importe quel point du segment"], 0, 1, ["Un demi-tour doit échanger les extrémités."], ["Le centre de symétrie d'un segment est son milieu."], wrong={1: "Une extrémité resterait fixe, l'autre irait loin du segment.", 2: "Il faut un point précis."}),
     choice("p25", "centre", "Combien de centres de symétrie un parallélogramme a-t-il ?", ["Aucun", "Un", "Quatre"], 1, 2, ["C'est l'intersection de ses diagonales."], ["Un seul : l'intersection de ses diagonales."], wrong={0: "Il en a un.", 2: "Il n'y en a qu'un."}),
     number("p26", "problemes", "ABCD est un parallélogramme de centre O. OA = 3,5 cm et OB = 2,5 cm. Quelle est la somme des diagonales AC + BD, en cm ?", Fraction(12), 2, ["AC = 2 × OA et BD = 2 × OB."], ["AC = 7 et BD = 5.", "7 + 5 = 12 cm."], units=["cm"]),
-    ordered("p27", "problemes", "O (4 ; 1) et A (9 ; 6). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(-1), Fraction(-4)], 3, ["A' = (2a − x ; 2b − y)."], ["2 × 4 − 9 = −1 et 2 × 1 − 6 = −4.", "A' (−1 ; −4)."]),
+    ordered("p27", "problemes", "O (9 ; 6) et A (4 ; 1). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(14), Fraction(11)], 3, ["A' = (2a − x ; 2b − y)."], ["2 × 9 − 4 = 14 et 2 × 6 − 1 = 11.", "A' (14 ; 11)."]),
     ordered("p28", "problemes", "A (0 ; 0) et A' (8 ; 6) sont symétriques par rapport à O. Écris les coordonnées de O sous la forme abscisse ; ordonnée.", [Fraction(4), Fraction(3)], 2, ["O est le milieu de [AA']."], ["(0 + 8) ÷ 2 = 4 et (0 + 6) ÷ 2 = 3.", "O (4 ; 3)."]),
     number("p29", "problemes", "Un rectangle de 9 cm sur 6 cm a un symétrique par rapport à O. Quel est son périmètre, en cm ?", Fraction(30), 2, ["Les longueurs sont conservées."], ["2 × (9 + 6) = 30 cm."], units=["cm"]),
     number("p30", "problemes", "Deux cercles symétriques par rapport à O ont leurs centres à 24 cm l'un de l'autre. Quelle est la distance de O à chaque centre, en cm ?", Fraction(12), 2, ["O est le milieu des deux centres."], ["24 ÷ 2 = 12 cm."], units=["cm"]),
     choice("p31", "problemes", "Léa dit : « le symétrique d'une droite par rapport à un point est toujours la même droite ». Qu'en penses-tu ?", ["Elle a raison", "Elle a tort : c'est une droite parallèle, la même seulement si elle passe par O", "Elle a tort : c'est une droite perpendiculaire"], 1, 3, ["Un demi-tour renverse la droite sans la tourner."], ["Le symétrique est une droite parallèle ; c'est la même droite seulement si elle passe par O."], wrong={0: "Ce n'est vrai que pour une droite qui passe par O.", 2: "Un demi-tour ne tourne pas d'un quart de tour."}),
-    number("p32", "problemes", "A est à 6 cm de O. B est à 10 cm de O. A' et B' sont leurs symétriques. Quelle est la longueur A'B' + AA', sachant que A, O, B sont alignés avec O entre A et B ? (A'B' = AB)", Fraction(28), 3, ["AB = AO + OB, et A'B' = AB. AA' = 2 × OA."], ["AB = 6 + 10 = 16 cm, donc A'B' = 16.", "AA' = 2 × 6 = 12.", "16 + 12 = 28 cm."], units=["cm"]),
+    number("p32", "problemes", "A est à 6 cm de O et B est à 10 cm de O. A' et B' sont leurs symétriques par rapport à O. Quelle est la somme AA' + BB', en cm ?", Fraction(32), 3, ["AA' = 2 × OA et BB' = 2 × OB."], ["AA' = 2 × 6 = 12 cm et BB' = 2 × 10 = 20 cm.", "12 + 20 = 32 cm."], units=["cm"]),
+    number("p33", "figures", "M est le milieu de [AB] et AB = 14 cm. A', B' et M' sont les symétriques de A, B et M par rapport à O. Quelle est la longueur A'M', en cm ?", Fraction(7), 2, ["M' est le milieu de [A'B']."], ["A'B' = AB = 14 cm.", "A'M' = 14 ÷ 2 = 7 cm."], units=["cm"]),
+    number("p34", "figures", "A, B et C sont alignés, B entre A et C, AB = 3,5 cm et BC = 4,5 cm. A', B' et C' sont leurs symétriques par rapport à O. Quelle est la longueur A'C', en cm ?", Fraction(8), 2, ["A'C' = AC."], ["AC = 3,5 + 4,5 = 8 cm.", "A'C' = AC = 8 cm."], units=["cm"]),
 ]
 
 SUMMARY = [
@@ -275,9 +289,12 @@ def assessment(rng):
     questions = []
     cm, cm2 = ["cm"], ["cm2", "cm²"]
     # 1. symmetric coordinates
-    a, b, x, y = rng.randint(1, 9), rng.randint(1, 9), rng.randint(1, 12), rng.randint(1, 12)
+    a, b = rng.randint(3, 9), rng.randint(3, 9)
+    x, y = rng.randint(1, 2 * a - 1), rng.randint(1, 2 * b - 1)
+    while (x, y) == (a, b):
+        x = rng.randint(1, 2 * a - 1)
     questions.append(ordered("a1", "point", f"O ({a} ; {b}) et A ({x} ; {y}). Écris les coordonnées de A', symétrique de A par rapport à O, sous la forme abscisse ; ordonnée.", [Fraction(2 * a - x), Fraction(2 * b - y)], 2,
-                             ["A' = (2a − x ; 2b − y)."], [f"2 × {a} − {x} = {2 * a - x} et 2 × {b} − {y} = {2 * b - y}.", f"A' ({2 * a - x} ; {2 * b - y})."]))
+                             ["Fais le trajet inverse de O à A, ou utilise A' = (2a − x ; 2b − y)."], [f"2 × {a} − {x} = {2 * a - x} et 2 × {b} − {y} = {2 * b - y}.", f"A' ({2 * a - x} ; {2 * b - y})."]))
     # 2. the whole segment AA'
     r = rng.randint(3, 20)
     questions.append(number("a2", "point", f"A est à {r} cm de O. A' est son symétrique par rapport à O. Quelle est la longueur AA', en cm ?", Fraction(2 * r), 1,
@@ -287,19 +304,21 @@ def assessment(rng):
     questions.append(number("a3", "point", f"AA' = {2 * r} cm, A' étant le symétrique de A par rapport à O. Quelle est la longueur OA, en cm ?", Fraction(r), 1,
                             ["OA est la moitié de AA'."], [f"{2 * r} ÷ 2 = {r} cm."], units=cm))
     # 4. the length of the symmetric segment
-    ab = Fraction(rng.randint(2, 30)) + rng.choice([0, Fraction(1, 2)])
-    questions.append(number("a4", "figures", f"[A'B'] est le symétrique de [AB] par rapport à O. AB = {show(ab)} cm. Quelle est la longueur A'B', en cm ?", ab, 1,
-                            ["Les longueurs sont conservées."], ["A'B' = AB."], units=cm))
+    ab, bc = Fraction(rng.randint(2, 15)) + rng.choice([0, Fraction(1, 2)]), Fraction(rng.randint(2, 15)) + rng.choice([0, Fraction(1, 2)])
+    questions.append(number("a4", "figures", f"A, B et C sont alignés, B entre A et C, avec AB = {show(ab)} cm et BC = {show(bc)} cm. A', B' et C' sont leurs symétriques par rapport à O. Quelle est la longueur A'C', en cm ?", ab + bc, 2,
+                            ["A'C' = AC, et AC = AB + BC."], [f"AC = {show(ab)} + {show(bc)} = {show(ab + bc)} cm.", f"A'C' = AC = {show(ab + bc)} cm."], units=cm))
     # 5. the angle of the symmetric
-    angle = rng.randint(10, 170)
-    questions.append(number("a5", "figures", f"Un angle mesure {angle}°. Quelle est la mesure de son symétrique par rapport à un point O, en degrés ?", Fraction(angle), 1,
-                            ["Les angles sont conservés."], [f"Même mesure : {angle}°."], units=["°", "degrés", "degré"]))
+    angle = rng.randint(20, 160)
+    questions.append(number("a5", "figures", f"Un angle mesure {angle}°. Son symétrique par rapport à un point O a la même mesure. Quel angle faut-il ajouter à ce symétrique pour obtenir un angle plat, en degrés ?", Fraction(180 - angle), 2,
+                            ["Les angles sont conservés, et un angle plat mesure 180°."], [f"Le symétrique mesure {angle}°.", f"180 − {angle} = {180 - angle}°."], units=["°", "degrés", "degré"]))
     # 6. the radius of the symmetric circle
     diameter = 2 * rng.randint(2, 15)
     questions.append(number("a6", "figures", f"Un cercle de diamètre {diameter} cm a pour symétrique un cercle par rapport à un point O. Quel est le rayon de ce cercle, en cm ?", Fraction(diameter // 2), 2,
                             ["Le rayon est conservé."], [f"{diameter} ÷ 2 = {diameter // 2} cm."], units=cm))
     # 7. the perimeter of the symmetric triangle
     sides = rng.sample(range(4, 20), 3)
+    while max(sides) >= sum(sides) - max(sides):
+        sides = rng.sample(range(4, 20), 3)
     questions.append(number("a7", "figures", f"Un triangle a pour côtés {sides[0]} cm, {sides[1]} cm et {sides[2]} cm. Quel est le périmètre de son symétrique par rapport à un point O, en cm ?", Fraction(sum(sides)), 2,
                             ["Les longueurs sont conservées."], [f"{sides[0]} + {sides[1]} + {sides[2]} = {sum(sides)} cm."], units=cm))
     # 8. the area of the symmetric
@@ -312,12 +331,14 @@ def assessment(rng):
     options = [good] + bad
     order = [0, 1, 2]
     rng.shuffle(order)
-    questions.append(choice("a9", "centre", "Quelle figure a un centre de symétrie ?", [options[i] for i in order], order.index(0), 2,
+    questions.append(choice("a9", "centre", "Parmi ces figures, laquelle admet un centre de symétrie ?", [options[i] for i in order], order.index(0), 2,
                             ["Pense au demi-tour : la figure doit se retrouver identique."], ["Un triangle n'a pas de centre de symétrie : la bonne réponse est la figure qui en a un."],
                             wrong={order.index(1): "Un triangle n'a pas de centre de symétrie.", order.index(2): "Un triangle n'a pas de centre de symétrie."}))
     # 10. the centre from two symmetric points
-    a, b = rng.randint(1, 9), rng.randint(1, 9)
-    x, y = rng.randint(1, 9), rng.randint(1, 9)
+    a, b = rng.randint(2, 9), rng.randint(2, 9)
+    x, y = rng.randint(1, 2 * a - 1), rng.randint(1, 2 * b - 1)
+    while (x, y) == (a, b):
+        x = rng.randint(1, 2 * a - 1)
     xp, yp = 2 * a - x, 2 * b - y
     questions.append(ordered("a10", "problemes", f"A ({x} ; {y}) et A' ({xp} ; {yp}) sont symétriques par rapport à O. Écris les coordonnées de O sous la forme abscisse ; ordonnée.", [Fraction(a), Fraction(b)], 3,
                              ["O est le milieu de [AA']."], [f"({x} + {xp}) ÷ 2 = {a} et ({y} + {yp}) ÷ 2 = {b}.", f"O ({a} ; {b})."]))
@@ -340,7 +361,8 @@ CHAPTER = Chapter(
                 "Connaître les propriétés de la symétrie centrale : longueurs, angles, alignement, parallélisme et cercles conservés.",
                 "Reconnaître le centre de symétrie d'un segment, d'un cercle et d'un parallélogramme.",
                 "Résoudre des problèmes avec la symétrie centrale."],
-    prerequisites=[{"text": "Connaître le milieu d'un segment et les droites parallèles.", "chapter": "sn-6e-droites-cercles"},
+    prerequisites=[{"text": "Se repérer sur un quadrillage avec des coordonnées (abscisse ; ordonnée)."},
+                   {"text": "Connaître le milieu d'un segment et les droites parallèles.", "chapter": "sn-6e-droites-cercles"},
                    {"text": "Connaître le parallélogramme et ses diagonales.", "chapter": "sn-6e-parallelogramme"}],
     sections=[S1, S2, S3, S4], practice=PRACTICE, summary=SUMMARY, concepts=CONCEPTS, assessment=assessment,
     sources=[ADEM_SN_6E, CI_PROGRAMME_6E], also_for=("ci",),
