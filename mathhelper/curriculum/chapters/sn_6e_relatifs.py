@@ -205,7 +205,7 @@ S4 = Section(
                  (N("(-4) + 9") + " = " + N("5"), "Signes contraires : 9 − 4 = 5, avec le signe de 9."),
                  (N("5 + (-3)") + " = " + N("2"), "Signes contraires : 5 − 3 = 2, avec le signe de 5.")],
                 "La température du soir est " + N("2") + " °C.", "-4+9-3==2"),
-        example("Exemple 2", "Un plongeur est à -12 m. Il remonte de 5 m, puis redescend de 8 m. À quelle altitude est-il ?",
+        example("Exemple 2", "Un plongeur est à l'altitude -12 m (12 m sous la surface de l'eau). Il remonte de 5 m, puis redescend de 8 m. À quelle altitude est-il ?",
                 "Remonter augmente l'altitude, redescendre la diminue.",
                 [(N("(-12) + (+5) + (-8)"), "Départ -12, remonter de 5 donne +5, redescendre de 8 donne -8."),
                  (N("(-12) + 5") + " = " + N("-7"), "Signes contraires : 12 − 5 = 7, avec le signe de -12."),

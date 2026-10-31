@@ -27,7 +27,7 @@ PARALLEL = (Figure().point("A", 40, 70, 0, -12).point("B", 300, 70, -8, -12).poi
             .line("A", "B").line("C", "D").arrow_mark("A", "B", 1, 0.3).arrow_mark("C", "D", 1, 0.3))
 PERPENDICULAR = (Figure().point("A", 40, 130, 0, 22).point("B", 300, 130, -8, 22).point("C", 170, 30, 10, 6).point("D", 170, 190, 10, -2)
                  .point("O", 170, 130, 10, 22).line("A", "B").line("C", "D").right_angle("O", "B", "C"))
-CIRCLE = Figure().point("A", 170, 105, -4, 24).point("M", 245, 105, 8, -8).circle("A", 75).segment("A", "M").tick("A", "M", 1)
+CIRCLE = Figure().point("A", 170, 105, -4, 24).point("M", 245, 105, 8, -8).circle("A", 75).segment("A", "M")
 CHORDS = (Figure().point("A", 170, 105, -4, 24).point("P", 95, 105, -16, 4).point("Q", 245, 105, 8, 4).point("R", 105, 68, -16, -4).point("S", 240, 79, 8, -4)
           .circle("A", 75).segment("P", "Q").segment("R", "S"))
 MIDPOINT = Figure().point("A", 50, 120, -4, 24).point("M", 170, 120, -4, 24).point("B", 290, 120, -4, 24).segment("A", "B").tick("A", "M", 1).tick("M", "B", 1)
