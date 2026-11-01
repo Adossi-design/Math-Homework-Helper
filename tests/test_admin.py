@@ -247,3 +247,16 @@ def test_admin_dashboard_shows_the_numbers_in_french_too(admin, logged_in):
         assert admin.get(path).status_code == 200, path
     french = page(admin.get("/admin/"))
     assert "Vue d'ensemble" in french and "Utilisateurs" in french and "Derniers inscrits" in french
+
+
+def test_start_up_work_is_skipped_when_nothing_changed(tmp_path):
+    uri = f"sqlite:///{tmp_path / 'boot.db'}"
+    settings = {"TESTING": True, "SQLALCHEMY_DATABASE_URI": uri, "ADMIN_EMAIL": "boss@example.com", "ADMIN_PASSWORD": "correct-horse-battery"}
+    first = create_app(settings)
+    with first.app_context():
+        assert schema.prepare("boss@example.com", "correct-horse-battery") is False
+        assert db.session.scalar(select(User).where(User.is_admin.is_(True))).email == "boss@example.com"
+    changed = create_app({**settings, "ADMIN_PASSWORD": "another-long-password"})
+    with changed.app_context():
+        assert schema.prepare("boss@example.com", "another-long-password") is False
+        assert schema.prepare("other@example.com", "another-long-password") is True

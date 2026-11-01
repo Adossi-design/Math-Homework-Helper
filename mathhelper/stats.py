@@ -1,7 +1,7 @@
 """Progress numbers for the dashboard, practice and learning."""
 from datetime import timedelta
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, union_all
 
 from .extensions import db
 from .i18n import day_label
@@ -12,10 +12,8 @@ from .timeutil import local_now, to_local
 
 def active_days(user):
     """Return every local date on which the user solved, practiced or studied."""
-    stamps = []
-    for model in (Solution, PracticeAttempt, LessonCompletion):
-        stamps += db.session.scalars(select(model.created_at).where(model.user_id == user.id)).all()
-    return {to_local(stamp, user).date() for stamp in stamps}
+    query = union_all(*(select(model.created_at).where(model.user_id == user.id) for model in (Solution, PracticeAttempt, LessonCompletion)))
+    return {to_local(stamp, user).date() for stamp in db.session.scalars(select(query.subquery().c.created_at))}
 
 
 def streak(days, today):
@@ -49,7 +47,7 @@ def best_scores(user):
     return {skill_id: {"best": best, "rounds": rounds, "total": total or 10} for skill_id, best, rounds, total in rows}
 
 
-def summary(user):
+def summary(user, done=None):
     """Collect the headline numbers shown on the dashboard."""
     days = active_days(user)
     today = local_now(user).date()
@@ -58,7 +56,7 @@ def summary(user):
         select(func.coalesce(func.sum(PracticeAttempt.correct), 0), func.coalesce(func.sum(PracticeAttempt.total), 0), func.count())
         .where(PracticeAttempt.user_id == user.id)
     ).one()
-    done = completed_keys(user)
+    done = completed_keys(user) if done is None else done
     return {
         "streak": streak(days, today),
         "week": week(days, today),

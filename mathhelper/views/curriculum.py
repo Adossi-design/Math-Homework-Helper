@@ -14,7 +14,7 @@ from .. import ai, mascot
 from ..curriculum import COUNTRIES, available_levels, chapters_for, country, find_chapter, label, level, valid_choice
 from ..curriculum.checker import MAX_LENGTH, check, show
 from ..curriculum.context import done_keys, lesson_text, profile, section_key
-from ..curriculum.progress import PASS_MARK, chapter_progress, grade
+from ..curriculum.progress import PASS_MARK, chapter_progress, grade, preload
 from ..curriculum.translate import localize, walk
 from ..extensions import db
 from ..i18n import gettext as _
@@ -144,9 +144,11 @@ def index():
     stage = level(place_id, level_id) if place_id else None
     chapters = chapters_for(place_id, level_id) if stage else []
     cards = []
-    for chapter in chapters:
-        view, _fallback = present(chapter, {"title": chapter.title, "intro": chapter.intro})
-        cards.append({"chapter": chapter, "view": view, "progress": chapter_progress(current_user, chapter)})
+    if chapters:
+        shown, _fallback = present(chapters[0], {c.id: {"title": c.title, "intro": c.intro} for c in chapters})
+        loaded = preload(current_user)
+        for chapter in chapters:
+            cards.append({"chapter": chapter, "view": shown[chapter.id], "progress": chapter_progress(current_user, chapter, loaded)})
     lang = language()
     offered = [(country(c), level(c, l)) for c, l in available_levels()]
     return render_template("curriculum/index.html", active_nav="learn", place=country(place_id), stage=stage, cards=cards, countries=COUNTRIES,

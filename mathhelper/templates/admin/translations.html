@@ -3,6 +3,18 @@
 {% block admin_lead %}{{ _("Check and correct the automatic translations of curriculum lessons. A corrected translation is kept and never overwritten.") }}{% endblock %}
 
 {% block admin %}
+<section class="card card-body" data-warm data-url="{{ url_for('admin.warm_chapter', chapter_id='__id__') }}" style="margin-bottom:20px">
+  <div class="row wrap" style="justify-content:space-between">
+    <div style="flex:1;min-width:240px">
+      <h2 style="font-size:17px">{{ _("Translate the chapters now") }}</h2>
+      <p class="small muted" style="margin-top:4px">{{ _("Students who read in another language wait for each new page to be translated. Do this once after adding or changing a chapter, so nobody waits. It takes a minute or two per chapter.") }}</p>
+    </div>
+    <button class="btn btn-primary" type="button" data-warm-start>{{ icon("globe") }} {{ _("Translate all chapters") }}</button>
+  </div>
+  <ol class="stack small" style="margin-top:14px;padding-left:20px" data-warm-list>
+    {% for chapter in chapters %}<li data-chapter="{{ chapter.id }}"><span>{{ chapter.number }}. {{ chapter.title }}</span> <strong data-state class="muted"></strong></li>{% endfor %}
+  </ol>
+</section>
 <form class="searchbar" method="get" role="search">
   {% if status != "unreviewed" %}<input type="hidden" name="status" value="{{ status }}">{% endif %}
   <div class="input-wrap">{{ icon("search") }}<input class="input" type="search" name="q" value="{{ query }}" placeholder="{{ _("Search the original or the translation") }}" aria-label="{{ _("Search the original or the translation") }}"></div>

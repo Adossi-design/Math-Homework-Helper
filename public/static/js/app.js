@@ -999,7 +999,29 @@
     });
   }
 
+  // Admin: translate the chapters one after the other, so each request stays short.
+  function initWarm() {
+    const box = $("[data-warm]");
+    if (!box) return;
+    const start = $("[data-warm-start]", box);
+    start.addEventListener("click", async () => {
+      start.disabled = true;
+      for (const item of $$("[data-chapter]", box)) {
+        const state = $("[data-state]", item);
+        state.textContent = ` ${t("Translating")}`;
+        try {
+          const reply = await postJSON(box.dataset.url.replace("__id__", item.dataset.chapter));
+          state.textContent = reply.failed ? ` ${t("Some text could not be translated. Run it again.")}` : ` ${t("Done")}`;
+        } catch (error) {
+          state.textContent = ` ${error.message}`;
+        }
+      }
+      start.disabled = false;
+    });
+  }
+
   const mascot = createMascot();
+  initWarm();
   initCommon();
   renderMath();
   initSolve();

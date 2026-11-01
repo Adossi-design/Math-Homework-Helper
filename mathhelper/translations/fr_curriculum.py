@@ -4,6 +4,12 @@ CURRICULUM = {
     # Settings and the curriculum hub.
     "Curriculum": "Programme scolaire",
     "My curriculum": "Mon programme",
+    "Translating": "Traduction en cours",
+    "Done": "Terminé",
+    "Some text could not be translated. Run it again.": "Une partie du texte n'a pas pu être traduite. Relance la traduction.",
+    "Translate the chapters now": "Traduire les chapitres maintenant",
+    "Students who read in another language wait for each new page to be translated. Do this once after adding or changing a chapter, so nobody waits. It takes a minute or two per chapter.": "Les élèves qui lisent dans une autre langue attendent que chaque nouvelle page soit traduite. Fais-le une fois après avoir ajouté ou modifié un chapitre, pour que personne n'attende. Cela prend une à deux minutes par chapitre.",
+    "Translate all chapters": "Traduire tous les chapitres",
     "Show all steps": "Montrer toutes les étapes",
     "Step {n} of {total}": "Étape {n} sur {total}",
     "Replay the steps": "Revoir les étapes",

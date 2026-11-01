@@ -372,7 +372,22 @@ def translations():
         stmt = stmt.where(TranslationCache.reviewed.is_(False))
     page = db.paginate(stmt.order_by(TranslationCache.id.desc()), page=request.args.get("page", 1, type=int), per_page=PER_PAGE, error_out=False)
     shown = {row.id: shown_translation(row) for row in page.items}
-    return render_template("admin/translations.html", tab="translations", page=page, query=query, status=status, shown=shown)
+    return render_template("admin/translations.html", tab="translations", page=page, query=query, status=status, shown=shown, chapters=CHAPTERS)
+
+
+@bp.post("/translations/warm/<chapter_id>")
+def warm_chapter(chapter_id):
+    """Translate every lesson page of one chapter now, so the first student does not wait for it."""
+    from ..cli import chapter_trees
+    from ..curriculum.catalog import find_chapter
+    from ..curriculum.translate import localize
+
+    chapter = find_chapter(chapter_id)
+    if chapter is None:
+        abort(404)
+    target = "en" if chapter.language == "fr" else "fr"
+    failed = sum(localize(tree, chapter.language, target).fallback for tree in chapter_trees(chapter))
+    return {"chapter": chapter.id, "failed": int(failed)}
 
 
 @bp.post("/translations/<int:row_id>/save")

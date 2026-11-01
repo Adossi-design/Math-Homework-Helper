@@ -11,18 +11,33 @@ WEAK_MARK = 60
 STRUGGLE_ATTEMPTS = 3
 
 
-def chapter_progress(user, chapter):
-    """Collect what the student has done in a chapter, and what they should revise."""
-    done = done_keys(user)
+def preload(user):
+    """Load a student's finished sections, exercise results and assessment attempts in three queries, for pages that show several chapters."""
+    return {
+        "done": done_keys(user),
+        "results": {r.exercise_id: r for r in db.session.scalars(select(ExerciseResult).where(ExerciseResult.user_id == user.id))},
+        "attempts": list(db.session.scalars(select(ChapterAttempt).where(ChapterAttempt.user_id == user.id).order_by(ChapterAttempt.id.desc()))),
+    }
+
+
+def chapter_progress(user, chapter, loaded=None):
+    """Collect what the student has done in a chapter, and what they should revise. Pass the result of preload() to avoid new queries."""
+    if loaded is None:
+        done = done_keys(user)
+        results = {
+            r.exercise_id: r for r in db.session.scalars(
+                select(ExerciseResult).where(ExerciseResult.user_id == user.id, ExerciseResult.exercise_id.like(f"{chapter.id}/%")))
+        }
+        attempts = list(db.session.scalars(
+            select(ChapterAttempt).where(ChapterAttempt.user_id == user.id, ChapterAttempt.chapter_id == chapter.id).order_by(ChapterAttempt.id.desc())))
+    else:
+        done = loaded["done"]
+        prefix = chapter.id + "/"
+        results = {i: r for i, r in loaded["results"].items() if i.startswith(prefix)}
+        attempts = [a for a in loaded["attempts"] if a.chapter_id == chapter.id]
     sections_done = [s.id for s in chapter.sections if section_key(chapter.id, s.id) in done]
     exercises = chapter.exercises()
-    results = {
-        r.exercise_id: r for r in db.session.scalars(
-            select(ExerciseResult).where(ExerciseResult.user_id == user.id, ExerciseResult.exercise_id.like(f"{chapter.id}/%")))
-    }
     solved = {i for i, r in results.items() if r.solved and i in exercises}
-    attempts = list(db.session.scalars(
-        select(ChapterAttempt).where(ChapterAttempt.user_id == user.id, ChapterAttempt.chapter_id == chapter.id).order_by(ChapterAttempt.id.desc())))
     return {
         "sections_done": sections_done,
         "solved": solved,
@@ -36,13 +51,13 @@ def chapter_progress(user, chapter):
     }
 
 
-def next_section(user):
+def next_section(user, done=None):
     """Return the first unfinished chapter and section of the student's own curriculum, or (None, None)."""
     from .catalog import chapters_for
 
     if not user.country or not user.grade:
         return None, None
-    done = done_keys(user)
+    done = done_keys(user) if done is None else done
     for chapter in chapters_for(user.country, user.grade):
         for section in chapter.sections:
             if section_key(chapter.id, section.id) not in done:

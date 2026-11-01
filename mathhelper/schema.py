@@ -97,3 +97,38 @@ def ensure_admin(email, password):
     except SQLAlchemyError:
         # Another server instance may have created the account at the same moment.
         db.session.rollback()
+
+
+def boot_state(email, password):
+    """Return a fingerprint of the table layout and of the admin settings: when it is unchanged, the start up work below is already done."""
+    layout = sorted((table.name, sorted((column.name, str(column.type)) for column in table.columns)) for table in db.metadata.tables.values())
+    usable = password if len(password) >= MIN_PASSWORD else ""
+    raw = repr((layout, sorted(NEW_COLUMNS), RETIRED_TABLES, email, password_mark(usable) if usable else ""))
+    return hashlib.sha256(raw.encode()).hexdigest()
+
+
+def prepare(email, password):
+    """Create missing tables, upgrade old ones and set up the admin account, but only when something changed since the last start.
+
+    Every start of a serverless instance used to repeat dozens of checks against the remote database. One fingerprint lookup replaces them.
+    """
+    state = boot_state(email, password)
+    try:
+        row = db.session.get(Setting, "boot_state")
+        if row is not None and row.value == state:
+            return False
+    except SQLAlchemyError:
+        db.session.rollback()
+    db.create_all()
+    upgrade()
+    ensure_admin(email, password)
+    try:
+        row = db.session.get(Setting, "boot_state")
+        if row is None:
+            db.session.add(Setting(key="boot_state", value=state))
+        else:
+            row.value = state
+        db.session.commit()
+    except SQLAlchemyError:
+        db.session.rollback()
+    return True

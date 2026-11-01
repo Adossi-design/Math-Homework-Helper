@@ -1,16 +1,33 @@
 """Gemini service that solves math problems and answers follow up questions."""
+import importlib
 import json
 import logging
 import re
 
 import httpx
 from flask import current_app
-from google import genai
-from google.genai import errors, types
 from pydantic import BaseModel
 
 from .i18n import gettext as _
 from .i18n import language
+
+
+class _Lazy:
+    """Import a module the first time one of its names is used, so that a page that never calls the AI does not pay for the SDK."""
+
+    def __init__(self, name):
+        self._name = name
+        self._module = None
+
+    def __getattr__(self, attribute):
+        if self._module is None:
+            self._module = importlib.import_module(self._name)
+        return getattr(self._module, attribute)
+
+
+genai = _Lazy("google.genai")
+types = _Lazy("google.genai.types")
+errors = _Lazy("google.genai.errors")
 
 log = logging.getLogger(__name__)
 

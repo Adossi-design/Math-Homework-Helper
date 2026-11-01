@@ -54,7 +54,7 @@ def home():
     ).all()
     done = stats.completed_keys(current_user)
     best = stats.best_scores(current_user)
-    chapter, section = next_section(current_user)
+    chapter, section = next_section(current_user, done)
     upcoming = None
     if chapter:
         view, _fallback = present(chapter, {"chapter": chapter.title, "section": section.title})
@@ -64,7 +64,7 @@ def home():
         "home.html",
         greeting=greeting(),
         today=format_date(local_now(), "day"),
-        numbers=stats.summary(current_user),
+        numbers=stats.summary(current_user, done),
         recent=recent,
         upcoming=upcoming,
         suggestion=stats.suggested_skill(best),

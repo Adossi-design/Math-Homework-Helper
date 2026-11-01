@@ -876,3 +876,28 @@ def test_plain_numbers_in_a_sentence_are_set_aside_like_formulas(app):
 def test_french_spacing_before_punctuation_is_dropped_in_english():
     assert translate.convert_plain("Decimal parts : 48 et ? Yes !", "fr", "en") == "Decimal parts: 48 et? Yes!"
     assert translate.convert_plain("Parties : 3.5", "en", "fr") == "Parties : 3,5"
+
+
+def test_the_admin_can_translate_a_chapter_from_the_browser(app, admin, logged_in, monkeypatch):
+    sent = []
+    monkeypatch.setattr(ai, "translate_batch", fake_translator(sent))
+    reply = admin.post("/admin/translations/warm/sn-6e-decimaux")
+    assert reply.status_code == 200 and reply.get_json() == {"chapter": "sn-6e-decimaux", "failed": 0}
+    with app.app_context():
+        assert db.session.query(TranslationCache).count() > 50
+    assert admin.post("/admin/translations/warm/nope").status_code == 404
+    assert logged_in.post("/admin/translations/warm/sn-6e-decimaux").status_code == 403
+    page = admin.get("/admin/translations").get_data(as_text=True)
+    assert "data-warm-start" in page and page.count("data-chapter=") >= 15
+
+
+def test_assets_are_versioned_and_the_hub_uses_few_queries(app, student):
+    from sqlalchemy import event
+
+    page = student.get("/curriculum/").get_data(as_text=True)
+    assert re.search(r'futuristic\.css\?v=[0-9a-z]+', page) and re.search(r'app\.js\?v=[0-9a-z]+', page)
+    statements = []
+    with app.app_context():
+        event.listen(db.engine, "before_cursor_execute", lambda conn, cur, st, params, ctx, many: statements.append(st))
+        student.get("/curriculum/")
+    assert len(statements) <= 8, len(statements)

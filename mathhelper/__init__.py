@@ -1,5 +1,6 @@
 """Math Homework Helper, a Flask web app that solves and teaches math."""
 import logging
+import os
 
 from dotenv import load_dotenv
 from flask import Flask, g, render_template, request
@@ -79,11 +80,14 @@ def create_app(overrides=None):
     app.jinja_env.filters.update(rich=rich, rich_inline=rich_inline, plain=plain, ago=time_ago, tall=tall_fractions)
     app.jinja_env.filters["local"] = lambda moment, style="date": i18n.format_date(to_local(moment), style)
 
+    asset_version = os.environ.get("VERCEL_GIT_COMMIT_SHA", "")[:8] or str(int(max((STATIC_DIR / name).stat().st_mtime for name in ("css/app.css", "css/futuristic.css", "js/app.js"))))
+    app.config.setdefault("SEND_FILE_MAX_AGE_DEFAULT", 86400)
+
     @app.context_processor
     def shared_context():
         theme = current_user.theme if current_user.is_authenticated else "system"
         lang = i18n.language()
-        return {"app_name": app.config["APP_NAME"], "google_ready": google_ready, "theme": theme,
+        return {"app_name": app.config["APP_NAME"], "google_ready": google_ready, "theme": theme, "asset_v": asset_version,
                 "support_email": app.config["SUPPORT_EMAIL"], "mail_provider": mailer.mail_provider(),
                 "lang": lang, "languages": i18n.LANGUAGES,
                 "js_strings": i18n.js_strings(),
@@ -100,9 +104,7 @@ def create_app(overrides=None):
     register_error_pages(app)
 
     with app.app_context():
-        db.create_all()
-        schema.upgrade()
-        schema.ensure_admin(app.config["ADMIN_EMAIL"], app.config["ADMIN_PASSWORD"])
+        schema.prepare(app.config["ADMIN_EMAIL"], app.config["ADMIN_PASSWORD"])
     return app
 
 
