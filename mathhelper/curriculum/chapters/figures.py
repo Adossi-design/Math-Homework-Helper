@@ -119,3 +119,72 @@ class Figure:
 def figure(fig, alt, caption):
     """Return a lesson block that shows a drawing with a text description and a caption."""
     return {"type": "figure", "svg": fig.svg(), "alt": alt, "caption": caption}
+
+
+class Graph:
+    """A graph with two axes, a grid, points and lines, for lessons on proportionality and statistics. It shares the svg() method of Figure."""
+
+    LEFT, RIGHT, TOP, BOTTOM = 46, 16, 14, 40
+
+    def __init__(self, xmax, ymax, xstep, ystep, xlabel="", ylabel="", width=340, height=240):
+        self.xmax, self.ymax, self.xstep, self.ystep = xmax, ymax, xstep, ystep
+        self.xlabel, self.ylabel = xlabel, ylabel
+        self.width, self.height = width, height
+        self.under = []
+        self.over = []
+
+    def px(self, x):
+        """Return the pixel position of an abscissa."""
+        return round(self.LEFT + x / self.xmax * (self.width - self.LEFT - self.RIGHT), 1)
+
+    def py(self, y):
+        """Return the pixel position of an ordinate."""
+        return round(self.height - self.BOTTOM - y / self.ymax * (self.height - self.BOTTOM - self.TOP), 1)
+
+    def line(self, x1, y1, x2, y2, cls="fig-line"):
+        """Draw a line segment between two points given in graph units."""
+        self.under.append(f'<line class="{cls}" x1="{self.px(x1)}" y1="{self.py(y1)}" x2="{self.px(x2)}" y2="{self.py(y2)}"/>')
+        return self
+
+    def point(self, x, y, label=""):
+        """Add a point given in graph units, with an optional label."""
+        self.over.append(f'<circle class="fig-pt" cx="{self.px(x)}" cy="{self.py(y)}" r="4"/>')
+        if label:
+            self.over.append(f'<text class="fig-label" x="{self.px(x) + 7}" y="{self.py(y) - 7}">{escape(label)}</text>')
+        return self
+
+    def bars(self, values, labels=()):
+        """Draw one vertical bar per value, evenly spread along the x axis, for a bar chart."""
+        count = len(values)
+        slot = (self.width - self.LEFT - self.RIGHT) / count
+        for index, value in enumerate(values):
+            x = self.LEFT + index * slot + slot * 0.2
+            top = self.py(value)
+            self.under.append(f'<rect class="fig-bar" x="{x:.1f}" y="{top}" width="{slot * 0.6:.1f}" height="{self.py(0) - top:.1f}" rx="3"/>')
+            if labels:
+                self.over.append(f'<text class="fig-note" x="{x + slot * 0.3:.1f}" y="{self.height - self.BOTTOM + 16}" text-anchor="middle">{escape(str(labels[index]))}</text>')
+        return self
+
+    def svg(self):
+        """Return the graph as an inline SVG element, hidden from screen readers because the block carries a text description."""
+        frame = []
+        x = 0
+        while x <= self.xmax + 1e-9:
+            frame.append(f'<line class="fig-grid" x1="{self.px(x)}" y1="{self.py(0)}" x2="{self.px(x)}" y2="{self.py(self.ymax)}"/>')
+            if not self.under or not any("fig-bar" in part for part in self.under):
+                frame.append(f'<text class="fig-note" x="{self.px(x)}" y="{self.height - self.BOTTOM + 16}" text-anchor="middle">{x:g}</text>')
+            x += self.xstep
+        y = 0
+        while y <= self.ymax + 1e-9:
+            frame.append(f'<line class="fig-grid" x1="{self.px(0)}" y1="{self.py(y)}" x2="{self.px(self.xmax)}" y2="{self.py(y)}"/>')
+            frame.append(f'<text class="fig-note" x="{self.LEFT - 6}" y="{self.py(y) + 4}" text-anchor="end">{y:g}</text>')
+            y += self.ystep
+        frame.append(f'<line class="fig-axis" x1="{self.px(0)}" y1="{self.py(0)}" x2="{self.px(self.xmax)}" y2="{self.py(0)}"/>')
+        frame.append(f'<line class="fig-axis" x1="{self.px(0)}" y1="{self.py(0)}" x2="{self.px(0)}" y2="{self.py(self.ymax)}"/>')
+        if self.xlabel:
+            frame.append(f'<text class="fig-note" x="{(self.px(0) + self.px(self.xmax)) / 2}" y="{self.height - 6}" text-anchor="middle">{escape(self.xlabel)}</text>')
+        if self.ylabel:
+            frame.append(f'<text class="fig-note" x="12" y="{(self.py(0) + self.py(self.ymax)) / 2}" text-anchor="middle" transform="rotate(-90 12 {(self.py(0) + self.py(self.ymax)) / 2})">{escape(self.ylabel)}</text>')
+        body = "".join(frame + self.under + self.over)
+        return (f'<svg class="fig" viewBox="0 0 {self.width} {self.height}" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">'
+                f'<rect class="fig-bg" x="0" y="0" width="{self.width}" height="{self.height}" rx="12"/>{body}</svg>')

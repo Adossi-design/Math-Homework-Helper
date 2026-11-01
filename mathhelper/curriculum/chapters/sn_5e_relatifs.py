@@ -296,7 +296,7 @@ def assessment(rng):
     questions.append(number("a5", "somme", f"Calcule ${rel(a)} + {rel(b)} - {rel(c)}$.", a + b - c, 2, ["Supprime les parenthèses, puis regroupe."], [f"{a} + ({b}) − ({c}) = {a + b - c}."]))
     # 6. a bank account
     flows = [rng.choice([1, -1]) * rng.randint(2, 30) * 100 for _ in range(4)]
-    names = ", ".join((f"+{f}" if f > 0 else f"-{-f}") + " F" for f in flows)
+    names = ", ".join(f"${f:+d}$ F" for f in flows)
     questions.append(number("a6", "somme", f"Un compte enregistre {names}. Quel est le total, en F ?", Fraction(sum(flows)), 2,
                             ["Somme algébrique."], [f"Positifs : {sum(f for f in flows if f > 0)}. Négatifs : {-sum(f for f in flows if f < 0)}.", f"Total : {sum(flows)} F."], units=["F"]))
     # 7. a product of two relative numbers

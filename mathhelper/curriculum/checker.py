@@ -138,7 +138,7 @@ def check(answer, given):
     value = parse_number(given, answer.units)
     if value is None:
         return Verdict("unreadable")
-    text = clean(given)
+    text = strip_units(clean(given), answer.units)
     if answer.form == "fraction" and "/" not in text:
         return Verdict("wrong_form", value)
     if answer.form == "decimal_fraction" and not decimal_fraction(text):

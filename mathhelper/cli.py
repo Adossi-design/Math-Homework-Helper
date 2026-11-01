@@ -7,7 +7,7 @@ import click
 from .curriculum.catalog import CHAPTERS
 from .curriculum.translate import localize
 
-ASSESSMENT_SAMPLES = 8
+ASSESSMENT_SAMPLES = 25
 
 
 def chapter_trees(chapter):
