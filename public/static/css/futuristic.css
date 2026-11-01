@@ -247,3 +247,4 @@ a.lesson-row:hover .lesson-num { transform: scale(1.08); }
 .fig-grid { stroke: var(--border-strong); stroke-width: 0.7; opacity: 0.55; }
 .fig-axis { stroke: var(--text); stroke-width: 1.8; }
 .fig-bar { fill: #6a63f5; opacity: 0.85; }
+.fig-stick { stroke: #6a63f5; stroke-width: 4; stroke-linecap: round; }

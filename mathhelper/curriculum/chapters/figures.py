@@ -165,14 +165,26 @@ class Graph:
                 self.over.append(f'<text class="fig-note" x="{x + slot * 0.3:.1f}" y="{self.height - self.BOTTOM + 16}" text-anchor="middle">{escape(str(labels[index]))}</text>')
         return self
 
+    def sticks(self, values, labels=()):
+        """Draw one thin vertical stick per value, evenly spread along the x axis, for a stick diagram."""
+        count = len(values)
+        slot = (self.width - self.LEFT - self.RIGHT) / count
+        for index, value in enumerate(values):
+            x = self.LEFT + index * slot + slot / 2
+            self.under.append(f'<line class="fig-stick" x1="{x:.1f}" y1="{self.py(0)}" x2="{x:.1f}" y2="{self.py(value)}"/>')
+            self.over.append(f'<circle class="fig-pt" cx="{x:.1f}" cy="{self.py(value)}" r="3.5"/>')
+            if labels:
+                self.over.append(f'<text class="fig-note" x="{x:.1f}" y="{self.height - self.BOTTOM + 16}" text-anchor="middle">{escape(str(labels[index]))}</text>')
+        return self
+
     def svg(self):
         """Return the graph as an inline SVG element, hidden from screen readers because the block carries a text description."""
         frame = []
+        categorical = any(("fig-bar" in part or "fig-stick" in part) for part in self.under)
         x = 0
-        while x <= self.xmax + 1e-9:
+        while not categorical and x <= self.xmax + 1e-9:
             frame.append(f'<line class="fig-grid" x1="{self.px(x)}" y1="{self.py(0)}" x2="{self.px(x)}" y2="{self.py(self.ymax)}"/>')
-            if not self.under or not any("fig-bar" in part for part in self.under):
-                frame.append(f'<text class="fig-note" x="{self.px(x)}" y="{self.height - self.BOTTOM + 16}" text-anchor="middle">{x:g}</text>')
+            frame.append(f'<text class="fig-note" x="{self.px(x)}" y="{self.height - self.BOTTOM + 16}" text-anchor="middle">{x:g}</text>')
             x += self.xstep
         y = 0
         while y <= self.ymax + 1e-9:
