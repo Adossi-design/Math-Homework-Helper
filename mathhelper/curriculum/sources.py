@@ -22,6 +22,15 @@ CI_PROGRAMME_6E = Source(
         "(the fractions lesson includes decimal fractions), so it does not list this chapter as a separate lesson and no alignment with it is claimed.",
 )
 
+CI_PROGRAMME_5E = Source(
+    id="ci-programme-5e",
+    title="Programme éducatif Mathématiques 5ème (version 2023)",
+    publisher="Ministère de l'Éducation Nationale, Côte d'Ivoire (DPFC)",
+    url="https://dpfc-ci.net/dpfc/programmes/maths/02.%20Prog%20%C3%89duct%20MATHS%205e%20CND%200923.pdf",
+    licence="Official programme, no licence statement found. Used only to read the list of lessons and their contents, nothing is copied.",
+    use="Read to decide which lessons a Cinquième course contains and what each lesson asks the student to be able to do. Every explanation, example, figure and exercise was written independently.",
+)
+
 REB = Source(
     id="reb-rw",
     title="Rwanda Basic Education Board mathematics books",
@@ -40,4 +49,4 @@ SIYAVULA = Source(
     use="Not used yet. Only the unbranded CC BY editions may be adapted.",
 )
 
-SOURCES = {s.id: s for s in (ADEM_SN_6E, CI_PROGRAMME_6E, REB, SIYAVULA)}
+SOURCES = {s.id: s for s in (ADEM_SN_6E, CI_PROGRAMME_6E, CI_PROGRAMME_5E, REB, SIYAVULA)}
