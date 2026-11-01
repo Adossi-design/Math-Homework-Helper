@@ -65,7 +65,6 @@ def test_assessment_keys_match_a_recalculation_from_each_prompt():
         assert sorted(q, key=lambda k: int(k[1:])) == [f"a{i}" for i in range(1, 13)]
         base, exponent = [int(x) for x in re.findall(r"\d+", q["a1"].prompt)[:2]]
         assert q["a1"].answer.value == base**exponent
-        base, n, m = [int(x) for x in re.findall(r"\d+", q["a2"].prompt)[:3]] if False else (None, None, None)
         digits = [int(x) for x in re.findall(r"\d+", q["a2"].prompt)]
         assert q["a2"].answer.value == digits[0] ** digits[1] * digits[2] ** digits[3] and digits[0] == digits[2]
         a, b, k = [int(x) for x in re.findall(r"\d+", q["a3"].prompt)]
